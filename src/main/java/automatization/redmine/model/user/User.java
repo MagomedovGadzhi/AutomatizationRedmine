@@ -1,11 +1,13 @@
 package automatization.redmine.model.user;
 
 import automatization.redmine.model.Creatable;
+import automatization.redmine.model.CreatableEntity;
 import automatization.redmine.model.project.Project;
 import automatization.redmine.model.role.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,5 +65,4 @@ public class User extends CreatableEntity implements Creatable<User> {
     public void addProject(Project project, List<Role> roles) {
         // TODO: Реализовать с помощью SQL-запроса
     }
-
 }

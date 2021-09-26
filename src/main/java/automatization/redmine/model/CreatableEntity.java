@@ -1,4 +1,4 @@
-package automatization.redmine.model.user;
+package automatization.redmine.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

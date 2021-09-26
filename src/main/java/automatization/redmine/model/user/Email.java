@@ -1,6 +1,7 @@
 package automatization.redmine.model.user;
 
 import automatization.redmine.model.Creatable;
+import automatization.redmine.model.CreatableEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
