@@ -19,6 +19,5 @@ public class UserTest {
         user2.setLastName("Петров");
         user2.setTokens(Collections.singletonList(new Token()));
         user2.setEmails(Collections.singletonList(new Email()));
-
     }
 }
