@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,19 +18,19 @@ import java.util.Map;
 @Setter
 public class Project extends CreatableEntity implements Creatable<Project> {
 
-    String name = "MGM_" + StringUtils.randomEnglishString(5);
-    String description = "Тестовый проект";
-    String homepage = "http://edu-at.dfu.i-teco.ru";
-    Boolean isPublic = true;
-    Integer parentId;
-    String identifier = "MGM_" + StringUtils.randomEnglishString(5);
-    Integer status = 1;
-    Integer ift;
-    Integer rgt;
-    Boolean inheritMembers = false;
-    Integer defaultVersionId;
-    Integer defaultAssignedToId;
-    Map<Member, List<Role>> members_roles;
+    private String name = "MGM_" + StringUtils.randomEnglishString(5);
+    private String description = "Тестовый проект";
+    private String homepage;
+    private Boolean isPublic = true;
+    private Integer parentId;
+    private String identifier = "MGM_" + StringUtils.randomEnglishString(5);
+    private ProjectStatus projectStatus = ProjectStatus.CREATED;
+    private Integer ift;
+    private Integer rgt;
+    private Boolean inheritMembers = false;
+    private Integer defaultVersionId;
+    private Integer defaultAssignedToId;
+    private Map<User, List<Role>> usersAndRoles = new HashMap<>();
 
     @Override
     public Project create() {
@@ -37,6 +38,7 @@ public class Project extends CreatableEntity implements Creatable<Project> {
         throw new UnsupportedOperationException();
     }
 
-    public void addUserWithRoles (User user, Role role) {
+    public void addUserWithRoles(User user, List<Role> roles) {
+        usersAndRoles.put(user, roles);
     }
 }

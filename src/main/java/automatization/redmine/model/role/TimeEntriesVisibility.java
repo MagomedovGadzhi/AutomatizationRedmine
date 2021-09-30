@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum TimeEntriesVisibility {
-    All("Все трудозатраты"),
+    ALL("Все трудозатраты"),
     OWN("Только собственные трудозатраты");
 
     String description;
