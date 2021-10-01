@@ -2,6 +2,8 @@ package automatization.redmine.model.project;
 
 import automatization.redmine.model.Creatable;
 import automatization.redmine.model.CreatableEntity;
+import automatization.redmine.model.Deleteable;
+import automatization.redmine.model.Updateable;
 import automatization.redmine.model.role.Role;
 import automatization.redmine.model.user.User;
 import automatization.redmine.utils.StringUtils;
@@ -16,7 +18,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Project extends CreatableEntity implements Creatable<Project> {
+public class Project extends CreatableEntity implements Creatable<Project>, Deleteable<Project>, Updateable<Project> {
 
     private String name = "MGM_" + StringUtils.randomEnglishString(5);
     private String description = "Тестовый проект";
@@ -36,6 +38,16 @@ public class Project extends CreatableEntity implements Creatable<Project> {
     public Project create() {
         // TODO: Реализовать с помощью SQL-Запроса
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Project delete() {
+        return null;
+    }
+
+    @Override
+    public Project update() {
+        return null;
     }
 
     public void addUserWithRoles(User user, List<Role> roles) {

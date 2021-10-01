@@ -83,5 +83,4 @@ public class EmailRequests extends BaseRequests implements Create<Email>, ReadAl
                 .setCreatedOn(toLocalDate(data.get("created_on")))
                 .setId((Integer) data.get("id"));
     }
-
 }

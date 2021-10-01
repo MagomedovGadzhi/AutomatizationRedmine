@@ -1,11 +1,15 @@
 package automatization.redmine.model.role;
 
+import automatization.redmine.db.requests.RoleRequest;
 import automatization.redmine.model.Creatable;
+import automatization.redmine.model.Deleteable;
 import automatization.redmine.model.Entity;
+import automatization.redmine.model.Updateable;
 import automatization.redmine.utils.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Role extends Entity implements Creatable<Role> {
+@Accessors(chain = true)
+public class Role extends Entity implements Creatable<Role>, Deleteable<Role>, Updateable<Role> {
 
     private String name = "MGM_" + StringUtils.randomEnglishString(5);
     private Integer position = 1;
@@ -26,9 +31,65 @@ public class Role extends Entity implements Creatable<Role> {
     private Boolean allRolesManaged = false;
     private String settings;
 
+    public String getStringOfPermissions() {
+        if (permissions.size() == 1) {
+            return permissions.get(0).toString().toLowerCase();
+        }
+        if (permissions.size() > 1) {
+            StringBuilder result = new StringBuilder();
+            result.append("---").append("\n");
+            for (Permission permission : permissions) {
+                result.append("- :").append(permission.toString().toLowerCase()).append("\n");
+            }
+            return result.toString();
+        } else return null;
+    }
+
+    public Role setPermissionsFromString(String permissions) {
+        if (permissions == null) return this;
+        String formattedPermissions = permissions.replaceAll("-", "")
+                .replaceAll(":", "")
+                .replaceAll(" ", "")
+                .trim();
+        String[] permissionsList = formattedPermissions.split("\n");
+        for (String perm : permissionsList) {
+            perm = perm.toUpperCase();
+            this.permissions.add(Permission.valueOf(perm));
+        }
+        return this;
+    }
+
     @Override
     public Role create() {
-        // TODO: Реализовать с помощью SQL-Запроса
-        throw new UnsupportedOperationException();
+        new RoleRequest().create(this);
+        return this;
+    }
+
+    @Override
+    public Role delete() {
+        new RoleRequest().delete(this.id);
+        return this;
+    }
+
+    @Override
+    public Role update() {
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Role { " + "\n"
+                + "id = " + id + "\n"
+                + "name = " + name + "\n"
+                + "position = " + position + "\n"
+                + "assignable = " + assignable + "\n"
+                + "builtin = " + builtin + "\n"
+                + "permissions = " + permissions + "\n"
+                + "issuesVisibility = " + issuesVisibility + "\n"
+                + "userVisibility = " + userVisibility + "\n"
+                + "timeEntriesVisibility = " + timeEntriesVisibility + "\n"
+                + "allRolesManaged = " + allRolesManaged + "\n"
+                + "settings = " + settings + "\n"
+                + "}";
     }
 }

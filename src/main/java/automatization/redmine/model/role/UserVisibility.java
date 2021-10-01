@@ -8,5 +8,5 @@ public enum UserVisibility {
     MEMBERS_OF_VISIBLE_PROJECTS("Участники видимых проектов", "members_of_visible_projects");
 
     private final String description;
-    private final String userVisibilityCode;
+    public final String userVisibilityCode;
 }

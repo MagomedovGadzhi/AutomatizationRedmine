@@ -31,7 +31,7 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
                 user.getUpdatedOn(),
                 user.getType(),
                 user.getIdentityUrl(),
-                user.getMailNotification().name().toLowerCase(),
+                user.getMailNotification().mailNotificationCode,
                 user.getSalt(),
                 user.getMustChangePassword(),
                 user.getPasswordChangedOn()
@@ -68,7 +68,7 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
                 user.getUpdatedOn(),
                 user.getType(),
                 user.getIdentityUrl(),
-                user.getMailNotification().name().toLowerCase(),
+                user.getMailNotification().mailNotificationCode,
                 user.getSalt(),
                 user.getMustChangePassword(),
                 user.getPasswordChangedOn(),

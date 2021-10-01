@@ -9,6 +9,5 @@ public enum IssuesVisibility {
     OWN("Задачи созданные или назначенные пользователю", "own");
 
     private final String description;
-    private final String issuesVisibilityCode;
-
+    public final String issuesVisibilityCode;
 }

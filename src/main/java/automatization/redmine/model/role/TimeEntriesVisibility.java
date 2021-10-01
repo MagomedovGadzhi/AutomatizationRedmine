@@ -8,6 +8,6 @@ public enum TimeEntriesVisibility {
     OWN("Только собственные трудозатраты", "own");
 
     private final String description;
-    private final String timeEntriesVisibilityCode;
+    public final String timeEntriesVisibilityCode;
 
 }
