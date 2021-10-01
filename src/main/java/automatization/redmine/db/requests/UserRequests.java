@@ -1,6 +1,9 @@
 package automatization.redmine.db.requests;
 
 import automatization.redmine.db.connection.PostgresConnection;
+import automatization.redmine.db.requests.interfases.Create;
+import automatization.redmine.db.requests.interfases.Delete;
+import automatization.redmine.db.requests.interfases.Update;
 import automatization.redmine.model.user.User;
 
 public class UserRequests extends BaseRequests implements Create<User>, Update<User>, Delete {

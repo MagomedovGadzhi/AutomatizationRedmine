@@ -1,4 +1,4 @@
-package automatization.redmine.model.property;
+package automatization.redmine.property;
 
 import lombok.SneakyThrows;
 

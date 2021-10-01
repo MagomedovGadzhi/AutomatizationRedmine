@@ -1,4 +1,4 @@
-package automatization.redmine.db.requests;
+package automatization.redmine.db.requests.interfases;
 
 public interface Delete {
 

@@ -73,5 +73,5 @@ public enum Permission {
     PROTECT_WIKI_PAGES ("Блокирование wiki-страниц"),
     MANAGE_WIKI ("Управление Wiki");
 
-    String description;
+    private final String description;
 }

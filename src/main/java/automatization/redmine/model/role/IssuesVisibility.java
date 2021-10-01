@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum IssuesVisibility {
-    ALL("Все задачи"),
-    DEFAULT("Только общие задачи"),
-    OWN("Задачи созданные или назначенные пользователю");
+    ALL("Все задачи", "all"),
+    DEFAULT("Только общие задачи", "default"),
+    OWN("Задачи созданные или назначенные пользователю", "own");
 
-    String description;
+    private final String description;
+    private final String issuesVisibilityCode;
+
 }

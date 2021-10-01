@@ -1,6 +1,6 @@
 package automatization.redmine.db.connection;
 
-import automatization.redmine.model.property.Property;
+import automatization.redmine.property.Property;
 import lombok.SneakyThrows;
 import org.postgresql.util.PSQLException;
 
