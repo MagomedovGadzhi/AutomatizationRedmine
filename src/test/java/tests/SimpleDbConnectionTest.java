@@ -20,8 +20,7 @@ public class SimpleDbConnectionTest {
     public void testDbConnection() {
         Class.forName("org.postgresql.Driver");
 
-        // String url = "jdbc:postgresql://edu-at.dfu.i-teco.ru:5432/db";
-        String url = "jdbc:postgresql://95.165.28.143:55432/db";
+        String url = "jdbc:postgresql://edu-at.dfu.i-teco.ru:5432/db";
         Properties connectionProperties = new Properties();
         connectionProperties.setProperty("user", "redmine_user");
         connectionProperties.setProperty("password", "redmine_pass");
@@ -73,7 +72,7 @@ public class SimpleDbConnectionTest {
         User user = new User();
         user.setId(9);
 
-        Email email = new EmailRequests(user).read(6);
+        Email email = new EmailRequests(user).read(2);
     }
 
     @Test
