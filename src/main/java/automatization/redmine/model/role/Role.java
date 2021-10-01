@@ -21,9 +21,9 @@ public class Role extends Entity implements Creatable<Role> {
     private Integer builtin = 0;
     private List<Permission> permissions = new ArrayList<>();
     private IssuesVisibility issuesVisibility = IssuesVisibility.ALL;
-    private UserVisibility userVisibility = UserVisibility.MEMBERS_OF_VISIBLE_PROJECTS;
-    private TimeEntriesVisibility timeEntriesVisibility = TimeEntriesVisibility.ALL;
-    private Boolean allRolesManaged = true;
+    private UserVisibility userVisibility = UserVisibility.ALL;
+    private TimeEntriesVisibility timeEntriesVisibility = TimeEntriesVisibility.OWN;
+    private Boolean allRolesManaged = false;
     private String settings;
 
     @Override

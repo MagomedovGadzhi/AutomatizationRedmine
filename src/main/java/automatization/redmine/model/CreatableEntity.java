@@ -1,12 +1,12 @@
 package automatization.redmine.model;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
+@Accessors(chain = true)
 @Setter
 @Getter
 public abstract class CreatableEntity extends Entity {
