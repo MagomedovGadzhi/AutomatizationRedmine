@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 public class Role extends Entity implements Creatable<Role> {
 
-    private String name = "MGM_" + StringUtils.randomEnglishString(5);;
+    private String name = "MGM_" + StringUtils.randomEnglishString(5);
     private Integer position = 1;
     private Boolean assignable = true;
     private Integer builtin = 0;
