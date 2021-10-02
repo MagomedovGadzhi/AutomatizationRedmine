@@ -73,7 +73,8 @@ public class Role extends Entity implements Creatable<Role>, Deleteable<Role>, U
 
     @Override
     public Role update() {
-        return null;
+        new RoleRequest().update(this.id, this);
+        return this;
     }
 
     @Override

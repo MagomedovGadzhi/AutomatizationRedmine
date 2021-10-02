@@ -37,7 +37,8 @@ public class RoleRequest extends BaseRequests implements Create<Role>, Delete, R
 
     @Override
     public Role read(Integer id) {
-        String query = "SELECT id, \"name\", \"position\", assignable, builtin, permissions, issues_visibility, users_visibility, time_entries_visibility, all_roles_managed, settings\n" +
+        String query = "SELECT id, \"name\", \"position\", assignable, builtin, permissions, issues_visibility, " +
+                "users_visibility, time_entries_visibility, all_roles_managed, settings\n" +
                 "FROM public.roles\n" +
                 "WHERE id=?;\n";
         List<Map<String, Object>> queryResult = PostgresConnection.INSTANCE.executeQuery(query, id);
@@ -46,7 +47,24 @@ public class RoleRequest extends BaseRequests implements Create<Role>, Delete, R
 
     @Override
     public void update(Integer id, Role role) {
-        //TODO:
+        String query = "UPDATE public.roles\n" +
+                "SET \"name\"=?, \"position\"=?, assignable=?, builtin=?, permissions=?, issues_visibility=?, " +
+                "users_visibility=?, time_entries_visibility=?, all_roles_managed=?, settings=?\n" +
+                "WHERE id=?;\n";
+        PostgresConnection.INSTANCE.executeQuery(
+                query,
+                role.getName(),
+                role.getPosition(),
+                role.getAssignable(),
+                role.getBuiltin(),
+                role.getStringOfPermissions(),          //вызывается метод возвращаюший строку со списком прав доступа
+                role.getIssuesVisibility().issuesVisibilityCode,
+                role.getUserVisibility().userVisibilityCode,
+                role.getTimeEntriesVisibility().timeEntriesVisibilityCode,
+                role.getAllRolesManaged(),
+                role.getSettings(),
+                id
+        );
     }
 
     private Role from(Map<String, Object> data) {
