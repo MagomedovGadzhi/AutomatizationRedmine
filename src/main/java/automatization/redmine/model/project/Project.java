@@ -1,5 +1,6 @@
 package automatization.redmine.model.project;
 
+import automatization.redmine.db.requests.ProjectRequest;
 import automatization.redmine.model.Creatable;
 import automatization.redmine.model.CreatableEntity;
 import automatization.redmine.model.Deleteable;
@@ -10,6 +11,7 @@ import automatization.redmine.utils.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 @Setter
+@Accessors(chain = true)
 public class Project extends CreatableEntity implements Creatable<Project>, Deleteable<Project>, Updateable<Project> {
 
     private String name = "MGM_" + StringUtils.randomEnglishString(5);
@@ -36,21 +39,23 @@ public class Project extends CreatableEntity implements Creatable<Project>, Dele
 
     @Override
     public Project create() {
-        // TODO: Реализовать с помощью SQL-Запроса
-        throw new UnsupportedOperationException();
+        new ProjectRequest().create(this);
+        return this;
     }
 
     @Override
     public Project delete() {
-        return null;
+        new ProjectRequest().delete(this.id);
+        return this;
     }
 
     @Override
     public Project update() {
-        return null;
+        new ProjectRequest().update(this.id, this);
+        return this;
     }
 
     public void addUserWithRoles(User user, List<Role> roles) {
-        usersAndRoles.put(user, roles);
+        usersAndRoles.forEach((k, v) -> k.addProject(this, v));
     }
 }

@@ -20,12 +20,13 @@ public class RoleRequest extends BaseRequests implements Create<Role>, Delete, R
                 role.getPosition(),
                 role.getAssignable(),
                 role.getBuiltin(),
-                role.getStringOfPermissions(),          //вызывается метод возвращаюший строку со списком прав доступа
+                role.getStringOfPermissions(),          //метод возвращаюший строку со списком прав доступа
                 role.getIssuesVisibility().issuesVisibilityCode,
                 role.getUserVisibility().userVisibilityCode,
                 role.getTimeEntriesVisibility().timeEntriesVisibilityCode,
                 role.getAllRolesManaged(),
-                role.getSettings()).get(0).get("id");
+                role.getSettings()
+        ).get(0).get("id");
         role.setId(roleId);
     }
 
@@ -57,7 +58,7 @@ public class RoleRequest extends BaseRequests implements Create<Role>, Delete, R
                 role.getPosition(),
                 role.getAssignable(),
                 role.getBuiltin(),
-                role.getStringOfPermissions(),          //вызывается метод возвращаюший строку со списком прав доступа
+                role.getStringOfPermissions(),          //метод возвращаюший строку со списком прав доступа
                 role.getIssuesVisibility().issuesVisibilityCode,
                 role.getUserVisibility().userVisibilityCode,
                 role.getTimeEntriesVisibility().timeEntriesVisibilityCode,
@@ -73,23 +74,12 @@ public class RoleRequest extends BaseRequests implements Create<Role>, Delete, R
                 .setPosition((Integer) data.get("position"))
                 .setAssignable((Boolean) data.get("assignable"))
                 .setBuiltin((Integer) (data.get("builtin")))
-                .setPermissionsFromString(checkIsStringNull(data.get("permissions")))
+                .setPermissionsFromString(checkIsStringNull(data.get("permissions")))           //проверка, что поле не нульное
                 .setIssuesVisibility(IssuesVisibility.valueOf(data.get("issues_visibility").toString().toUpperCase()))
                 .setUserVisibility(UserVisibility.valueOf(data.get("users_visibility").toString().toUpperCase()))
                 .setTimeEntriesVisibility(TimeEntriesVisibility.valueOf(data.get("time_entries_visibility").toString().toUpperCase()))
                 .setAllRolesManaged((Boolean) data.get("all_roles_managed"))
                 .setSettings((String) data.get("settings"))
                 .setId((Integer) data.get("id"));
-    }
-
-    /**
-     * Отдельный метод проверяющий, что объект не равен NULL.
-     * Был создан т.к. при попытке установить значение переменной,
-     * которая в БД равна NULL, возникало исключение.
-     * Пока использую только для стрингов.
-     */
-    private String checkIsStringNull(Object object) {
-        if (object == null) return null;
-        else return object.toString();
     }
 }

@@ -7,5 +7,5 @@ public enum ProjectStatus {
     CREATED(1),
     ARCH(9);
 
-    private final Integer statusCode;
+    public final Integer statusCode;
 }
