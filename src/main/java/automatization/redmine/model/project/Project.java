@@ -58,4 +58,26 @@ public class Project extends CreatableEntity implements Creatable<Project>, Dele
     public void addUserWithRoles(User user, List<Role> roles) {
         usersAndRoles.forEach((k, v) -> k.addProject(this.id, v));
     }
+
+    @Override
+    public String toString() {
+        return "Project { " + "\n"
+                + "id = " + id + "\n"
+                + "name = " + name + "\n"
+                + "description = " + description + "\n"
+                + "homepage = " + homepage + "\n"
+                + "isPublic = " + isPublic + "\n"
+                + "parentId = " + parentId + "\n"
+                + "identifier = " + identifier + "\n"
+                + "projectStatus = " + projectStatus + "\n"
+                + "ift = " + ift + "\n"
+                + "rgt = " + rgt + "\n"
+                + "inheritMembers = " + inheritMembers + "\n"
+                + "defaultVersionId = " + defaultVersionId + "\n"
+                + "defaultAssignedToId = " + defaultAssignedToId + "\n"
+                + "createdOn = " + createdOn + "\n"
+                + "updatedOn = " + updatedOn + "\n"
+                + "usersAndRoles = " + usersAndRoles + "\n"
+                + "}";
+    }
 }
