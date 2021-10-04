@@ -8,8 +8,11 @@ public class ProjectTest {
     @Test
     public void projectCreationTest() {
         Project project1 = new Project();
+        project1.create();
 
-        Project project2 = new Project();
-        project2.setName("TestProjectName");
+        project1.setIsPublic(false);
+        project1.update();
+
+        project1.delete();
     }
 }

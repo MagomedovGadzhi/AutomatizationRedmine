@@ -83,7 +83,34 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
         return this;
     }
 
-    public void addProject(Project project, List<Role> roles) {
-        // TODO: Реализовать с помощью SQL-запроса
+    public void addProject(Integer projectId, List<Role> roles) {
+        new UserRequests().addUserToProject(this, projectId, roles);
+    }
+
+    @Override
+    public String toString() {
+        return "User { " + "\n"
+                + "id = " + id + "\n"
+                + "login = " + login + "\n"
+                + "password = " + password + "\n"
+                + "salt = " + salt + "\n"
+                + "hashedPassword = " + hashedPassword + "\n"
+                + "firstName = " + firstName + "\n"
+                + "lastName = " + lastName + "\n"
+                + "isAdmin = " + isAdmin + "\n"
+                + "status = " + status + "\n"
+                + "lastLoginOn = " + lastLoginOn + "\n"
+                + "language = " + language + "\n"
+                + "authSourceId = " + authSourceId + "\n"
+                + "type = " + type + "\n"
+                + "identityUrl = " + identityUrl + "\n"
+                + "mailNotification = " + mailNotification + "\n"
+                + "mustChangePassword = " + mustChangePassword + "\n"
+                + "passwordChangedOn = " + passwordChangedOn + "\n"
+                + "createdOn = " + createdOn + "\n"
+                + "updatedOn = " + updatedOn + "\n"
+                + "tokens = " + tokens + "\n"
+                + "emails = " + emails + "\n"
+                + "}";
     }
 }

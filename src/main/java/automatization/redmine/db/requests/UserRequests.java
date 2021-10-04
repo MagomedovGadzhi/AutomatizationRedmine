@@ -4,7 +4,10 @@ import automatization.redmine.db.connection.PostgresConnection;
 import automatization.redmine.db.requests.interfases.Create;
 import automatization.redmine.db.requests.interfases.Delete;
 import automatization.redmine.db.requests.interfases.Update;
+import automatization.redmine.model.role.Role;
 import automatization.redmine.model.user.User;
+
+import java.util.List;
 
 public class UserRequests extends BaseRequests implements Create<User>, Update<User>, Delete {
 
@@ -74,5 +77,9 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
                 user.getPasswordChangedOn(),
                 id
         );
+    }
+
+    public void addUserToProject(User user, Integer projectId, List<Role> roles) {
+        //TODO
     }
 }

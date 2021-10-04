@@ -56,6 +56,6 @@ public class Project extends CreatableEntity implements Creatable<Project>, Dele
     }
 
     public void addUserWithRoles(User user, List<Role> roles) {
-        usersAndRoles.forEach((k, v) -> k.addProject(this, v));
+        usersAndRoles.forEach((k, v) -> k.addProject(this.id, v));
     }
 }

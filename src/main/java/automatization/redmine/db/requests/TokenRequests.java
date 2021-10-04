@@ -2,7 +2,9 @@ package automatization.redmine.db.requests;
 
 import automatization.redmine.db.connection.PostgresConnection;
 import automatization.redmine.db.requests.interfases.Create;
+import automatization.redmine.db.requests.interfases.Delete;
 import automatization.redmine.db.requests.interfases.ReadAll;
+import automatization.redmine.db.requests.interfases.Update;
 import automatization.redmine.model.user.Token;
 import automatization.redmine.model.user.User;
 import lombok.AllArgsConstructor;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class TokenRequests extends BaseRequests implements Create<Token>, ReadAll<Token> {
+public class TokenRequests extends BaseRequests implements Create<Token>, ReadAll<Token>, Update<Token>, Delete {
     private User user;
 
     @Override
@@ -46,6 +48,28 @@ public class TokenRequests extends BaseRequests implements Create<Token>, ReadAl
         return queryResult.stream()
                 .map(data -> from(data, user))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(Integer id) {
+        String query = "DELETE FROM public.tokens WHERE id = ?;";
+        PostgresConnection.INSTANCE.executeQuery(query, id);
+    }
+
+    @Override
+    public void update(Integer id, Token token) {
+        String query = "UPDATE public.tokens\n" +
+                "SET user_id=?, \"action\"=?, value=?, created_on=?, updated_on=?\n" +
+                "WHERE id=?;\n";
+        PostgresConnection.INSTANCE.executeQuery(
+                query,
+                token.getUserId(),
+                token.getAction(),
+                token.getValue(),
+                token.getCreatedOn(),
+                token.getUpdatedOn(),
+                id
+        );
     }
 
     private Token from(Map<String, Object> data, User user) {
