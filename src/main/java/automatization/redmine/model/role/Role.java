@@ -4,6 +4,7 @@ import automatization.redmine.db.requests.RoleRequest;
 import automatization.redmine.model.Creatable;
 import automatization.redmine.model.Deleteable;
 import automatization.redmine.model.Entity;
+import automatization.redmine.model.Readable;
 import automatization.redmine.model.Updateable;
 import automatization.redmine.utils.StringUtils;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class Role extends Entity implements Creatable<Role>, Deleteable<Role>, Updateable<Role> {
+public class Role extends Entity implements Creatable<Role>, Deleteable<Role>, Updateable<Role>, Readable<Role> {
 
     private String name = "MGM_" + StringUtils.randomEnglishString(5);
     private Integer position = 1;
@@ -75,6 +76,11 @@ public class Role extends Entity implements Creatable<Role>, Deleteable<Role>, U
     public Role update() {
         new RoleRequest().update(this.id, this);
         return this;
+    }
+
+    @Override
+    public Role read() {
+        return new RoleRequest().read(this.id);
     }
 
     @Override

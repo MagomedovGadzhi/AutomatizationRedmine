@@ -4,6 +4,7 @@ import automatization.redmine.db.requests.ProjectRequest;
 import automatization.redmine.model.Creatable;
 import automatization.redmine.model.CreatableEntity;
 import automatization.redmine.model.Deleteable;
+import automatization.redmine.model.Readable;
 import automatization.redmine.model.Updateable;
 import automatization.redmine.model.role.Role;
 import automatization.redmine.model.user.User;
@@ -21,7 +22,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class Project extends CreatableEntity implements Creatable<Project>, Deleteable<Project>, Updateable<Project> {
+public class Project extends CreatableEntity implements Creatable<Project>, Deleteable<Project>, Updateable<Project>, Readable<Project> {
 
     private String name = "MGM_" + StringUtils.randomEnglishString(5);
     private String description = "Тестовый проект";
@@ -53,6 +54,11 @@ public class Project extends CreatableEntity implements Creatable<Project>, Dele
     public Project update() {
         new ProjectRequest().update(this.id, this);
         return this;
+    }
+
+    @Override
+    public Project read() {
+        return new ProjectRequest().read(this.id);
     }
 
     public void addUserWithRoles(User user, List<Role> roles) {
