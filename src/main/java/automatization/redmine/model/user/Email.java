@@ -4,17 +4,21 @@ import automatization.redmine.db.requests.EmailRequests;
 import automatization.redmine.model.Creatable;
 import automatization.redmine.model.CreatableEntity;
 import automatization.redmine.model.Deleteable;
+import automatization.redmine.model.Readable;
 import automatization.redmine.model.Updateable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.io.IOException;
+import java.nio.CharBuffer;
 
 import static automatization.redmine.utils.StringUtils.randomEmail;
 
 @Accessors(chain = true)
 @Setter
 @Getter
-public class Email extends CreatableEntity implements Creatable<Email>, Deleteable<Email>, Updateable<Email> {
+public class Email extends CreatableEntity implements Creatable<Email>, Deleteable<Email>, Updateable<Email>, Readable<Email> {
 
     private Integer userId;
     private String address = randomEmail();
@@ -42,6 +46,11 @@ public class Email extends CreatableEntity implements Creatable<Email>, Deleteab
     public Email update() {
         new EmailRequests().update(this.id, this);
         return this;
+    }
+
+    @Override
+    public Email read() {
+        return new EmailRequests().read(this.id);
     }
 
     @Override

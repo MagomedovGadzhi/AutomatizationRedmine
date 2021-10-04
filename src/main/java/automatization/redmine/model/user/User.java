@@ -1,11 +1,13 @@
 package automatization.redmine.model.user;
 
+import automatization.redmine.db.requests.EmailRequests;
+import automatization.redmine.db.requests.TokenRequests;
 import automatization.redmine.db.requests.UserRequests;
 import automatization.redmine.model.Creatable;
 import automatization.redmine.model.CreatableEntity;
 import automatization.redmine.model.Deleteable;
+import automatization.redmine.model.Readable;
 import automatization.redmine.model.Updateable;
-import automatization.redmine.model.project.Project;
 import automatization.redmine.model.role.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +26,7 @@ import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 @Setter
 @Getter
 @Accessors(chain = true)
-public class User extends CreatableEntity implements Creatable<User>, Updateable<User>, Deleteable<User> {
+public class User extends CreatableEntity implements Creatable<User>, Updateable<User>, Deleteable<User>, Readable<User> {
 
     private String login = "MGM_" + randomEnglishString(10);
     private String password = "1qaz@WSX";
@@ -83,6 +85,14 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
         return this;
     }
 
+    @Override
+    public User read() {
+        User resultUser = new UserRequests().read(this.id);
+        resultUser.setEmails(new EmailRequests(resultUser).readAll());
+        resultUser.setTokens(new TokenRequests(resultUser).readAll());
+        return  resultUser;
+    }
+
     public void addProject(Integer projectId, List<Role> roles) {
         new UserRequests().addUserToProject(this, projectId, roles);
     }
@@ -92,7 +102,7 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
         return "User { " + "\n"
                 + "id = " + id + "\n"
                 + "login = " + login + "\n"
-                + "password = " + password + "\n"
+                + "password (по умолчанию) = " + password + "\n"
                 + "salt = " + salt + "\n"
                 + "hashedPassword = " + hashedPassword + "\n"
                 + "firstName = " + firstName + "\n"

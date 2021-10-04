@@ -6,15 +6,17 @@ import java.time.LocalDateTime;
 public abstract class BaseRequests {
 
     protected LocalDateTime toLocalDate(Object timestamp) {
+        if (timestamp == null) {
+            return null;
+        }
         Timestamp ts = (Timestamp) timestamp;
         return ts.toLocalDateTime();
     }
 
     /**
-     * Отдельный метод проверяющий, что объект не равен NULL.
-     * Был создан т.к. при попытке установить значение переменной объекта,
+     * Отдельный методы проверяющие, что объект не равен NULL.
+     * Созданы т.к. при попытке установить значение переменной объекта,
      * которая в БД равна NULL, возникало исключение.
-     * Пока использую только для String.
      */
     protected String checkIsStringNull(Object object) {
         if (object == null) return null;

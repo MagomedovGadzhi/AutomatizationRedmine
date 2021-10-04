@@ -10,4 +10,18 @@ public enum Status {
     LOCKED(3);
 
     public final int statusCode;
+
+    public static Status getStatusFromCode(Integer statusCode) {
+        switch (statusCode) {
+            case 0:
+                return UNREGISTERED;
+            case 1:
+                return ACTIVE;
+            case 2:
+                return UNACCEPTED;
+            case 3:
+                return LOCKED;
+        }
+        throw new IllegalArgumentException("Указанного кода статуса не существует.");
+    }
 }

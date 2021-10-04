@@ -3,13 +3,18 @@ package automatization.redmine.db.requests;
 import automatization.redmine.db.connection.PostgresConnection;
 import automatization.redmine.db.requests.interfases.Create;
 import automatization.redmine.db.requests.interfases.Delete;
+import automatization.redmine.db.requests.interfases.Read;
 import automatization.redmine.db.requests.interfases.Update;
 import automatization.redmine.model.role.Role;
+import automatization.redmine.model.user.Language;
+import automatization.redmine.model.user.MailNotification;
+import automatization.redmine.model.user.Status;
 import automatization.redmine.model.user.User;
 
 import java.util.List;
+import java.util.Map;
 
-public class UserRequests extends BaseRequests implements Create<User>, Update<User>, Delete {
+public class UserRequests extends BaseRequests implements Create<User>, Update<User>, Read<User>, Delete {
 
     @Override
     public void create(User user) {
@@ -77,6 +82,35 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
                 user.getPasswordChangedOn(),
                 id
         );
+    }
+
+    @Override
+    public User read(Integer userId) {
+        String query = "SELECT * FROM public.users WHERE id = ?";
+        List<Map<String, Object>> queryResult = PostgresConnection.INSTANCE.executeQuery(query, userId);
+        return from(queryResult.get(0));
+    }
+
+    private User from(Map<String, Object> data) {
+        return (User) new User()
+                .setLogin((String) data.get("login"))
+                .setSalt((String) data.get("salt"))
+                .setHashedPassword((String) data.get("hashed_password"))
+                .setFirstName((String) data.get("firstname"))
+                .setLastName((String) data.get("lastname"))
+                .setIsAdmin((Boolean) data.get("admin"))
+                .setStatus(Status.getStatusFromCode((Integer) data.get("status")))
+                .setLastLoginOn(toLocalDate(data.get("last_login_on")))
+                .setLanguage(Language.getLanguageFromCode(data.get("language").toString()))
+                .setAuthSourceId((String) data.get("auth_source_id"))
+                .setType((String) data.get("type"))
+                .setIdentityUrl((String) data.get("identity_url"))
+                .setMailNotification(MailNotification.valueOf(data.get("mail_notification").toString().toUpperCase()))
+                .setMustChangePassword((Boolean) data.get("must_change_passwd"))
+                .setPasswordChangedOn(toLocalDate(data.get("passwd_changed_on")))
+                .setUpdatedOn(toLocalDate(data.get("updated_on")))
+                .setCreatedOn(toLocalDate(data.get("created_on")))
+                .setId((Integer) data.get("id"));
     }
 
     public void addUserToProject(User user, Integer projectId, List<Role> roles) {

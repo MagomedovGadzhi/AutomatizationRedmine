@@ -4,6 +4,7 @@ import automatization.redmine.db.requests.TokenRequests;
 import automatization.redmine.model.Creatable;
 import automatization.redmine.model.CreatableEntity;
 import automatization.redmine.model.Deleteable;
+import automatization.redmine.model.Readable;
 import automatization.redmine.model.Updateable;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import static automatization.redmine.utils.StringUtils.randomHexString;
 @Accessors(chain = true)
 @Setter
 @Getter
-public class Token extends CreatableEntity implements Creatable<Token>, Deleteable<Token>, Updateable<Token> {
+public class Token extends CreatableEntity implements Creatable<Token>, Deleteable<Token>, Updateable<Token>, Readable<Token> {
 
     private Integer userId;
     private TokenType action = TokenType.API;
@@ -47,6 +48,11 @@ public class Token extends CreatableEntity implements Creatable<Token>, Deleteab
     public Token update() {
         new TokenRequests().update(this.id, this);
         return this;
+    }
+
+    @Override
+    public Token read() {
+        return new TokenRequests().read(this.id);
     }
 
     @Override

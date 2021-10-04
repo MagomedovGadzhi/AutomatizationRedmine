@@ -46,6 +46,7 @@ public class EmailRequests extends BaseRequests implements Create<Email>, ReadAl
 
     @Override
     public Email read(Integer id) {
+        Objects.requireNonNull(user.getId());
         String query = "SELECT * FROM public.email_addresses WHERE id = ?";
         List<Map<String, Object>> queryResult = PostgresConnection.INSTANCE.executeQuery(query, id);
         return from(queryResult.get(0), user);

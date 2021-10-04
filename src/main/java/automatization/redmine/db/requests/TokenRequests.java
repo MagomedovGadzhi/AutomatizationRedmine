@@ -1,10 +1,7 @@
 package automatization.redmine.db.requests;
 
 import automatization.redmine.db.connection.PostgresConnection;
-import automatization.redmine.db.requests.interfases.Create;
-import automatization.redmine.db.requests.interfases.Delete;
-import automatization.redmine.db.requests.interfases.ReadAll;
-import automatization.redmine.db.requests.interfases.Update;
+import automatization.redmine.db.requests.interfases.*;
 import automatization.redmine.model.user.Token;
 import automatization.redmine.model.user.User;
 import lombok.AllArgsConstructor;
@@ -17,7 +14,7 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class TokenRequests extends BaseRequests implements Create<Token>, ReadAll<Token>, Update<Token>, Delete {
+public class TokenRequests extends BaseRequests implements Create<Token>, ReadAll<Token>, Update<Token>, Read<Token>, Delete {
     private User user;
 
     @Override
@@ -35,6 +32,14 @@ public class TokenRequests extends BaseRequests implements Create<Token>, ReadAl
         );
         Integer tokenId = (Integer) queryResult.get(0).get("id");
         token.setId(tokenId);
+    }
+
+    @Override
+    public Token read(Integer id) {
+        Objects.requireNonNull(user.getId());
+        String query = "SELECT * FROM tokens WHERE id = ?";
+        List<Map<String, Object>> queryResult = PostgresConnection.INSTANCE.executeQuery(query, id);
+        return from(queryResult.get(0), user);
     }
 
     @Override
@@ -74,9 +79,7 @@ public class TokenRequests extends BaseRequests implements Create<Token>, ReadAl
 
     private Token from(Map<String, Object> data, User user) {
         return (Token) new Token(user)
-                .setAction(
-                        Token.TokenType.valueOf(data.get("action").toString().toUpperCase())
-                )
+                .setAction(Token.TokenType.valueOf(data.get("action").toString().toUpperCase()))
                 .setValue((String) data.get("value"))
                 .setCreatedOn(toLocalDate(data.get("created_on")))
                 .setUpdatedOn(toLocalDate(data.get("updated_on")))
