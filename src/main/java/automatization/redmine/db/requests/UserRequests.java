@@ -11,8 +11,10 @@ import automatization.redmine.model.user.MailNotification;
 import automatization.redmine.model.user.Status;
 import automatization.redmine.model.user.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class UserRequests extends BaseRequests implements Create<User>, Update<User>, Read<User>, Delete {
 
@@ -114,6 +116,28 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
     }
 
     public void addUserToProject(User user, Integer projectId, List<Role> roles) {
-        //TODO
+        Integer userId = Objects.requireNonNull(user.getId());
+        String query = "INSERT INTO public.members\n" +
+                "(id, user_id, project_id, created_on, mail_notification)\n" +
+                "VALUES(DEFAULT, ?, ?, ?, ?) RETURNING id;\n";
+        Integer memberId = (Integer) PostgresConnection.INSTANCE.executeQuery(
+                query,
+                userId,
+                projectId,
+                LocalDateTime.now(),
+                false
+        ).get(0).get("id");
+
+        query = "INSERT INTO public.member_roles\n" +
+                "(id, member_id, role_id, inherited_from)\n" +
+                "VALUES(DEFAULT, ?, ?, ?);\n";
+        for (Role role : roles) {
+            PostgresConnection.INSTANCE.executeQuery(
+                    query,
+                    memberId,
+                    role.getId(),
+                    null
+            );
+        }
     }
 }
