@@ -32,7 +32,7 @@ public class PostgresConnection implements DatabaseConnection {
         Properties connectionProperties = new Properties();
         connectionProperties.setProperty("user", user);
         connectionProperties.setProperty("password", password);
-        Connection connection = DriverManager.getConnection(url, connectionProperties);
+        connection = DriverManager.getConnection(url, connectionProperties);
     }
 
     @Override
