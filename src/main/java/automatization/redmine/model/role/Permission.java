@@ -2,6 +2,8 @@ package automatization.redmine.model.role;
 
 import lombok.AllArgsConstructor;
 
+import java.util.stream.Stream;
+
 @AllArgsConstructor
 public enum Permission {
     ADD_PROJECT("Создание проекта"),
@@ -74,4 +76,11 @@ public enum Permission {
     MANAGE_WIKI("Управление Wiki");
 
     private final String description;
+
+    public static Permission getPermissionByCode(String description) {
+        return Stream.of(values())
+                .filter(permission -> permission.description.equals(description))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Не найден объект enum Permission"));
+    }
 }

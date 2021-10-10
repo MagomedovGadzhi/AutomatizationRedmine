@@ -103,7 +103,7 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
                 .setIsAdmin((Boolean) data.get("admin"))
                 .setStatus(Status.getStatusFromCode((Integer) data.get("status")))
                 .setLastLoginOn(toLocalDate(data.get("last_login_on")))
-                .setLanguage(Language.getLanguageFromCode(data.get("language").toString()))
+                .setLanguage(Language.getLanguageByCode(data.get("language").toString()))
                 .setAuthSourceId((String) data.get("auth_source_id"))
                 .setType((String) data.get("type"))
                 .setIdentityUrl((String) data.get("identity_url"))

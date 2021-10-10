@@ -31,8 +31,8 @@ public class Project extends CreatableEntity implements Creatable<Project>, Dele
     private Integer parentId;
     private String identifier = "MGM_" + StringUtils.randomEnglishString(5);
     private ProjectStatus projectStatus = ProjectStatus.CREATED;
-    private Integer ift;
-    private Integer rgt;
+    private Integer ift = 1;        //захардкодил поля ift, rgt, т.к. падала БД.
+    private Integer rgt = 1;
     private Boolean inheritMembers = false;
     private Integer defaultVersionId;
     private Integer defaultAssignedToId;

@@ -2,6 +2,8 @@ package automatization.redmine.model.user;
 
 import lombok.AllArgsConstructor;
 
+import java.util.stream.Stream;
+
 @AllArgsConstructor
 public enum MailNotification {
     ALL("О всех событиях во всех моих проектах", "all"),
@@ -12,4 +14,11 @@ public enum MailNotification {
 
     private final String description;
     public final String mailNotificationCode;
+
+    public static MailNotification getMailNotificationByCode(String code) {
+        return Stream.of(values())
+                .filter(mailNotification -> mailNotification.mailNotificationCode.equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Не найден объект enum MailNotification"));
+    }
 }

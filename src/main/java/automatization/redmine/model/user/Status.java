@@ -2,6 +2,8 @@ package automatization.redmine.model.user;
 
 import lombok.AllArgsConstructor;
 
+import java.util.stream.Stream;
+
 @AllArgsConstructor
 public enum Status {
     UNREGISTERED(0),
@@ -11,17 +13,10 @@ public enum Status {
 
     public final int statusCode;
 
-    public static Status getStatusFromCode(Integer statusCode) {
-        switch (statusCode) {
-            case 0:
-                return UNREGISTERED;
-            case 1:
-                return ACTIVE;
-            case 2:
-                return UNACCEPTED;
-            case 3:
-                return LOCKED;
-        }
-        throw new IllegalArgumentException("Указанного кода статуса не существует.");
+    public static Status getStatusFromCode(int code) {
+        return Stream.of(values())
+                .filter(status -> status.statusCode == code)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Не найден объект enum Status"));
     }
 }

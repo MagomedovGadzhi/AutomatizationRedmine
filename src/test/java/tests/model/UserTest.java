@@ -1,4 +1,4 @@
-package tests;
+package tests.model;
 
 import automatization.redmine.model.project.Project;
 import automatization.redmine.model.role.Role;

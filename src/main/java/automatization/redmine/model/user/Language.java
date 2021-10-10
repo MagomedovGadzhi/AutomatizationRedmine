@@ -2,6 +2,8 @@ package automatization.redmine.model.user;
 
 import lombok.AllArgsConstructor;
 
+import java.util.stream.Stream;
+
 @AllArgsConstructor
 public enum Language {
     RUSSIAN("ru"),
@@ -9,13 +11,10 @@ public enum Language {
 
     public final String languageCode;
 
-    public static Language getLanguageFromCode(String languageCode) {
-        switch (languageCode) {
-            case "ru":
-                return RUSSIAN;
-            case "en":
-                return ENGLISH;
-        }
-        throw new IllegalArgumentException("Указанного кода статуса не существует.");
+    public static Language getLanguageByCode(String code) {
+        return Stream.of(values())
+                .filter(language -> language.languageCode.equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Не найден объект enum Language"));
     }
 }

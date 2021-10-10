@@ -1,4 +1,4 @@
-package tests;
+package tests.model;
 
 import automatization.redmine.db.requests.RoleRequest;
 import automatization.redmine.model.role.Permission;
@@ -21,7 +21,7 @@ public class RoleTest {
                 "- :edit_messages\n" +
                 "- :manage_wiki\n";
          */
-        Role role2 = new RoleRequest().read(1744);
+        Role role2 = new RoleRequest().read(1863);
         System.out.println(role2);
         role2.setBuiltin(1)
                 .setAllRolesManaged(true)

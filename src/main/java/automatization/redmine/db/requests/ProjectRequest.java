@@ -89,7 +89,7 @@ public class ProjectRequest extends BaseRequests implements Create<Project>, Del
                 .setIsPublic((Boolean) (data.get("is_public")))
                 .setParentId(checkIsIntegerNull(data.get("parent_id")))        //проверка, что поле не нульное
                 .setIdentifier((String) (data.get("identifier")))
-                .setProjectStatus(ProjectStatus.valueOf(data.get("status").toString()))
+                .setProjectStatus(ProjectStatus.getProjectStatusByCode((int) data.get("status")))
                 .setIft(checkIsIntegerNull(data.get("ift")))
                 .setRgt(checkIsIntegerNull(data.get("rgt")))
                 .setInheritMembers((Boolean) data.get("inherit_members"))

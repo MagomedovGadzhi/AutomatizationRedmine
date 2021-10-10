@@ -1,4 +1,4 @@
-package tests;
+package tests.model;
 
 import automatization.redmine.model.project.Project;
 import org.testng.annotations.Test;
@@ -12,6 +12,9 @@ public class ProjectTest {
 
         project1.setIsPublic(false);
         project1.update();
+
+        Project project2 = project1.read();
+        System.out.println(project2);
 
         project1.delete();
     }

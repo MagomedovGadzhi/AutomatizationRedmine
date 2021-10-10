@@ -1,4 +1,4 @@
-package tests;
+package tests.model;
 
 import automatization.redmine.db.requests.TokenRequests;
 import automatization.redmine.db.requests.UserRequests;
