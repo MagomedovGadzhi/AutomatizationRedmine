@@ -6,12 +6,13 @@ import java.util.stream.Stream;
 
 @AllArgsConstructor
 public enum Status {
-    UNREGISTERED(0),
-    ACTIVE(1),
-    UNACCEPTED(2),
-    LOCKED(3);
+    UNREGISTERED(0, "Не зарегистрирован"),
+    ACTIVE(1, "Активирован"),
+    UNACCEPTED(2, "Зарегестрирован, но еще не подтвердил почтовый ящик или не актвирован администратором"),
+    LOCKED(3, "Заблокирован");
 
     public final int statusCode;
+    public final String description;
 
     public static Status getStatusFromCode(int code) {
         return Stream.of(values())

@@ -18,12 +18,12 @@ public abstract class BaseRequests {
      * Созданы т.к. при попытке установить значение переменной объекта,
      * которая в БД равна NULL, возникало исключение.
      */
-    protected String checkIsStringNull(Object object) {
+    protected String getStringFromObject(Object object) {
         if (object == null) return null;
         else return object.toString();
     }
 
-    protected Integer checkIsIntegerNull(Object object) {
+    protected Integer getIntegerFromObject(Object object) {
         if (object == null) return null;
         else return (Integer) object;
     }

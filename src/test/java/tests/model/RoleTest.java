@@ -10,8 +10,8 @@ public class RoleTest {
 
     @Test
     public void roleCreationTest() {
-        //Role role1 = new Role();
-        //role1.create();
+        Role role1 = new Role();
+        role1.create();
         /*
         role1.getPermissions().add(Permission.ADD_DOCUMENTS);
         role1.getPermissions().add(Permission.ADD_PROJECT);

@@ -1,7 +1,7 @@
 package automatization.redmine.db.requests;
 
 import automatization.redmine.db.connection.PostgresConnection;
-import automatization.redmine.db.requests.interfases.*;
+import automatization.redmine.db.requests.interfaсes.*;
 import automatization.redmine.model.project.Project;
 import automatization.redmine.model.project.ProjectStatus;
 
@@ -85,16 +85,16 @@ public class ProjectRequest extends BaseRequests implements Create<Project>, Del
         return (Project) new Project()
                 .setName((String) data.get("name"))
                 .setDescription((String) data.get("description"))
-                .setHomepage(checkIsStringNull(data.get("homepage")))           //проверка, что поле не нульное
+                .setHomepage(getStringFromObject(data.get("homepage")))           //проверка, что поле не нульное
                 .setIsPublic((Boolean) (data.get("is_public")))
-                .setParentId(checkIsIntegerNull(data.get("parent_id")))        //проверка, что поле не нульное
+                .setParentId(getIntegerFromObject(data.get("parent_id")))        //проверка, что поле не нульное
                 .setIdentifier((String) (data.get("identifier")))
                 .setProjectStatus(ProjectStatus.getProjectStatusByCode((int) data.get("status")))
-                .setIft(checkIsIntegerNull(data.get("ift")))
-                .setRgt(checkIsIntegerNull(data.get("rgt")))
+                .setIft(getIntegerFromObject(data.get("ift")))
+                .setRgt(getIntegerFromObject(data.get("rgt")))
                 .setInheritMembers((Boolean) data.get("inherit_members"))
-                .setDefaultVersionId(checkIsIntegerNull(data.get("default_version_id")))        //проверка, что поле не нульное
-                .setDefaultAssignedToId(checkIsIntegerNull(data.get("default_assigned_to_id")))    //проверка, что поле не нульное
+                .setDefaultVersionId(getIntegerFromObject(data.get("default_version_id")))        //проверка, что поле не нульное
+                .setDefaultAssignedToId(getIntegerFromObject(data.get("default_assigned_to_id")))    //проверка, что поле не нульное
                 .setCreatedOn(toLocalDate(data.get("created_on")))
                 .setUpdatedOn(toLocalDate(data.get("updated_on")))
                 .setId((Integer) data.get("id"));

@@ -1,4 +1,4 @@
-package automatization.redmine.db.requests.interfases;
+package automatization.redmine.db.requests.interfaсes;
 
 import automatization.redmine.model.Entity;
 

@@ -1,10 +1,10 @@
 package automatization.redmine.db.requests;
 
 import automatization.redmine.db.connection.PostgresConnection;
-import automatization.redmine.db.requests.interfases.Create;
-import automatization.redmine.db.requests.interfases.Delete;
-import automatization.redmine.db.requests.interfases.Read;
-import automatization.redmine.db.requests.interfases.Update;
+import automatization.redmine.db.requests.interfaсes.Create;
+import automatization.redmine.db.requests.interfaсes.Delete;
+import automatization.redmine.db.requests.interfaсes.Read;
+import automatization.redmine.db.requests.interfaсes.Update;
 import automatization.redmine.model.role.Role;
 import automatization.redmine.model.user.Language;
 import automatization.redmine.model.user.MailNotification;
@@ -41,7 +41,7 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
                 user.getUpdatedOn(),
                 user.getType(),
                 user.getIdentityUrl(),
-                user.getMailNotification().mailNotificationCode,
+                user.getMailNotification().name().toLowerCase(),
                 user.getSalt(),
                 user.getMustChangePassword(),
                 user.getPasswordChangedOn()
@@ -78,7 +78,7 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
                 user.getUpdatedOn(),
                 user.getType(),
                 user.getIdentityUrl(),
-                user.getMailNotification().mailNotificationCode,
+                user.getMailNotification().name().toLowerCase(),
                 user.getSalt(),
                 user.getMustChangePassword(),
                 user.getPasswordChangedOn(),

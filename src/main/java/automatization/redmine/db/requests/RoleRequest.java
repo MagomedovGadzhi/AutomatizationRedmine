@@ -1,7 +1,7 @@
 package automatization.redmine.db.requests;
 
 import automatization.redmine.db.connection.PostgresConnection;
-import automatization.redmine.db.requests.interfases.*;
+import automatization.redmine.db.requests.interfaсes.*;
 import automatization.redmine.model.role.*;
 
 import java.util.List;
@@ -21,8 +21,8 @@ public class RoleRequest extends BaseRequests implements Create<Role>, Delete, R
                 role.getAssignable(),
                 role.getBuiltin(),
                 role.getStringOfPermissions(),          //метод возвращаюший строку со списком прав доступа
-                role.getIssuesVisibility().issuesVisibilityCode,
-                role.getUserVisibility().userVisibilityCode,
+                role.getIssuesVisibility().name().toLowerCase(),
+                role.getUserVisibility().name().toLowerCase(),
                 role.getTimeEntriesVisibility().timeEntriesVisibilityCode,
                 role.getAllRolesManaged(),
                 role.getSettings()
@@ -59,8 +59,8 @@ public class RoleRequest extends BaseRequests implements Create<Role>, Delete, R
                 role.getAssignable(),
                 role.getBuiltin(),
                 role.getStringOfPermissions(),          //метод возвращаюший строку со списком прав доступа
-                role.getIssuesVisibility().issuesVisibilityCode,
-                role.getUserVisibility().userVisibilityCode,
+                role.getIssuesVisibility().name().toLowerCase(),
+                role.getUserVisibility().name().toLowerCase(),
                 role.getTimeEntriesVisibility().timeEntriesVisibilityCode,
                 role.getAllRolesManaged(),
                 role.getSettings(),
@@ -74,7 +74,7 @@ public class RoleRequest extends BaseRequests implements Create<Role>, Delete, R
                 .setPosition((Integer) data.get("position"))
                 .setAssignable((Boolean) data.get("assignable"))
                 .setBuiltin((Integer) (data.get("builtin")))
-                .setPermissionsFromString(checkIsStringNull(data.get("permissions")))           //проверка, что поле не нульное
+                .setPermissionsFromString(getStringFromObject(data.get("permissions")))           //проверка, что поле не нульное
                 .setIssuesVisibility(IssuesVisibility.valueOf(data.get("issues_visibility").toString().toUpperCase()))
                 .setUserVisibility(UserVisibility.valueOf(data.get("users_visibility").toString().toUpperCase()))
                 .setTimeEntriesVisibility(TimeEntriesVisibility.valueOf(data.get("time_entries_visibility").toString().toUpperCase()))

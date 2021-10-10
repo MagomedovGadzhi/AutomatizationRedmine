@@ -18,6 +18,11 @@ public class UserDto {
 
     private String login;
 
+    private String password;
+
+    @SerializedName("admin")
+    private Boolean isAdmin;
+
     @SerializedName("firstname")
     private String firstName;
 
@@ -26,13 +31,14 @@ public class UserDto {
 
     private String mail;
 
-    private String password;
-
     @SerializedName("created_on")
     private LocalDateTime createdOn;
 
     @SerializedName("last_login_on")
     private LocalDateTime lastLoginOn;
+
+    @SerializedName("api_key")
+    private String apiKey;
 
     private Integer status;
 }

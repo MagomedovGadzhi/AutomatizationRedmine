@@ -1,7 +1,7 @@
 package automatization.redmine.db.requests;
 
 import automatization.redmine.db.connection.PostgresConnection;
-import automatization.redmine.db.requests.interfases.*;
+import automatization.redmine.db.requests.interfaсes.*;
 import automatization.redmine.model.user.Token;
 import automatization.redmine.model.user.User;
 import lombok.AllArgsConstructor;
