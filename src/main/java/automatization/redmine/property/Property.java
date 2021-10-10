@@ -7,8 +7,7 @@ import java.util.Properties;
 
 public class Property {
 
-    // TODO: Параметризовать системной переменной
-    private static String propertiesName = "default.properties";
+    private static String propertiesName = System.getProperty("properties", "default1.properties");
     private static Properties properties = new Properties();
     private static boolean isInitialized = false;
 
