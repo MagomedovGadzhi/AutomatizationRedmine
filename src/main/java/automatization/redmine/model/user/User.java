@@ -90,7 +90,7 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
         User resultUser = new UserRequests().read(this.id);
         resultUser.setEmails(new EmailRequests(resultUser).readAll());
         resultUser.setTokens(new TokenRequests(resultUser).readAll());
-        return  resultUser;
+        return resultUser;
     }
 
     public void addProject(Integer projectId, List<Role> roles) {

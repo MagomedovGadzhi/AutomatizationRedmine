@@ -12,6 +12,7 @@ import automatization.redmine.api.rest_assured.RestAssuredClient;
 import automatization.redmine.api.rest_assured.RestAssuredRequest;
 import automatization.redmine.model.user.Token;
 import automatization.redmine.model.user.User;
+import automatization.redmine.utils.StringUtils;
 import io.restassured.http.ContentType;
 import io.restassured.http.Method;
 import io.restassured.specification.RequestSpecification;
@@ -52,11 +53,11 @@ public class SimpleApiConnectionTest {
     public void testUserCreation() {
         UserInfoDto body = new UserInfoDto(
                 new UserDto()
-                        .setLogin("jplang116")
-                        .setLastName("Jean-Philippe116")
-                        .setFirstName("Lang116")
-                        .setMail("jp_lang116@yahoo.fr")
-                        .setPassword("secret116")
+                        .setLogin(StringUtils.randomEnglishString(5))
+                        .setLastName(StringUtils.randomEnglishString(10))
+                        .setFirstName(StringUtils.randomEnglishString(7))
+                        .setMail(StringUtils.randomEmail())
+                        .setPassword("secreft116")
         );
         given(ADMIN_AUTH_SPECIFICATION).contentType(ContentType.JSON)
                 .body(GsonProvider.GSON.toJson(body))

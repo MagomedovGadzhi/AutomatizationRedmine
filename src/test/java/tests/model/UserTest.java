@@ -52,10 +52,9 @@ public class UserTest {
         System.out.println();
         System.out.println(user.getId());
 
-        /*
+
         user.getTokens().forEach(Token::delete);
         user.getEmails().forEach(Email::delete);
         user.delete();
-         */
     }
 }
