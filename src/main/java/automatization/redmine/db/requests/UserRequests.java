@@ -90,6 +90,9 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
     public User read(Integer userId) {
         String query = "SELECT * FROM public.users WHERE id = ?";
         List<Map<String, Object>> queryResult = PostgresConnection.INSTANCE.executeQuery(query, userId);
+        if (queryResult == null || queryResult.size() == 0) {
+            throw  new IllegalArgumentException("Пользователь не найден в БД.");
+        }
         return from(queryResult.get(0));
     }
 

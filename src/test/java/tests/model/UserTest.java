@@ -23,9 +23,9 @@ public class UserTest {
         System.out.println();
         System.out.println(user2);
 
-        user.getTokens().forEach(Token::delete);
-        user.getEmails().forEach(Email::delete);
-        user.delete();
+      //  user.getTokens().forEach(Token::delete);
+      //  user.getEmails().forEach(Email::delete);
+      //  user.delete();
     }
 
     @Test

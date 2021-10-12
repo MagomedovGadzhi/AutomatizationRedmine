@@ -26,7 +26,7 @@ import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 @Setter
 @Getter
 @Accessors(chain = true)
-public class User extends CreatableEntity implements Creatable<User>, Updateable<User>, Deleteable<User>, Readable<User> {
+public class User extends CreatableEntity implements Creatable<User>, Updateable<User>, Deleteable<User>, Readable<User>, Cloneable {
 
     private String login = "MGM_" + randomEnglishString(10);
     private String password = "1qaz@WSX";

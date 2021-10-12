@@ -32,7 +32,6 @@ public class ApiGetUsersListTest {
         request = new RestAssuredRequest(RestMethod.GET, "/users.json", null, null, null);
     }
 
-
     @Test
     public void getUsersByAdminTest() {
 
@@ -43,7 +42,5 @@ public class ApiGetUsersListTest {
         UsersListDto responseData = response.getPayload(UsersListDto.class);
 
         Assert.assertEquals(responseData.getLimit().intValue(), 25);
-
     }
-
 }
