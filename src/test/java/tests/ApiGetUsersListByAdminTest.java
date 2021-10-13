@@ -4,9 +4,7 @@ import automatization.redmine.api.client.RestApiClient;
 import automatization.redmine.api.client.RestMethod;
 import automatization.redmine.api.client.RestRequest;
 import automatization.redmine.api.client.RestResponse;
-import automatization.redmine.api.dto.users.UserDto;
-import automatization.redmine.api.dto.users.UserInfoDto;
-import automatization.redmine.api.rest_assured.GsonProvider;
+import automatization.redmine.api.dto.users.UsersListDto;
 import automatization.redmine.api.rest_assured.RestAssuredClient;
 import automatization.redmine.api.rest_assured.RestAssuredRequest;
 import automatization.redmine.model.user.Token;
@@ -17,38 +15,32 @@ import org.testng.annotations.Test;
 
 import java.util.Collections;
 
-public class CreateUserByNotAdminUserTest {
+public class ApiGetUsersListByAdminTest {
+
     private RestApiClient apiClient;
     private RestRequest request;
 
     @BeforeMethod
     public void prepareFixtures() {
         User user = new User() {{
+            setIsAdmin(true);
             setTokens(Collections.singletonList(new Token(this)));
         }}.create();
 
         apiClient = new RestAssuredClient(user);
 
-        UserInfoDto dto = new UserInfoDto(
-                new UserDto()
-                        .setLogin("jplang116")
-                        .setLastName("Jean-Philippe116")
-                        .setFirstName("Lang116")
-                        .setMail("jp_lang116@yahoo.fr")
-                        .setPassword("secret116")
-        );
-        String body = GsonProvider.GSON.toJson(dto);
-
-        request = new RestAssuredRequest(RestMethod.POST, "/users.json", null, null, body);
+        request = new RestAssuredRequest(RestMethod.GET, "/users.json", null, null, null);
     }
 
-
     @Test
-    public void createUserByNotAdminUserTest() {
+    public void getUsersByAdminTest() {
 
         RestResponse response = apiClient.execute(request);
 
-        Assert.assertEquals(response.getStatusCode(), 403);
+        Assert.assertEquals(response.getStatusCode(), 200);
 
+        UsersListDto responseData = response.getPayload(UsersListDto.class);
+
+        Assert.assertEquals(responseData.getLimit().intValue(), 25);
     }
 }

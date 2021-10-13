@@ -22,6 +22,7 @@ import org.testng.annotations.Test;
 import java.util.Collections;
 
 public class CrudByAdminTest {
+
     private User admin;
     private User testUser;
 
@@ -69,7 +70,7 @@ public class CrudByAdminTest {
         //Шаг 4. Отправить запрос PUT на изменение пользователя. Использовать данные из ответа запроса, выполненного в шаге №1, но при этом изменить поле status = 1
         testUser = testUser.read();
         testUser.setStatus(Status.ACTIVE);
-        String uriWithUserId = String.format("/users/%s.json", testUser.getId());
+        String uriWithUserId = String.format("/users/%d.json", testUser.getId());
         RestResponse responseFromPutRequest = sendRequest(testUser, RestMethod.PUT, uriWithUserId);
         //Проверяем статус-код 204 и сверяем информацию о пользователе с БД
         Assert.assertEquals(responseFromPutRequest.getStatusCode(), 204);
@@ -109,7 +110,7 @@ public class CrudByAdminTest {
                             .setPassword(expectedUser.getPassword())
                             .setStatus(expectedUser.getStatus().statusCode)
             );
-            //Сериализуем UserInfoDto в JSON
+            //Сериализуем UserInfoDto в JSON, expectedUser не NULL
             body = new Gson().toJson(userApi);
         }
         //Формируем запрос
@@ -134,11 +135,10 @@ public class CrudByAdminTest {
         Assert.assertEquals(actualUserDto.getLastLoginOn(), expectedUser.getLastLoginOn());
         Assert.assertEquals(actualUserDto.getStatus().intValue(), expectedUser.getStatus().statusCode);
         //Если информация о пользователе, из полученного в ответе JSON, совпадает с expectedUser,
-        //присваем expectedUser id пользователя из JSON
+        //и у expectedUser id = NULL, то присваем ему id пользователя из JSON
         if (expectedUser.getId() == null) {
             expectedUser.setId(actualUserDto.getId());
-        }
-        else Assert.assertEquals(actualUserDto.getId(), expectedUser.getId());
+        } else Assert.assertEquals(actualUserDto.getId(), expectedUser.getId());
     }
 
     private void readAndCheckUserFromDataBase(User expectedUser) {
@@ -172,11 +172,10 @@ public class CrudByAdminTest {
         }
     }
 
-    private Boolean isUserDeletedFromDataBase (User user) {
+    private Boolean isUserDeletedFromDataBase(User user) {
         try {
             readAndCheckUserFromDataBase(testUser);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return e.getMessage().equals("Пользователь не найден в БД.");
         }
         return false;

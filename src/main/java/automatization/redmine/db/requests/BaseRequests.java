@@ -2,6 +2,7 @@ package automatization.redmine.db.requests;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public abstract class BaseRequests {
 
