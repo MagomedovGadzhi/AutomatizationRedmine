@@ -13,6 +13,8 @@ import automatization.redmine.model.user.Email;
 import automatization.redmine.model.user.Token;
 import automatization.redmine.model.user.User;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -22,18 +24,19 @@ public class CreateUserByNotAdminUserTest {
 
     private RestApiClient apiClient;
     private RestRequest request;
+    User notAdminUser;
 
     @BeforeMethod
     public void prepareConditions() {
-        User notAdminUser = new User() {{
+        notAdminUser = new User() {{
             setTokens(Collections.singletonList(new Token(this)));
         }}.create();
+
+        apiClient = new RestAssuredClient(notAdminUser);
 
         User testUser = new User() {{
             setEmails(Collections.singletonList(new Email(this)));
         }};
-
-        apiClient = new RestAssuredClient(notAdminUser);
 
         UserInfoDto dto = new UserInfoDto(
                 new UserDto()
@@ -56,5 +59,10 @@ public class CreateUserByNotAdminUserTest {
 
         Assert.assertEquals(response.getStatusCode(), 403);
 
+    }
+
+    @AfterClass
+    private void postConditions() {
+        notAdminUser.delete();
     }
 }

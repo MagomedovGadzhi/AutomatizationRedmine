@@ -11,6 +11,8 @@ import automatization.redmine.api.rest_assured.RestAssuredRequest;
 import automatization.redmine.model.user.Token;
 import automatization.redmine.model.user.User;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -85,5 +87,11 @@ public class GetUsersListByNotAdminTest {
         //Проверяем, что теги admin и api_key не содержатся в ответе
         Assert.assertNull(responseUser.getIsAdmin());
         Assert.assertNull(responseUser.getApiKey());
+    }
+
+    @AfterClass
+    private void postConditions() {
+        notAdminUserWitApi.delete();
+        notAdminUserWithoutApi.delete();
     }
 }
