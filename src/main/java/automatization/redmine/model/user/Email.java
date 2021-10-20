@@ -10,9 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.io.IOException;
-import java.nio.CharBuffer;
-
 import static automatization.redmine.utils.StringUtils.randomEmail;
 
 @Accessors(chain = true)

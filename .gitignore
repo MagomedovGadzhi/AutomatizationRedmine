@@ -3,3 +3,4 @@
 /.idea/
 AutomatizationRedmine.iml
 /target/
+/src/test/resources/drivers/

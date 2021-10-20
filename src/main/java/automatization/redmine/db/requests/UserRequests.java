@@ -91,7 +91,7 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
         String query = "SELECT * FROM public.users WHERE id = ?";
         List<Map<String, Object>> queryResult = PostgresConnection.INSTANCE.executeQuery(query, userId);
         if (queryResult == null || queryResult.size() == 0) {
-            throw  new IllegalArgumentException("Пользователь не найден в БД.");
+            return null;
         }
         return from(queryResult.get(0));
     }
@@ -118,29 +118,29 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
                 .setId((Integer) data.get("id"));
     }
 
-    public void addUserToProject(User user, Integer projectId, List<Role> roles) {
+    public Integer addMember(User user, Integer projectId) {
         Integer userId = Objects.requireNonNull(user.getId());
         String query = "INSERT INTO public.members\n" +
                 "(id, user_id, project_id, created_on, mail_notification)\n" +
                 "VALUES(DEFAULT, ?, ?, ?, ?) RETURNING id;\n";
-        Integer memberId = (Integer) PostgresConnection.INSTANCE.executeQuery(
+        return (Integer) PostgresConnection.INSTANCE.executeQuery(
                 query,
                 userId,
                 projectId,
                 LocalDateTime.now(),
                 false
         ).get(0).get("id");
+    }
 
-        query = "INSERT INTO public.member_roles\n" +
+    public void addMemberRoles(Integer memberId, Role role) {
+        String query = "INSERT INTO public.member_roles\n" +
                 "(id, member_id, role_id, inherited_from)\n" +
                 "VALUES(DEFAULT, ?, ?, ?);\n";
-        for (Role role : roles) {
-            PostgresConnection.INSTANCE.executeQuery(
-                    query,
-                    memberId,
-                    role.getId(),
-                    null
-            );
-        }
+        PostgresConnection.INSTANCE.executeQuery(
+                query,
+                memberId,
+                role.getId(),
+                null
+        );
     }
 }

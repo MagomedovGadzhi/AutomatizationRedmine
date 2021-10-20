@@ -32,7 +32,7 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
     private String password = "1qaz@WSX";
     private String salt = randomHexString(32);
     private String hashedPassword = hashPassword();
-    private String firstName = "MGM_" + randomEnglishString(10);
+    private String firstName = "MGM_" + randomEnglishString(5);
     private String lastName = "MGM_" + randomEnglishString(10);
     private Boolean isAdmin = false;
     private Status status = Status.ACTIVE;
@@ -88,13 +88,18 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
     @Override
     public User read() {
         User resultUser = new UserRequests().read(this.id);
-        resultUser.setEmails(new EmailRequests(resultUser).readAll());
-        resultUser.setTokens(new TokenRequests(resultUser).readAll());
+        if (resultUser != null) {
+            resultUser.setEmails(new EmailRequests(resultUser).readAll());
+            resultUser.setTokens(new TokenRequests(resultUser).readAll());
+        }
         return resultUser;
     }
 
     public void addProject(Integer projectId, List<Role> roles) {
-        new UserRequests().addUserToProject(this, projectId, roles);
+        Integer memberId = new UserRequests().addMember(this, projectId);
+        for (Role role: roles) {
+            new UserRequests().addMemberRoles(memberId, role);
+        }
     }
 
     @Override
