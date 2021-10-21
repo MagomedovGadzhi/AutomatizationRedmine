@@ -84,7 +84,6 @@ public class GetUsersListByNotAdminTest {
         //Пришлось добавить в ожидаемом результат withNano(0), т.к. в ответе API не передаются милисекунды
         Assert.assertEquals(responseUser.getCreatedOn(), targetUser.getCreatedOn().withNano(0));
         Assert.assertEquals(responseUser.getLastLoginOn(), targetUser.getLastLoginOn());
-        //Проверяем, что теги admin и api_key не содержатся в ответе
         Assert.assertNull(responseUser.getIsAdmin());
         Assert.assertNull(responseUser.getApiKey());
     }

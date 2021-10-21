@@ -51,9 +51,7 @@ public class CreateUserByNotAdminUserTest {
 
     @Test
     public void createUserByNotAdminUserTest() {
-
         RestResponse response = apiClient.execute(request);
-
         Assert.assertEquals(response.getStatusCode(), 403);
 
     }
