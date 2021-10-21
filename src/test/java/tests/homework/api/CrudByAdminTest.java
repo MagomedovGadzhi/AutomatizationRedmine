@@ -68,7 +68,7 @@ public class CrudByAdminTest {
 
     //------------------Методы по шагам теста------------------
 
-    private void createAndValidateUser () {
+    private void createAndValidateUser() {
         RestResponse positiveResponse = sendRequest(testUser, RestMethod.POST, "/users.json");
         Assert.assertEquals(positiveResponse.getStatusCode(), 201);
         UserDto dto = getUserDtoFromResponse(positiveResponse);
@@ -77,7 +77,7 @@ public class CrudByAdminTest {
         readAndCheckUserFromDataBase(testUser);
     }
 
-    private void createAndValidateDuplicateUser () {
+    private void createAndValidateDuplicateUser() {
         RestResponse negativeResponse = sendRequest(testUser, RestMethod.POST, "/users.json");
         Assert.assertEquals(negativeResponse.getStatusCode(), 422);
         ErrorsInfoDto errorsFromResponse = negativeResponse.getPayload(ErrorsInfoDto.class);
@@ -86,7 +86,7 @@ public class CrudByAdminTest {
         Assert.assertEquals(errorsFromResponse.getErrors().get(1), "Пользователь уже существует");
     }
 
-    private void createAndValidateDuplicateUserWithInvalidEmailAndShortPassword () {
+    private void createAndValidateDuplicateUserWithInvalidEmailAndShortPassword() {
         User invalidUser = testUser.read();
         invalidUser.getEmails().get(0).setAddress("invalid_email.com");
         invalidUser.setPassword("1234");
@@ -100,7 +100,7 @@ public class CrudByAdminTest {
         Assert.assertEquals(errorsFromResponse.getErrors().get(2), "Пароль недостаточной длины (не может быть меньше 8 символа)");
     }
 
-    private void updateStatusAndValidateUser () {
+    private void updateStatusAndValidateUser() {
         testUser = testUser.read();
         testUser.setStatus(Status.ACTIVE);
         uriWithUserId = String.format("/users/%d.json", testUser.getId());
@@ -108,7 +108,8 @@ public class CrudByAdminTest {
         Assert.assertEquals(responseFromPutRequest.getStatusCode(), 204);
         readAndCheckUserFromDataBase(testUser);
     }
-    private void getAndValidateUserWithNewStatus () {
+
+    private void getAndValidateUserWithNewStatus() {
         RestResponse response = sendRequest(null, RestMethod.GET, uriWithUserId);
         Assert.assertEquals(response.getStatusCode(), 200);
         testUser.setStatus(Status.ACTIVE);
@@ -116,13 +117,13 @@ public class CrudByAdminTest {
         checkUserFromJsonResponse(dto, testUser);
     }
 
-    private void deleteUser () {
+    private void deleteUser() {
         RestResponse responseFromDeleteRequest1 = sendRequest(null, RestMethod.DELETE, uriWithUserId);
         Assert.assertEquals(responseFromDeleteRequest1.getStatusCode(), 204);
         Assert.assertNull(testUser.read());
     }
 
-    private void deleteUserAgain () {
+    private void deleteUserAgain() {
         RestResponse responseFromDeleteRequest2 = sendRequest(null, RestMethod.DELETE, uriWithUserId);
         Assert.assertEquals(responseFromDeleteRequest2.getStatusCode(), 404);
     }
@@ -163,7 +164,7 @@ public class CrudByAdminTest {
         }
     }
 
-    private UserDto getUserDtoFromResponse (RestResponse response) {
+    private UserDto getUserDtoFromResponse(RestResponse response) {
         UserInfoDto userInfoDtoFromResponse = response.getPayload(UserInfoDto.class);
         return userInfoDtoFromResponse.getUser();
     }

@@ -15,6 +15,7 @@ public class LoginPage extends Page {
     @FindBy(xpath = "//input[@id='login-submit']")
     private WebElement signInButton;
 
+    //Всплывающее сообщение об ошибке при неудачной авторизации
     @FindBy(xpath = "//div[@id='flash_error']")
     public WebElement errorFlash;
 
@@ -31,6 +32,4 @@ public class LoginPage extends Page {
     public void login(User user) {
         login(user.getLogin(), user.getPassword());
     }
-
-
 }

@@ -23,5 +23,4 @@ public class AdminLoginTest extends BaseUITest {
         loginPage.login(admin);
         Assert.assertEquals(topMenu.myAccount.getText(), "Моя учётная запись");
     }
-
 }
