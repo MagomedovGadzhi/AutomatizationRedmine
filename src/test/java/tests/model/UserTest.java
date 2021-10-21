@@ -14,15 +14,16 @@ public class UserTest {
     @Test
     public void userCreationTest() {
         User user = new User();
-        new Token(user);
-        new Email(user);
+        user.setIsAdmin(true);
         user.create();
 
-        User user2 = user.read();
-        System.out.println(user);
-        System.out.println();
-        System.out.println(user2);
+        System.out.println(user.getLogin());
 
+       // User user2 = user.read();
+       // System.out.println(user);
+       // System.out.println();
+       // System.out.println(user2);
+//
       //  user.getTokens().forEach(Token::delete);
       //  user.getEmails().forEach(Email::delete);
       //  user.delete();

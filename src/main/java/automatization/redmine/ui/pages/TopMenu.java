@@ -50,7 +50,7 @@ public class TopMenu extends Page {
 
     //Выйти
     @FindBy(xpath = "//div[@id='account']//a[@class='logout']")
-    public WebElement logOut;
+    public WebElement logoutButton;
 
     public TopMenu() {
         super();
