@@ -1,8 +1,6 @@
 package tests.homework.ui;
 
 import automatization.redmine.model.user.User;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -40,16 +38,8 @@ public class AdminLoginTest extends BaseUITest {
         Assert.assertFalse(isElementDisplayed(topMenu.loginButton));
         Assert.assertFalse(isElementDisplayed(topMenu.registration));
 
-        Assert.assertTrue(header.quickSearch.isDisplayed());
+        Assert.assertEquals(header.quickSearch.getText(), "Поиск");
         Assert.assertTrue(header.quickSearchInputField.isDisplayed());
-    }
-
-    private Boolean isElementDisplayed(WebElement webElement) {
-        try {
-            return webElement.isDisplayed();
-        } catch (NoSuchElementException e) {
-            return false;
-        }
     }
 
     @AfterClass

@@ -1,28 +1,22 @@
 package tests.homework.ui;
 
-import automatization.redmine.model.user.Email;
 import automatization.redmine.model.user.Status;
-import automatization.redmine.model.user.Token;
 import automatization.redmine.model.user.User;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 
-public class ApprovedUserLoginTest extends BaseUITest {
-    private User user;
+public class AcceptedUserLoginTest extends BaseUITest {
+    private User acceptedUser;
 
     @BeforeClass
     public void prepareFixtures() {
-        user = new User() {{
+        acceptedUser = new User() {{
             setStatus(Status.ACTIVE);
-            new Token(this);
-            new Email(this);
         }};
-        user.create();
+        acceptedUser.create();
 
         openBrowser();
         topMenu.loginButton.click();
@@ -30,10 +24,10 @@ public class ApprovedUserLoginTest extends BaseUITest {
 
     @Test
     public void positiveAdminLoginTest() {
-        loginPage.login(user);
+        loginPage.login(acceptedUser);
         Assert.assertEquals(homePage.homePage.getText(), "Домашняя страница");
 
-        Assert.assertEquals(topMenu.loggedAs.getText(), "Вошли как " + user.getLogin());
+        Assert.assertEquals(topMenu.loggedAs.getText(), "Вошли как " + acceptedUser.getLogin());
 
         Assert.assertEquals(topMenu.homePage.getText(), "Домашняя страница");
         Assert.assertEquals(topMenu.myPage.getText(), "Моя страница");
@@ -46,20 +40,12 @@ public class ApprovedUserLoginTest extends BaseUITest {
         Assert.assertFalse(isElementDisplayed(topMenu.registration));
         Assert.assertFalse(isElementDisplayed(topMenu.administration));
 
-        Assert.assertTrue(header.quickSearch.isDisplayed());
+        Assert.assertEquals(header.quickSearch.getText(), "Поиск");
         Assert.assertTrue(header.quickSearchInputField.isDisplayed());
-    }
-
-    private Boolean isElementDisplayed(WebElement webElement) {
-        try {
-            return webElement.isDisplayed();
-        } catch (NoSuchElementException e) {
-            return false;
-        }
     }
 
     @AfterClass
     public void postConditions() {
-        user.delete();
+        acceptedUser.delete();
     }
 }
