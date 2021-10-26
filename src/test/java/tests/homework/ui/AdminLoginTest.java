@@ -6,6 +6,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import static automatization.redmine.ui.browser.BrowserUtils.isElementDisplayed;
+
 
 public class AdminLoginTest extends BaseUITest {
     private User admin;
