@@ -3,8 +3,6 @@ package tests.homework.ui;
 import automatization.redmine.ui.browser.Browser;
 import automatization.redmine.ui.browser.BrowserManager;
 import automatization.redmine.ui.pages.*;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterMethod;
 
 public class BaseUITest {
@@ -36,14 +34,6 @@ public class BaseUITest {
         homePage = Page.getPage(HomePage.class);
         administrationPage = Page.getPage(AdministrationPage.class);
         userTablePage = Page.getPage(UserTablePage.class);
-    }
-
-    protected Boolean isElementDisplayed(WebElement webElement) {
-        try {
-            return webElement.isDisplayed();
-        } catch (NoSuchElementException e) {
-            return false;
-        }
     }
 
     @AfterMethod
