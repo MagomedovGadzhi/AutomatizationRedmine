@@ -1,8 +1,11 @@
 package automatization.redmine.ui.pages;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class MyPage extends Page {
     @FindBy(xpath = "//div[@id='content' and h2='Моя страница']//h2")
     public WebElement myPage;
@@ -15,8 +18,4 @@ public class MyPage extends Page {
 
     @FindBy(xpath = "//div[@id='content']//form[label ='Добавить']//select[@id='block-select']")
     public WebElement add;
-
-    public MyPage() {
-        super();
-    }
 }

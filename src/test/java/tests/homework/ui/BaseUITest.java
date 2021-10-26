@@ -16,6 +16,7 @@ public class BaseUITest {
     protected MyPage myPage;
     protected HomePage homePage;
     protected AdministrationPage administrationPage;
+    protected UserTablePage userTablePage;
 
     protected void openBrowser() {
         browser = BrowserManager.getBrowser();
@@ -24,17 +25,15 @@ public class BaseUITest {
 
     protected void openBrowser(String uri) {
         browser = BrowserManager.getBrowser(uri);
-        topMenuPage = new TopMenuPage();
-        headerPage = new HeaderPage();
-        loginPage = new LoginPage();
-        myPage = new MyPage();
-        homePage = new HomePage();
-        administrationPage = new AdministrationPage();
+        initPages();
     }
 
     private void initPages() {
+        topMenuPage = Page.getPage(TopMenuPage.class);
         headerPage = Page.getPage(HeaderPage.class);
         loginPage = Page.getPage(LoginPage.class);
+        myPage = Page.getPage(MyPage.class);
+        homePage = Page.getPage(HomePage.class);
         administrationPage = Page.getPage(AdministrationPage.class);
         userTablePage = Page.getPage(UserTablePage.class);
     }

@@ -1,8 +1,11 @@
 package automatization.redmine.ui.pages;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class TopMenuPage extends Page {
     //-----------Кнопки доступные всегда-----------
     //Домашняя страница
@@ -51,8 +54,4 @@ public class TopMenuPage extends Page {
     //Выйти
     @FindBy(xpath = "//div[@id='account']//a[@class='logout']")
     public WebElement logoutButton;
-
-    public TopMenuPage() {
-        super();
-    }
 }
