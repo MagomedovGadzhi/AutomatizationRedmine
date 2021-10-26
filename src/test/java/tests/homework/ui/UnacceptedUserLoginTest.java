@@ -17,7 +17,7 @@ public class UnacceptedUserLoginTest extends BaseUITest {
         }}.create();
 
         openBrowser();
-        topMenu.loginButton.click();
+        topMenuPage.loginButton.click();
     }
 
     @Test
@@ -28,17 +28,17 @@ public class UnacceptedUserLoginTest extends BaseUITest {
 
         Assert.assertEquals(loginPage.errorFlash.getText(), "Ваша учётная запись создана и ожидает подтверждения администратора.");
 
-        Assert.assertEquals(topMenu.homePage.getText(), "Домашняя страница");
-        Assert.assertEquals(topMenu.projects.getText(), "Проекты");
-        Assert.assertEquals(topMenu.help.getText(), "Помощь");
+        Assert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница");
+        Assert.assertEquals(topMenuPage.projects.getText(), "Проекты");
+        Assert.assertEquals(topMenuPage.help.getText(), "Помощь");
 
-        Assert.assertFalse(isElementDisplayed(topMenu.myPage));
-        Assert.assertFalse(isElementDisplayed(topMenu.myAccount));
-        Assert.assertFalse(isElementDisplayed(topMenu.loggedAs));
-        Assert.assertFalse(isElementDisplayed(topMenu.logoutButton));
+        Assert.assertFalse(isElementDisplayed(topMenuPage.myPage));
+        Assert.assertFalse(isElementDisplayed(topMenuPage.myAccount));
+        Assert.assertFalse(isElementDisplayed(topMenuPage.loggedAs));
+        Assert.assertFalse(isElementDisplayed(topMenuPage.logoutButton));
 
 
-        Assert.assertEquals(topMenu.loginButton.getText(), "Войти");
-        Assert.assertEquals(topMenu.registration.getText(), "Регистрация");
+        Assert.assertEquals(topMenuPage.loginButton.getText(), "Войти");
+        Assert.assertEquals(topMenuPage.registration.getText(), "Регистрация");
     }
 }

@@ -3,7 +3,7 @@ package automatization.redmine.ui.pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class TopMenu extends Page {
+public class TopMenuPage extends Page {
     //-----------Кнопки доступные всегда-----------
     //Домашняя страница
     @FindBy(xpath = "//div[@id='top-menu']//a[@class='home']")
@@ -52,7 +52,7 @@ public class TopMenu extends Page {
     @FindBy(xpath = "//div[@id='account']//a[@class='logout']")
     public WebElement logoutButton;
 
-    public TopMenu() {
+    public TopMenuPage() {
         super();
     }
 }

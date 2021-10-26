@@ -19,7 +19,7 @@ public class AcceptedUserLoginTest extends BaseUITest {
         acceptedUser.create();
 
         openBrowser();
-        topMenu.loginButton.click();
+        topMenuPage.loginButton.click();
     }
 
     @Test
@@ -27,21 +27,21 @@ public class AcceptedUserLoginTest extends BaseUITest {
         loginPage.login(acceptedUser);
         Assert.assertEquals(homePage.homePage.getText(), "Домашняя страница");
 
-        Assert.assertEquals(topMenu.loggedAs.getText(), "Вошли как " + acceptedUser.getLogin());
+        Assert.assertEquals(topMenuPage.loggedAs.getText(), "Вошли как " + acceptedUser.getLogin());
 
-        Assert.assertEquals(topMenu.homePage.getText(), "Домашняя страница");
-        Assert.assertEquals(topMenu.myPage.getText(), "Моя страница");
-        Assert.assertEquals(topMenu.projects.getText(), "Проекты");
-        Assert.assertEquals(topMenu.help.getText(), "Помощь");
-        Assert.assertEquals(topMenu.myAccount.getText(), "Моя учётная запись");
-        Assert.assertEquals(topMenu.logoutButton.getText(), "Выйти");
+        Assert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница");
+        Assert.assertEquals(topMenuPage.myPage.getText(), "Моя страница");
+        Assert.assertEquals(topMenuPage.projects.getText(), "Проекты");
+        Assert.assertEquals(topMenuPage.help.getText(), "Помощь");
+        Assert.assertEquals(topMenuPage.myAccount.getText(), "Моя учётная запись");
+        Assert.assertEquals(topMenuPage.logoutButton.getText(), "Выйти");
 
-        Assert.assertFalse(isElementDisplayed(topMenu.loginButton));
-        Assert.assertFalse(isElementDisplayed(topMenu.registration));
-        Assert.assertFalse(isElementDisplayed(topMenu.administration));
+        Assert.assertFalse(isElementDisplayed(topMenuPage.loginButton));
+        Assert.assertFalse(isElementDisplayed(topMenuPage.registration));
+        Assert.assertFalse(isElementDisplayed(topMenuPage.administration));
 
-        Assert.assertEquals(header.quickSearch.getText(), "Поиск");
-        Assert.assertTrue(header.quickSearchInputField.isDisplayed());
+        Assert.assertEquals(headerPage.quickSearch.getText(), "Поиск");
+        Assert.assertTrue(headerPage.quickSearchInputField.isDisplayed());
     }
 
     @AfterClass
