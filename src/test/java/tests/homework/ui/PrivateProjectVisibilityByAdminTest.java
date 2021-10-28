@@ -30,7 +30,7 @@ public class PrivateProjectVisibilityByAdminTest extends BaseUITest {
     }
 
     @Test
-    public void positiveAdminLoginTest() {
+    public void privateProjectVisibilityByAdminTest() {
         loginPage.login(admin);
         Assert.assertEquals(homePage.homePage.getText(), "Домашняя страница");
 
