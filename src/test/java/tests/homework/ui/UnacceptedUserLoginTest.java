@@ -3,6 +3,7 @@ package tests.homework.ui;
 import automatization.redmine.model.user.Status;
 import automatization.redmine.model.user.User;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -13,7 +14,7 @@ public class UnacceptedUserLoginTest extends BaseUITest {
     private User unacceptedUser;
 
     @BeforeClass
-    public void prepareFixtures() {
+    public void prepareConditions() {
         unacceptedUser = new User() {{
             setStatus(Status.UNACCEPTED);
         }}.create();
@@ -23,7 +24,7 @@ public class UnacceptedUserLoginTest extends BaseUITest {
     }
 
     @Test
-    public void testUnacceptedUserLogin() {
+    public void negativeUnacceptedUserLoginTest() {
         loginPage.login(unacceptedUser);
 
         Assert.assertFalse(isElementDisplayed(homePage.homePage));
@@ -42,5 +43,10 @@ public class UnacceptedUserLoginTest extends BaseUITest {
 
         Assert.assertEquals(topMenuPage.loginButton.getText(), "Войти");
         Assert.assertEquals(topMenuPage.registration.getText(), "Регистрация");
+    }
+
+    @AfterClass
+    public void postConditions() {
+        unacceptedUser.delete();
     }
 }

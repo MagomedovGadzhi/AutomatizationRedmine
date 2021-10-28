@@ -14,7 +14,7 @@ public class AcceptedUserLoginTest extends BaseUITest {
     private User acceptedUser;
 
     @BeforeClass
-    public void prepareFixtures() {
+    public void prepareConditions() {
         acceptedUser = new User() {{
             setStatus(Status.ACTIVE);
         }};
@@ -25,7 +25,7 @@ public class AcceptedUserLoginTest extends BaseUITest {
     }
 
     @Test
-    public void positiveAdminLoginTest() {
+    public void positiveUserLoginTest() {
         loginPage.login(acceptedUser);
         Assert.assertEquals(homePage.homePage.getText(), "Домашняя страница");
 

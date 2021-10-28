@@ -13,7 +13,7 @@ public class AdminLoginTest extends BaseUITest {
     private User admin;
 
     @BeforeClass
-    public void prepareFixtures() {
+    public void prepareConditions() {
         admin = new User() {{
             setIsAdmin(true);
         }}.create();
