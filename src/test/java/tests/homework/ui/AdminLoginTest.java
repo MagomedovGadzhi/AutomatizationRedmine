@@ -22,7 +22,7 @@ public class AdminLoginTest extends BaseUITest {
         topMenuPage.loginButton.click();
     }
 
-    @Test
+    @Test(testName = "1. Авторизация администратором")
     public void positiveAdminLoginTest() {
         loginPage.login(admin);
         Assert.assertEquals(homePage.homePage.getText(), "Домашняя страница");

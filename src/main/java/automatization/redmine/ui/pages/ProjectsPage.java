@@ -24,7 +24,7 @@ public class ProjectsPage extends Page {
     @FindBy(xpath = "//div[@id='main-menu']//a[contains(@class, 'issues')]")
     public WebElement issuesTab;
 
-    @FindBy(xpath = "//div[@id='projects-index']//a[@class='project root parent ']")
+    @FindBy(xpath = "//div[@id='projects-index']//li[@class='root']//a")
     public List<WebElement> projects;
 
 

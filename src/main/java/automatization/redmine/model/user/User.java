@@ -102,6 +102,11 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
         }
     }
 
+    public void addProject(Integer projectId, Role role) {
+        Integer memberId = new UserRequests().addMember(this, projectId);
+        new UserRequests().addMemberRoles(memberId, role);
+    }
+
     @Override
     public String toString() {
         return "User { " + "\n"

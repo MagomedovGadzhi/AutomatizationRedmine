@@ -10,13 +10,12 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-
 public class PrivateProjectVisibilityByAdminTest extends BaseUITest {
     private User admin;
     private Project project;
 
     @BeforeClass
-    public void prepareFixtures() {
+    public void prepareConditions() {
         admin = new User() {{
             setIsAdmin(true);
         }}.create();
@@ -29,7 +28,7 @@ public class PrivateProjectVisibilityByAdminTest extends BaseUITest {
         topMenuPage.loginButton.click();
     }
 
-    @Test
+    @Test(testName = "4. Видимость проекта. Приватный проект. Администратор")
     public void privateProjectVisibilityByAdminTest() {
         loginPage.login(admin);
         Assert.assertEquals(homePage.homePage.getText(), "Домашняя страница");
