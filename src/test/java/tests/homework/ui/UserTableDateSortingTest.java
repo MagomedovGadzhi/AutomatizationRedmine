@@ -7,13 +7,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static automatization.redmine.ui.browser.BrowserUtils.getElementsText;
-import static automatization.redmine.utils.CompareUtils.assertListSortedByDateAsc;
-import static automatization.redmine.utils.CompareUtils.assertListSortedByDateDesc;
+import static automatization.redmine.utils.CompareUtils.*;
 
 public class UserTableDateSortingTest extends BaseUITest {
 
     @BeforeMethod
-    public void prepareConditions() {
+    public void prepareFixtures() {
         User admin = new User() {{
             setIsAdmin(true);
         }}.create();
@@ -26,12 +25,13 @@ public class UserTableDateSortingTest extends BaseUITest {
 
     @Test
     public void testUsersTableDateSorting() {
-        userTablePage.button("Создано").click();
-        List<String> creationDatesByDesc = getElementsText(userTablePage.creationDates);
+        usersPage.filterButton("Создано").click();
+        List<String> creationDatesByDesc = getElementsText(usersPage.creationDates);
         assertListSortedByDateDesc(creationDatesByDesc);
 
-        userTablePage.button("Создано").click();
-        List<String> creationDatesByAsc = getElementsText(userTablePage.creationDates);
+        usersPage.filterButton("Создано").click();
+        List<String> creationDatesByAsc = getElementsText(usersPage.creationDates);
         assertListSortedByDateAsc(creationDatesByAsc);
     }
+
 }

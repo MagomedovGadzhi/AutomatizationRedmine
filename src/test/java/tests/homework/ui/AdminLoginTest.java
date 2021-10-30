@@ -25,7 +25,7 @@ public class AdminLoginTest extends BaseUITest {
     @Test(testName = "1. Авторизация администратором")
     public void positiveAdminLoginTest() {
         loginPage.login(admin);
-        Assert.assertEquals(homePage.homePage.getText(), "Домашняя страница");
+        Assert.assertEquals(homePage.pageName.getText(), "Домашняя страница");
 
         Assert.assertEquals(topMenuPage.loggedAs.getText(), "Вошли как " + admin.getLogin());
 

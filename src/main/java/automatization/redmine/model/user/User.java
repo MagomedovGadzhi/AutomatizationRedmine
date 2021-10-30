@@ -26,7 +26,7 @@ import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 @Setter
 @Getter
 @Accessors(chain = true)
-public class User extends CreatableEntity implements Creatable<User>, Updateable<User>, Deleteable<User>, Readable<User>, Cloneable {
+public class User extends CreatableEntity implements Creatable<User>, Updateable<User>, Deleteable<User>, Readable<User> {
 
     private String login = "MGM_" + randomEnglishString(10);
     private String password = "1qaz@WSX";
@@ -95,9 +95,18 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
         return resultUser;
     }
 
+    public User readByLogin() {
+        User resultUser = new UserRequests().readByLogin(this.login);
+        if (resultUser != null) {
+            resultUser.setEmails(new EmailRequests(resultUser).readAll());
+            resultUser.setTokens(new TokenRequests(resultUser).readAll());
+        }
+        return resultUser;
+    }
+
     public void addProject(Integer projectId, List<Role> roles) {
         Integer memberId = new UserRequests().addMember(this, projectId);
-        for (Role role: roles) {
+        for (Role role : roles) {
             new UserRequests().addMemberRoles(memberId, role);
         }
     }

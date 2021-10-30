@@ -1,10 +1,7 @@
 package automatization.redmine.db.requests;
 
 import automatization.redmine.db.connection.PostgresConnection;
-import automatization.redmine.db.requests.interfaсes.Create;
-import automatization.redmine.db.requests.interfaсes.Delete;
-import automatization.redmine.db.requests.interfaсes.Read;
-import automatization.redmine.db.requests.interfaсes.Update;
+import automatization.redmine.db.requests.interfaсes.*;
 import automatization.redmine.model.role.Role;
 import automatization.redmine.model.user.Language;
 import automatization.redmine.model.user.MailNotification;
@@ -16,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class UserRequests extends BaseRequests implements Create<User>, Update<User>, Read<User>, Delete {
+public class UserRequests extends BaseRequests implements Create<User>, Update<User>, Read<User>, ReadByLogin<User>, Delete {
 
     @Override
     public void create(User user) {
@@ -90,6 +87,16 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
     public User read(Integer userId) {
         String query = "SELECT * FROM public.users WHERE id = ?";
         List<Map<String, Object>> queryResult = PostgresConnection.INSTANCE.executeQuery(query, userId);
+        if (queryResult == null || queryResult.size() == 0) {
+            return null;
+        }
+        return from(queryResult.get(0));
+    }
+
+    @Override
+    public User readByLogin(String userLogin) {
+        String query = "SELECT * FROM public.users WHERE login = ?";
+        List<Map<String, Object>> queryResult = PostgresConnection.INSTANCE.executeQuery(query, userLogin);
         if (queryResult == null || queryResult.size() == 0) {
             return null;
         }

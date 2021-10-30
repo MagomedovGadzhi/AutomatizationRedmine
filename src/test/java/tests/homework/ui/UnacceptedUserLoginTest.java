@@ -27,7 +27,7 @@ public class UnacceptedUserLoginTest extends BaseUITest {
     public void negativeUnacceptedUserLoginTest() {
         loginPage.login(unacceptedUser);
 
-        Assert.assertFalse(isElementDisplayed(homePage.homePage));
+        Assert.assertFalse(isElementDisplayed(homePage.pageName));
 
         Assert.assertEquals(loginPage.errorFlash.getText(), "Ваша учётная запись создана и ожидает подтверждения администратора.");
 
