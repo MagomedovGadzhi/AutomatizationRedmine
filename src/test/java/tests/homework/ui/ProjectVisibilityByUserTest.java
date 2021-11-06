@@ -50,7 +50,7 @@ public class ProjectVisibilityByUserTest extends BaseUITest {
         topMenuPage.loginButton.click();
     }
 
-    @Test(testName = "5. Видимость проектов. Пользователь")
+    @Test(description = "5. Видимость проектов. Пользователь")
     public void projectVisibilityByUserTest() {
         loginPage.login(user);
         Assert.assertEquals(homePage.pageName.getText(), "Домашняя страница");

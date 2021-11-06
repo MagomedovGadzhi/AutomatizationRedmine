@@ -28,7 +28,7 @@ public class PrivateProjectVisibilityByAdminTest extends BaseUITest {
         topMenuPage.loginButton.click();
     }
 
-    @Test(testName = "4. Видимость проекта. Приватный проект. Администратор")
+    @Test(description = "4. Видимость проекта. Приватный проект. Администратор")
     public void privateProjectVisibilityByAdminTest() {
         loginPage.login(admin);
         Assert.assertEquals(homePage.pageName.getText(), "Домашняя страница");

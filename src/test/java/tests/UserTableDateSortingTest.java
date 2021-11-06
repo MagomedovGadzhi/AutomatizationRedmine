@@ -1,10 +1,11 @@
-package tests.homework.ui;
+package tests;
 
 import java.util.List;
 
 import automatization.redmine.model.user.User;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import tests.homework.ui.BaseUITest;
 
 import static automatization.redmine.ui.browser.BrowserUtils.getElementsText;
 import static automatization.redmine.utils.CompareUtils.*;

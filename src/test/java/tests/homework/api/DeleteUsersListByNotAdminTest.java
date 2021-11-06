@@ -8,6 +8,10 @@ import automatization.redmine.api.rest_assured.RestAssuredClient;
 import automatization.redmine.api.rest_assured.RestAssuredRequest;
 import automatization.redmine.model.user.Token;
 import automatization.redmine.model.user.User;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Step;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
@@ -23,7 +27,9 @@ public class DeleteUsersListByNotAdminTest {
     private User notAdminUserWithoutApi;
     private String uri;
 
-    @BeforeMethod
+    @BeforeMethod(description = "1. Заведен пользователь в системе. " +
+            "2. У пользователя есть доступ к API и ключ API. " +
+            "3. Заведен еще один пользователь в системе.")
     public void prepareFixtures() {
         notAdminUserWithApi = new User() {{
             setTokens(Collections.singletonList(new Token(this)));
@@ -32,15 +38,16 @@ public class DeleteUsersListByNotAdminTest {
         notAdminUserWithoutApi = new User().create();
     }
 
-    @Test
+    @Test(description = "Проверка удаления другого пользователя и себя, пользователем без прав администратора")
+    @Owner("Магомедов Гаджи Магомедович")
+    @Severity(SeverityLevel.CRITICAL)
     public void getUsersByAdminTest() {
-        //Шаг 1. Отправить запрос GET на получение пользователя notAdminUser, используя ключ API пользователя notAdminUser
         deleteCurrentUserByNotAdmin(notAdminUserWithApi);
 
-        //Шаг 2. Отправить запрос GET на получение пользователя notAdminUserWithoutApi, используя ключ API пользователя notAdminUser
-        deleteAnotherUserByNotAdmin(notAdminUserWithApi, notAdminUserWithoutApi);
+        deleteAnotherUserByNotAdmin(notAdminUserWithoutApi, notAdminUserWithApi);
     }
 
+    @Step("1. Отправлен запрос DELETE на удаление пользователя из п.3, используя ключ из п.2. (удаление другого пользователя)")
     private void deleteCurrentUserByNotAdmin(User currentUser) {
         apiClient = new RestAssuredClient(currentUser);
         uri = String.format("/users/%d.json", currentUser.getId());
@@ -51,7 +58,8 @@ public class DeleteUsersListByNotAdminTest {
         Assert.assertNotNull(currentUser.read());
     }
 
-    private void deleteAnotherUserByNotAdmin(User seeker, User targetUser) {
+    @Step("2. Отправлен запрос DELETE на удаление пользователя из п.1, используя ключи из п.2 (удаление себя)")
+    private void deleteAnotherUserByNotAdmin(User targetUser, User seeker) {
         apiClient = new RestAssuredClient(seeker);
         uri = String.format("/users/%d.json", targetUser.getId());
         request = new RestAssuredRequest(RestMethod.DELETE, uri, null, null, null);
@@ -61,7 +69,7 @@ public class DeleteUsersListByNotAdminTest {
         Assert.assertNotNull(targetUser.read());
     }
 
-    @AfterClass
+    @AfterClass(description = "Пользователи удалены из системы")
     private void postConditions() {
         notAdminUserWithApi.delete();
         notAdminUserWithoutApi.delete();

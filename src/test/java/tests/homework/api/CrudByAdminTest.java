@@ -14,6 +14,10 @@ import automatization.redmine.model.user.Status;
 import automatization.redmine.model.user.Token;
 import automatization.redmine.model.user.User;
 import com.google.gson.Gson;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Step;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -27,7 +31,7 @@ public class CrudByAdminTest {
     private RestApiClient apiClient;
     private String uriWithUserId;
 
-    @BeforeClass
+    @BeforeClass(description = "В системе заведен пользователь с правами администратора. У пользователя есть доступ к API и ключ API")
     private void prepareConditions() {
         admin = new User() {{
             setIsAdmin(true);
@@ -42,32 +46,27 @@ public class CrudByAdminTest {
         apiClient = new RestAssuredClient(admin);
     }
 
-    @Test(testName = "Создание, изменение, получение, удаление пользователя. Администратор системы")
+    @Test(description = "Создание, изменение, получение, удаление пользователя администратором системы")
+    @Owner("Магомедов Гаджи Магомедович")
+    @Severity(SeverityLevel.CRITICAL)
     public void userCrudByAdminTest() {
-        //Шаг 1. Отправить запрос POST на создание пользователя (данные пользователя должны быть сгенерированы корректно, пользователь должен иметь status = 2)
         createAndValidateUser();
 
-        //Шаг 2. Отправить запрос POST на создание пользователя повторно с тем же телом запроса
         createAndValidateDuplicateUser();
 
-        //Шаг 3. Отправить запрос POST на создание пользователя повторно с тем же телом запроса, при этом изменив "email" на невалидный, а "password" - на строку из 4 символов
         createAndValidateDuplicateUserWithInvalidEmailAndShortPassword();
 
-        //Шаг 4. Отправить запрос PUT на изменение пользователя. Использовать данные из ответа запроса, выполненного в шаге №1, но при этом изменить поле status = 1
         updateStatusAndValidateUser();
 
-        //Шаг 5. Отправить запрос GET на получение пользователя
         getAndValidateUserWithNewStatus();
 
-        //Шаг 6. Отправить запрос DELETE на удаление пользователя
         deleteUser();
 
-        //Шаг 7. Отправить запрос DELETE на удаление пользователя повторно
         deleteUserAgain();
     }
 
     //------------------Методы по шагам теста------------------
-
+    @Step("1. Отправлен запрос POST на создание пользователя (данные пользователя должны быть сгенерированы корректно, пользователь должен иметь status = 2)")
     private void createAndValidateUser() {
         RestResponse positiveResponse = sendRequest(testUser, RestMethod.POST, "/users.json");
         Assert.assertEquals(positiveResponse.getStatusCode(), 201);
@@ -77,6 +76,7 @@ public class CrudByAdminTest {
         readAndCheckUserFromDataBase(testUser);
     }
 
+    @Step("2. Отправлен запрос POST на создание пользователя повторно с тем же телом запроса")
     private void createAndValidateDuplicateUser() {
         RestResponse negativeResponse = sendRequest(testUser, RestMethod.POST, "/users.json");
         Assert.assertEquals(negativeResponse.getStatusCode(), 422);
@@ -86,6 +86,7 @@ public class CrudByAdminTest {
         Assert.assertEquals(errorsFromResponse.getErrors().get(1), "Пользователь уже существует");
     }
 
+    @Step("3. Отправлен запрос POST на создание пользователя повторно с тем же телом запроса, при этом изменив \"email\" на невалидный, а \"password\" - на строку из 4 символов")
     private void createAndValidateDuplicateUserWithInvalidEmailAndShortPassword() {
         User invalidUser = testUser.read();
         invalidUser.getEmails().get(0).setAddress("invalid_email.com");
@@ -100,6 +101,7 @@ public class CrudByAdminTest {
         Assert.assertEquals(errorsFromResponse.getErrors().get(2), "Пароль недостаточной длины (не может быть меньше 8 символа)");
     }
 
+    @Step("4. Отправлен запрос PUT на изменение пользователя. Использовать данные из ответа запроса, выполненного в шаге №1, но при этом изменить поле status = 1")
     private void updateStatusAndValidateUser() {
         testUser = testUser.read();
         testUser.setStatus(Status.ACTIVE);
@@ -109,6 +111,7 @@ public class CrudByAdminTest {
         readAndCheckUserFromDataBase(testUser);
     }
 
+    @Step("5. Отправлен запрос GET на получение пользователя")
     private void getAndValidateUserWithNewStatus() {
         RestResponse response = sendRequest(null, RestMethod.GET, uriWithUserId);
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -117,12 +120,14 @@ public class CrudByAdminTest {
         checkUserFromJsonResponse(dto, testUser);
     }
 
+    @Step("6. Отправлен запрос DELETE на удаление пользователя")
     private void deleteUser() {
         RestResponse responseFromDeleteRequest1 = sendRequest(null, RestMethod.DELETE, uriWithUserId);
         Assert.assertEquals(responseFromDeleteRequest1.getStatusCode(), 204);
         Assert.assertNull(testUser.read());
     }
 
+    @Step("7. Отправлен запрос DELETE на удаление пользователя повторно")
     private void deleteUserAgain() {
         RestResponse responseFromDeleteRequest2 = sendRequest(null, RestMethod.DELETE, uriWithUserId);
         Assert.assertEquals(responseFromDeleteRequest2.getStatusCode(), 404);
@@ -187,7 +192,7 @@ public class CrudByAdminTest {
         Assert.assertEquals(userFromDataBase.getEmails().get(0).getAddress(), expectedUser.getEmails().get(0).getAddress());
     }
 
-    @AfterClass
+    @AfterClass(description = "Пользователи удалены из системы")
     private void postConditions() {
         admin.delete();
         testUser.delete();

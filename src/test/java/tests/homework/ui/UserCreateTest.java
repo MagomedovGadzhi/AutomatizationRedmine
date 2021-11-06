@@ -26,7 +26,7 @@ public class UserCreateTest extends BaseUITest {
         topMenuPage.loginButton.click();
     }
 
-    @Test(testName = "8. Администрирование. Создание пользователя.")
+    @Test(description = "8. Администрирование. Создание пользователя.")
     public void userCreateTest() {
         loginPage.login(admin);
         Assert.assertEquals(homePage.pageName.getText(), "Домашняя страница");

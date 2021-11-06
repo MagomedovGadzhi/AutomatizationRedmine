@@ -9,6 +9,7 @@ import automatization.redmine.model.Deleteable;
 import automatization.redmine.model.Readable;
 import automatization.redmine.model.Updateable;
 import automatization.redmine.model.role.Role;
+import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -64,6 +65,7 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
     }
 
     @Override
+    @Step("Создан пользователь в БД")
     public User create() {
         new UserRequests().create(this);
         tokens.forEach(t -> t.setUserId(id));
@@ -74,18 +76,23 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
     }
 
     @Override
+    @Step("Пользователь удален из БД")
     public User delete() {
         new UserRequests().delete(this.id);
+        tokens.forEach(Token::delete);
+        emails.forEach(Email::delete);
         return this;
     }
 
     @Override
+    @Step("Пользователь изменен в БД")
     public User update() {
         new UserRequests().update(this.id, this);
         return this;
     }
 
     @Override
+    @Step("Пользователь прочитан из БД")
     public User read() {
         User resultUser = new UserRequests().read(this.id);
         if (resultUser != null) {

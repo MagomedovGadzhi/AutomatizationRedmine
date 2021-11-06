@@ -31,7 +31,7 @@ public class UserTableUserSortingTest extends BaseUITest {
         topMenuPage.loginButton.click();
     }
 
-    @Test(testName = "6. Администрирование. Сортировка списка пользователей по пользователю")
+    @Test(description = "6. Администрирование. Сортировка списка пользователей по пользователю")
     public void testUsersTableLoginSorting() {
         loginPage.login(admin);
         Assert.assertEquals(homePage.pageName.getText(), "Домашняя страница");

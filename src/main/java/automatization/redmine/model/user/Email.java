@@ -6,6 +6,7 @@ import automatization.redmine.model.CreatableEntity;
 import automatization.redmine.model.Deleteable;
 import automatization.redmine.model.Readable;
 import automatization.redmine.model.Updateable;
+import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -28,24 +29,28 @@ public class Email extends CreatableEntity implements Creatable<Email>, Deleteab
     }
 
     @Override
+    @Step("Email создан в БД")
     public Email create() {
         new EmailRequests().create(this);
         return this;
     }
 
     @Override
+    @Step("Email удален из БД")
     public Email delete() {
         new EmailRequests().delete(this.id);
         return this;
     }
 
     @Override
+    @Step("Email изменен в БД")
     public Email update() {
         new EmailRequests().update(this.id, this);
         return this;
     }
 
     @Override
+    @Step("Email прочитан из БД")
     public Email read() {
         return new EmailRequests().read(this.id);
     }

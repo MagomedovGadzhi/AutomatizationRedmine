@@ -23,7 +23,7 @@ public class UnacceptedUserLoginTest extends BaseUITest {
         topMenuPage.loginButton.click();
     }
 
-    @Test(testName = "3. Авторизация неподтвержденным пользователем")
+    @Test(description = "3. Авторизация неподтвержденным пользователем")
     public void negativeUnacceptedUserLoginTest() {
         loginPage.login(unacceptedUser);
 

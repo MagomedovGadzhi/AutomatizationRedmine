@@ -11,6 +11,10 @@ import automatization.redmine.api.rest_assured.RestAssuredClient;
 import automatization.redmine.api.rest_assured.RestAssuredRequest;
 import automatization.redmine.model.user.Token;
 import automatization.redmine.model.user.User;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Step;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -23,17 +27,28 @@ import static automatization.redmine.utils.StringUtils.randomEnglishString;
 
 public class CreateUserByNotAdminUserTest {
 
-    private RestApiClient apiClient;
-    private RestRequest request;
     private User notAdminUser;
 
-    @BeforeClass
+    @BeforeClass(description = "В системе заведен пользователь. У пользователя есть доступ к API и ключ API")
     public void prepareConditions() {
         notAdminUser = new User() {{
             setTokens(Collections.singletonList(new Token(this)));
         }}.create();
+    }
 
-        apiClient = new RestAssuredClient(notAdminUser);
+
+    @Test(description = "Создание пользователя, пользователем без прав администратора.")
+    @Owner("Магомедов Гаджи Магомедович")
+    @Severity(SeverityLevel.CRITICAL)
+    public void createUserByNotAdminUserTest() {
+        RestResponse response = sendPostRequestToCreateUser();
+
+        Assert.assertEquals(response.getStatusCode(), 403);
+    }
+
+    @Step("1. Отправлен запрос POST на создание пользователя (данные пользователя должны быть сгенерированы корректно)")
+    private RestResponse sendPostRequestToCreateUser() {
+        RestApiClient apiClient = new RestAssuredClient(notAdminUser);
 
         UserInfoDto dto = new UserInfoDto(
                 new UserDto()
@@ -45,18 +60,11 @@ public class CreateUserByNotAdminUserTest {
         );
         String body = GsonProvider.GSON.toJson(dto);
 
-        request = new RestAssuredRequest(RestMethod.POST, "/users.json", null, null, body);
+        RestRequest request = new RestAssuredRequest(RestMethod.POST, "/users.json", null, null, body);
+        return apiClient.execute(request);
     }
 
-
-    @Test
-    public void createUserByNotAdminUserTest() {
-        RestResponse response = apiClient.execute(request);
-        Assert.assertEquals(response.getStatusCode(), 403);
-
-    }
-
-    @AfterClass
+    @AfterClass(description = "Пользователь удален из системы")
     private void postConditions() {
         notAdminUser.delete();
     }

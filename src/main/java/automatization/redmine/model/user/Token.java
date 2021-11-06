@@ -6,6 +6,7 @@ import automatization.redmine.model.CreatableEntity;
 import automatization.redmine.model.Deleteable;
 import automatization.redmine.model.Readable;
 import automatization.redmine.model.Updateable;
+import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -33,24 +34,28 @@ public class Token extends CreatableEntity implements Creatable<Token>, Deleteab
     }
 
     @Override
+    @Step("Токен создан в БД")
     public Token create() {
         new TokenRequests().create(this);
         return this;
     }
 
     @Override
+    @Step("Токен удален из БД")
     public Token delete() {
         new TokenRequests().delete(this.id);
         return this;
     }
 
     @Override
+    @Step("Токен изменен в БД")
     public Token update() {
         new TokenRequests().update(this.id, this);
         return this;
     }
 
     @Override
+    @Step("Токен прочитан из БД")
     public Token read() {
         return new TokenRequests().read(this.id);
     }

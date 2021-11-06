@@ -24,7 +24,7 @@ public class AcceptedUserLoginTest extends BaseUITest {
         topMenuPage.loginButton.click();
     }
 
-    @Test(testName = "2. Авторизация подтвержденным пользователем")
+    @Test(description = "2. Авторизация подтвержденным пользователем")
     public void positiveUserLoginTest() {
         loginPage.login(acceptedUser);
         Assert.assertEquals(homePage.pageName.getText(), "Домашняя страница");
