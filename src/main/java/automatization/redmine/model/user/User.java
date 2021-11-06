@@ -92,7 +92,7 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
     }
 
     @Override
-    @Step("Пользователь прочитан из БД")
+    @Step("Пользователь прочитан из БД (по id)")
     public User read() {
         User resultUser = new UserRequests().read(this.id);
         if (resultUser != null) {
@@ -102,6 +102,7 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
         return resultUser;
     }
 
+    @Step("Пользователь прочитан из БД (по login)")
     public User readByLogin() {
         User resultUser = new UserRequests().readByLogin(this.login);
         if (resultUser != null) {
@@ -111,6 +112,7 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
         return resultUser;
     }
 
+    @Step("Пользователь добавлен в проект {0} с ролями {1}")
     public void addProject(Integer projectId, List<Role> roles) {
         Integer memberId = new UserRequests().addMember(this, projectId);
         for (Role role : roles) {
@@ -118,6 +120,7 @@ public class User extends CreatableEntity implements Creatable<User>, Updateable
         }
     }
 
+    @Step("Пользователь добавлен в проект {0} с ролью {1}")
     public void addProject(Integer projectId, Role role) {
         Integer memberId = new UserRequests().addMember(this, projectId);
         new UserRequests().addMemberRoles(memberId, role);

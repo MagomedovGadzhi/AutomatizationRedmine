@@ -3,6 +3,7 @@ package tests.homework.ui;
 import automatization.redmine.ui.browser.Browser;
 import automatization.redmine.ui.browser.BrowserManager;
 import automatization.redmine.ui.pages.*;
+import io.qameta.allure.Step;
 import org.testng.annotations.AfterMethod;
 
 public class BaseUITest {
@@ -18,11 +19,13 @@ public class BaseUITest {
     protected ProjectsPage projectsPage;
     protected NewUserPage newUserPage;
 
+    @Step("Открыт браузер на главной странице")
     protected void openBrowser() {
         browser = BrowserManager.getBrowser();
         initPages();
     }
 
+    @Step("Открыт браузер на странице: {0}")
     protected void openBrowser(String uri) {
         browser = BrowserManager.getBrowser(uri);
         initPages();
@@ -40,7 +43,7 @@ public class BaseUITest {
         newUserPage = Page.getPage(NewUserPage.class);
     }
 
-    @AfterMethod
+    @AfterMethod (description = "Закрытие браузера")
     public void tearDown() {
         BrowserManager.closeBrowser();
     }

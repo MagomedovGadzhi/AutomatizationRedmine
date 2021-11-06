@@ -1,10 +1,10 @@
 package tests.homework.ui;
 
+import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.model.user.Status;
 import automatization.redmine.model.user.User;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static automatization.redmine.ui.browser.BrowserUtils.isElementDisplayed;
@@ -13,7 +13,7 @@ import static automatization.redmine.ui.browser.BrowserUtils.isElementDisplayed;
 public class AcceptedUserLoginTest extends BaseUITest {
     private User acceptedUser;
 
-    @BeforeClass
+    @BeforeMethod(description = "В системе заведен пользователь. Пользователь подтвержден администратором и не заблокирован")
     public void prepareConditions() {
         acceptedUser = new User() {{
             setStatus(Status.ACTIVE);
@@ -27,26 +27,26 @@ public class AcceptedUserLoginTest extends BaseUITest {
     @Test(description = "2. Авторизация подтвержденным пользователем")
     public void positiveUserLoginTest() {
         loginPage.login(acceptedUser);
-        Assert.assertEquals(homePage.pageName.getText(), "Домашняя страница");
+        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страницы\"");
 
-        Assert.assertEquals(topMenuPage.loggedAs.getText(), "Вошли как " + acceptedUser.getLogin());
+        AllureAssert.assertEquals(topMenuPage.loggedAs.getText(), "Вошли как " + acceptedUser.getLogin(), "Текст элемента \"Вошли как " + acceptedUser.getLogin() + "\"");
 
-        Assert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница");
-        Assert.assertEquals(topMenuPage.myPage.getText(), "Моя страница");
-        Assert.assertEquals(topMenuPage.projects.getText(), "Проекты");
-        Assert.assertEquals(topMenuPage.help.getText(), "Помощь");
-        Assert.assertEquals(topMenuPage.myAccount.getText(), "Моя учётная запись");
-        Assert.assertEquals(topMenuPage.logoutButton.getText(), "Выйти");
+        AllureAssert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница", "Текст элемента \"Домашняя страницы\"");
+        AllureAssert.assertEquals(topMenuPage.myPage.getText(), "Моя страница", "Текст элемента \"Моя страница\"");
+        AllureAssert.assertEquals(topMenuPage.projects.getText(), "Проекты", "Текст элемента \"Проекты\"");
+        AllureAssert.assertEquals(topMenuPage.help.getText(), "Помощь", "Текст элемента \"Помощь\"");
+        AllureAssert.assertEquals(topMenuPage.myAccount.getText(), "Моя учётная запись", "Текст элемента \"Моя учётная запись\"");
+        AllureAssert.assertEquals(topMenuPage.logoutButton.getText(), "Выйти", "Текст элемента \"Выйти\"");
 
-        Assert.assertFalse(isElementDisplayed(topMenuPage.loginButton));
-        Assert.assertFalse(isElementDisplayed(topMenuPage.registration));
-        Assert.assertFalse(isElementDisplayed(topMenuPage.administration));
+        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.loginButton), "Отображается элемент \"Войти\"");
+        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.registration), "Отображается элемент \"Регистрация\"");
+        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.administration), "Отображается элемент \"Администрирование\"");
 
-        Assert.assertEquals(headerPage.quickSearch.getText(), "Поиск");
-        Assert.assertTrue(headerPage.quickSearchInputField.isDisplayed());
+        AllureAssert.assertEquals(headerPage.quickSearch.getText(), "Поиск", "Текст элемента \"Поиск\"");
+        AllureAssert.assertTrue(headerPage.quickSearchInputField.isDisplayed(), "Отображается поле для ввода поискового запроса");
     }
 
-    @AfterClass
+    @AfterMethod(description = "Удаление тестового пользователя")
     public void postConditions() {
         acceptedUser.delete();
     }

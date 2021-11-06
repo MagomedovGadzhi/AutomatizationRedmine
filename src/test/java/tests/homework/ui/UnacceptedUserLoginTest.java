@@ -1,10 +1,10 @@
 package tests.homework.ui;
 
+import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.model.user.Status;
 import automatization.redmine.model.user.User;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static automatization.redmine.ui.browser.BrowserUtils.isElementDisplayed;
@@ -13,7 +13,7 @@ public class UnacceptedUserLoginTest extends BaseUITest {
 
     private User unacceptedUser;
 
-    @BeforeClass
+    @BeforeMethod(description = "В системе заведен пользователь. Пользователь не подтвержден администратором и не заблокирован")
     public void prepareConditions() {
         unacceptedUser = new User() {{
             setStatus(Status.UNACCEPTED);
@@ -27,25 +27,25 @@ public class UnacceptedUserLoginTest extends BaseUITest {
     public void negativeUnacceptedUserLoginTest() {
         loginPage.login(unacceptedUser);
 
-        Assert.assertFalse(isElementDisplayed(homePage.pageName));
+        AllureAssert.assertFalse(isElementDisplayed(homePage.pageName), "Отображается наименование страницы \"Домашняя страница\"");
 
-        Assert.assertEquals(loginPage.errorFlash.getText(), "Ваша учётная запись создана и ожидает подтверждения администратора.");
+        AllureAssert.assertEquals(loginPage.errorFlash.getText(), "Ваша учётная запись создана и ожидает подтверждения администратора.", "Текст ошибки \"Ваша учётная запись создана и ожидает подтверждения администратора.\"");
 
-        Assert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница");
-        Assert.assertEquals(topMenuPage.projects.getText(), "Проекты");
-        Assert.assertEquals(topMenuPage.help.getText(), "Помощь");
+        AllureAssert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница", "Текст элемента \"Домашняя страницы\"");
+        AllureAssert.assertEquals(topMenuPage.projects.getText(), "Проекты", "Текст элемента \"Проекты\"");
+        AllureAssert.assertEquals(topMenuPage.help.getText(), "Помощь", "Текст элемента \"Помощь\"");
 
-        Assert.assertFalse(isElementDisplayed(topMenuPage.myPage));
-        Assert.assertFalse(isElementDisplayed(topMenuPage.myAccount));
-        Assert.assertFalse(isElementDisplayed(topMenuPage.loggedAs));
-        Assert.assertFalse(isElementDisplayed(topMenuPage.logoutButton));
+        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.myPage), "Отображается элемент \"Моя страница\"");
+        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.myAccount), "Отображается элемент \"Моя учётная запись\"");
+        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.loggedAs), "Отображается элемент \"Вошли как " + unacceptedUser.getLogin() + "\"");
+        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.logoutButton), "Отображается элемент \"Выйти\"");
 
 
-        Assert.assertEquals(topMenuPage.loginButton.getText(), "Войти");
-        Assert.assertEquals(topMenuPage.registration.getText(), "Регистрация");
+        AllureAssert.assertEquals(topMenuPage.loginButton.getText(), "Войти", "Текст элемента \"Войти\"");
+        AllureAssert.assertEquals(topMenuPage.registration.getText(), "Регистрация", "Текст элемента \"Регистрация\"");
     }
 
-    @AfterClass
+    @AfterMethod(description = "Удаление тестового пользователя")
     public void postConditions() {
         unacceptedUser.delete();
     }

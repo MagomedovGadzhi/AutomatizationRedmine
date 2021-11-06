@@ -20,6 +20,7 @@ public class BrowserManager {
     }
 
     public static void closeBrowser() {
+        browser.takeScreenshot();
         browser.getDriver().quit();
         browser = null;
     }
