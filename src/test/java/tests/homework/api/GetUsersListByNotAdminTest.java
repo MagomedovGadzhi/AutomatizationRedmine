@@ -25,9 +25,9 @@ public class GetUsersListByNotAdminTest {
 
     private RestApiClient apiClient;
     private RestRequest request;
-    User notAdminUserWitApi;
-    User notAdminUserWithoutApi;
-    String uri;
+    private User notAdminUserWitApi;
+    private User notAdminUserWithoutApi;
+    private String uri;
 
     @BeforeClass(description = "1. Заведен пользователь в системе. " +
             "2. У пользователя есть доступ к API и ключ API. " +

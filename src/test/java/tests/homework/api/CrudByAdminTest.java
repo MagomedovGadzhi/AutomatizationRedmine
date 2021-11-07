@@ -19,6 +19,7 @@ import io.qameta.allure.Owner;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Step;
+import lombok.NonNull;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -113,7 +114,7 @@ public class CrudByAdminTest {
 
     @Step("5. Отправлен запрос GET на получение пользователя")
     private void getAndValidateUserWithNewStatus() {
-        RestResponse response = sendRequest(null, RestMethod.GET, uriWithUserId);
+        RestResponse response = sendRequest(RestMethod.GET, uriWithUserId);
         AllureAssert.assertEquals(response.getStatusCode(), 200, "Статус кода ответа");
         testUser.setStatus(Status.ACTIVE);
         UserDto dto = getUserDtoFromResponse(response);
@@ -122,36 +123,34 @@ public class CrudByAdminTest {
 
     @Step("6. Отправлен запрос DELETE на удаление пользователя")
     private void deleteUser() {
-        RestResponse responseFromDeleteRequest1 = sendRequest(null, RestMethod.DELETE, uriWithUserId);
+        RestResponse responseFromDeleteRequest1 = sendRequest(RestMethod.DELETE, uriWithUserId);
         AllureAssert.assertEquals(responseFromDeleteRequest1.getStatusCode(), 204, "Статус кода ответа");
         AllureAssert.assertNull(testUser.read());
     }
 
     @Step("7. Отправлен запрос DELETE на удаление пользователя повторно")
     private void deleteUserAgain() {
-        RestResponse responseFromDeleteRequest2 = sendRequest(null, RestMethod.DELETE, uriWithUserId);
+        RestResponse responseFromDeleteRequest2 = sendRequest(RestMethod.DELETE, uriWithUserId);
         AllureAssert.assertEquals(responseFromDeleteRequest2.getStatusCode(), 404, "Статус кода ответа");
     }
 
-    //------------------Вспомогательные методы------------------
-
-    private RestResponse sendRequest(User expectedUser, RestMethod method, String uri) {
-        UserInfoDto userInfoDto;
-        String body = null;
-
-        if (expectedUser != null) {
-            userInfoDto = new UserInfoDto(
-                    new UserDto()
-                            .setLogin(expectedUser.getLogin())
-                            .setFirstName(expectedUser.getFirstName())
-                            .setLastName(expectedUser.getLastName())
-                            .setMail(expectedUser.getEmails().get(0).getAddress())
-                            .setPassword(expectedUser.getPassword())
-                            .setStatus(expectedUser.getStatus().statusCode)
-            );
-            body = new Gson().toJson(userInfoDto);
-        }
+    private RestResponse sendRequest(@NonNull User expectedUser, RestMethod method, String uri) {
+        UserInfoDto userInfoDto = new UserInfoDto(
+                new UserDto()
+                        .setLogin(expectedUser.getLogin())
+                        .setFirstName(expectedUser.getFirstName())
+                        .setLastName(expectedUser.getLastName())
+                        .setMail(expectedUser.getEmails().get(0).getAddress())
+                        .setPassword(expectedUser.getPassword())
+                        .setStatus(expectedUser.getStatus().statusCode)
+        );
+        String body = new Gson().toJson(userInfoDto);
         RestRequest postRequest = new RestAssuredRequest(method, uri, null, null, body);
+        return apiClient.execute(postRequest);
+    }
+
+    private RestResponse sendRequest(RestMethod method, String uri) {
+        RestRequest postRequest = new RestAssuredRequest(method, uri, null, null, null);
         return apiClient.execute(postRequest);
     }
 
