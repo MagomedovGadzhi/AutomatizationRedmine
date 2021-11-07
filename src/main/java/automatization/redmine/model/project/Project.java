@@ -9,6 +9,7 @@ import automatization.redmine.model.Updateable;
 import automatization.redmine.model.role.Role;
 import automatization.redmine.model.user.User;
 import automatization.redmine.utils.StringUtils;
+import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,24 +40,28 @@ public class Project extends CreatableEntity implements Creatable<Project>, Dele
     private Map<User, List<Role>> usersAndRoles = new HashMap<>();
 
     @Override
+    @Step("Создан проект в БД")
     public Project create() {
         new ProjectRequest().create(this);
         return this;
     }
 
     @Override
+    @Step("Проект удален из БД")
     public Project delete() {
         new ProjectRequest().delete(this.id);
         return this;
     }
 
     @Override
+    @Step("Проект изменен в БД")
     public Project update() {
         new ProjectRequest().update(this.id, this);
         return this;
     }
 
     @Override
+    @Step("Проект прочитан из БД")
     public Project read() {
         return new ProjectRequest().read(this.id);
     }

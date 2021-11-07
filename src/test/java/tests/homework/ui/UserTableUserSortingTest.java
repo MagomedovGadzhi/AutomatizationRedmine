@@ -1,8 +1,9 @@
 package tests.homework.ui;
 
+import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.model.user.User;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
+import automatization.redmine.ui.browser.BrowserUtils;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -17,7 +18,7 @@ public class UserTableUserSortingTest extends BaseUITest {
     private User user2;
     private User user3;
 
-    @BeforeMethod
+    @BeforeMethod(description = "В системе заведен пользователь с правами администратора. Заведено несколько пользователей в системе")
     public void prepareConditions() {
         admin = new User() {{
             setIsAdmin(true);
@@ -34,22 +35,22 @@ public class UserTableUserSortingTest extends BaseUITest {
     @Test(description = "6. Администрирование. Сортировка списка пользователей по пользователю")
     public void testUsersTableLoginSorting() {
         loginPage.login(admin);
-        Assert.assertEquals(homePage.pageName.getText(), "Домашняя страница");
+        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страница\"");
 
-        topMenuPage.administration.click();
-        Assert.assertEquals(administrationPage.pageName.getText(), "Администрирование");
+        BrowserUtils.click(topMenuPage.administration, "\"Администрирование\"");
+        AllureAssert.assertEquals(administrationPage.pageName.getText(), "Администрирование", "Наименование страницы \"Администрирование\"");
 
-        administrationPage.users.click();
-        Assert.assertEquals(usersPage.pageName.getText(), "Пользователи");
+        BrowserUtils.click(administrationPage.users, "\"Пользователи\"");
+        AllureAssert.assertEquals(usersPage.pageName.getText(), "Пользователи", "Наименование страницы \"Пользователи\"");
         List<String> logins = getElementsText(usersPage.login);
         assertListSortedByNameAsc(logins);
 
-        usersPage.filterButton("Пользователь").click();
+        BrowserUtils.click(usersPage.filterButton("Пользователь"), "\"Пользователь\"");
         logins = getElementsText(usersPage.login);
         assertListSortedByNameDesc(logins);
     }
 
-    @AfterClass
+    @AfterMethod(description = "Удаление тестовых данных")
     public void postConditions() {
         admin.delete();
         user1.delete();

@@ -1,5 +1,6 @@
 package tests.homework.api;
 
+import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.api.client.RestApiClient;
 import automatization.redmine.api.client.RestMethod;
 import automatization.redmine.api.client.RestRequest;
@@ -12,7 +13,6 @@ import io.qameta.allure.Owner;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Step;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -38,7 +38,7 @@ public class DeleteUsersListByNotAdminTest {
         notAdminUserWithoutApi = new User().create();
     }
 
-    @Test(description = "Проверка удаления другого пользователя и себя, пользователем без прав администратора")
+    @Test(description = "4. Проверка удаления другого пользователя и себя, пользователем без прав администратора")
     @Owner("Магомедов Гаджи Магомедович")
     @Severity(SeverityLevel.CRITICAL)
     public void getUsersByAdminTest() {
@@ -54,8 +54,8 @@ public class DeleteUsersListByNotAdminTest {
         request = new RestAssuredRequest(RestMethod.DELETE, uri, null, null, null);
         RestResponse response = apiClient.execute(request);
 
-        Assert.assertEquals(response.getStatusCode(), 403);
-        Assert.assertNotNull(currentUser.read());
+        AllureAssert.assertEquals(response.getStatusCode(), 403, "Статус код ответа");
+        AllureAssert.assertNotNull(currentUser.read());
     }
 
     @Step("2. Отправлен запрос DELETE на удаление пользователя из п.1, используя ключи из п.2 (удаление себя)")
@@ -65,8 +65,8 @@ public class DeleteUsersListByNotAdminTest {
         request = new RestAssuredRequest(RestMethod.DELETE, uri, null, null, null);
         RestResponse response = apiClient.execute(request);
 
-        Assert.assertEquals(response.getStatusCode(), 403);
-        Assert.assertNotNull(targetUser.read());
+        AllureAssert.assertEquals(response.getStatusCode(), 403, "Статус код ответа");
+        AllureAssert.assertNotNull(targetUser.read());
     }
 
     @AfterClass(description = "Пользователи удалены из системы")

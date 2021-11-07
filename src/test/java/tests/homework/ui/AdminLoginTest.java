@@ -25,11 +25,11 @@ public class AdminLoginTest extends BaseUITest {
     @Test(description = "1. Авторизация администратором")
     public void positiveAdminLoginTest() {
         loginPage.login(admin);
-        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страницы\"");
+        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страница\"");
 
         AllureAssert.assertEquals(topMenuPage.loggedAs.getText(), "Вошли как " + admin.getLogin(), "Текст элемента \"Вошли как " + admin.getLogin() + "\"");
 
-        AllureAssert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница", "Текст элемента \"Домашняя страницы\"");
+        AllureAssert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница", "Текст элемента \"Домашняя страница\"");
         AllureAssert.assertEquals(topMenuPage.myPage.getText(), "Моя страница", "Текст элемента \"Моя страница\"");
         AllureAssert.assertEquals(topMenuPage.projects.getText(), "Проекты", "Текст элемента \"Проекты\"");
         AllureAssert.assertEquals(topMenuPage.administration.getText(), "Администрирование", "Текст элемента \"Администрирование\"");
@@ -37,14 +37,14 @@ public class AdminLoginTest extends BaseUITest {
         AllureAssert.assertEquals(topMenuPage.myAccount.getText(), "Моя учётная запись", "Текст элемента \"Моя учётная запись\"");
         AllureAssert.assertEquals(topMenuPage.logoutButton.getText(), "Выйти", "Текст элемента \"Выйти\"");
 
-        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.loginButton), "Отображается элемент \"Войти\"");
-        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.registration), "Отображается элемент \"Регистрация\"");
+        AllureAssert.assertTrue(!isElementDisplayed(topMenuPage.loginButton), "Не отображается элемент \"Войти\"");
+        AllureAssert.assertTrue(!isElementDisplayed(topMenuPage.registration), "Не отображается элемент \"Регистрация\"");
 
         AllureAssert.assertEquals(headerPage.quickSearch.getText(), "Поиск", "Текст элемента \"Поиск\"");
         AllureAssert.assertTrue(headerPage.quickSearchInputField.isDisplayed(), "Отображается поле для ввода поискового запроса");
     }
 
-    @AfterMethod(description = "Удаление тестового пользователя")
+    @AfterMethod(description = "Удаление тестовых данных")
     public void postConditions() {
         admin.delete();
     }

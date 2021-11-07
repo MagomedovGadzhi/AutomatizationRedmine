@@ -27,25 +27,25 @@ public class UnacceptedUserLoginTest extends BaseUITest {
     public void negativeUnacceptedUserLoginTest() {
         loginPage.login(unacceptedUser);
 
-        AllureAssert.assertFalse(isElementDisplayed(homePage.pageName), "Отображается наименование страницы \"Домашняя страница\"");
+        AllureAssert.assertTrue(!isElementDisplayed(homePage.pageName), "Не отображается наименование страницы \"Домашняя страница\"");
 
         AllureAssert.assertEquals(loginPage.errorFlash.getText(), "Ваша учётная запись создана и ожидает подтверждения администратора.", "Текст ошибки \"Ваша учётная запись создана и ожидает подтверждения администратора.\"");
 
-        AllureAssert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница", "Текст элемента \"Домашняя страницы\"");
+        AllureAssert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница", "Текст элемента \"Домашняя страница\"");
         AllureAssert.assertEquals(topMenuPage.projects.getText(), "Проекты", "Текст элемента \"Проекты\"");
         AllureAssert.assertEquals(topMenuPage.help.getText(), "Помощь", "Текст элемента \"Помощь\"");
 
-        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.myPage), "Отображается элемент \"Моя страница\"");
-        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.myAccount), "Отображается элемент \"Моя учётная запись\"");
-        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.loggedAs), "Отображается элемент \"Вошли как " + unacceptedUser.getLogin() + "\"");
-        AllureAssert.assertFalse(isElementDisplayed(topMenuPage.logoutButton), "Отображается элемент \"Выйти\"");
+        AllureAssert.assertTrue(!isElementDisplayed(topMenuPage.myPage), "Не отображается элемент \"Моя страница\"");
+        AllureAssert.assertTrue(!isElementDisplayed(topMenuPage.myAccount), "Не отображается элемент \"Моя учётная запись\"");
+        AllureAssert.assertTrue(!isElementDisplayed(topMenuPage.loggedAs), "Не отображается элемент \"Вошли как " + unacceptedUser.getLogin() + "\"");
+        AllureAssert.assertTrue(!isElementDisplayed(topMenuPage.logoutButton), "Не отображается элемент \"Выйти\"");
 
 
         AllureAssert.assertEquals(topMenuPage.loginButton.getText(), "Войти", "Текст элемента \"Войти\"");
         AllureAssert.assertEquals(topMenuPage.registration.getText(), "Регистрация", "Текст элемента \"Регистрация\"");
     }
 
-    @AfterMethod(description = "Удаление тестового пользователя")
+    @AfterMethod(description = "Удаление тестовых данных")
     public void postConditions() {
         unacceptedUser.delete();
     }

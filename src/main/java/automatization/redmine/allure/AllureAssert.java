@@ -11,9 +11,14 @@ public class AllureAssert {
         Assert.assertEquals(actual, expected, message);
     }
 
-    @Step("Проверка равенства:")
-    public static void assertEquals(Object actual, Object expected) {
-        Assert.assertEquals(actual, expected);
+    @Step("Проверка на NULL")
+    public static void assertNull(Object object) {
+        Assert.assertNull(object);
+    }
+
+    @Step("Проверка на НЕ NULL")
+    public static void assertNotNull(Object object) {
+        Assert.assertNotNull(object);
     }
 
     @Step("Проверка на ложность условия: {1}")
@@ -21,18 +26,8 @@ public class AllureAssert {
         Assert.assertFalse(condition, message);
     }
 
-    @Step("Проверка на ложность условия:")
-    public static void assertFalse(boolean condition) {
-        Assert.assertFalse(condition);
-    }
-
     @Step("Проверка на истинность условия: {1}")
     public static void assertTrue(boolean condition, String message) {
         Assert.assertTrue(condition, message);
-    }
-
-    @Step("Проверка на истинность условия:")
-    public static void assertTrue(boolean condition) {
-        Assert.assertTrue(condition);
     }
 }

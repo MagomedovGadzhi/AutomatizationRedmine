@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import io.qameta.allure.Step;
 import org.testng.Assert;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -26,30 +27,35 @@ public class CompareUtils {
 
     private static final Comparator<String> STRING_ASC_COMPARATOR = STRING_DESC_COMPARATOR.reversed();
 
+    @Step("Проверка сортировки списка дат по убыванию")
     public static void assertListSortedByDateDesc(List<String> dates) {
         List<String> datesCopy = new ArrayList<>(dates);
         datesCopy.sort(DATE_DESC_COMPARATOR);
         Assert.assertEquals(dates, datesCopy);
     }
 
+    @Step("Проверка сортировки списка дат по возрастанию")
     public static void assertListSortedByDateAsc(List<String> dates) {
         List<String> datesCopy = new ArrayList<>(dates);
         datesCopy.sort(DATE_ASC_COMPARATOR);
         Assert.assertEquals(dates, datesCopy);
     }
 
+    @Step("Проверка сортировки списка строк по убыванию")
     public static void assertListSortedByNameDesc(List<String> names) {
         List<String> namesCopy = new ArrayList<>(names);
         namesCopy.sort(STRING_DESC_COMPARATOR);
         Assert.assertEquals(names, namesCopy);
     }
 
+    @Step("Проверка сортировки списка строк по возрастанию")
     public static void assertListSortedByNameAsc(List<String> names) {
         List<String> namesCopy = new ArrayList<>(names);
         namesCopy.sort(STRING_ASC_COMPARATOR);
         Assert.assertEquals(names, namesCopy);
     }
 
+    @Step("Проверка отсутствия сортировки в списке строк")
     public static void assertIsNotSorted(List<String> strings) {
         List<String> stringsCopy = new ArrayList<>(strings);
         stringsCopy.sort(String::compareTo);

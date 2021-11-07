@@ -7,6 +7,7 @@ import automatization.redmine.model.Entity;
 import automatization.redmine.model.Readable;
 import automatization.redmine.model.Updateable;
 import automatization.redmine.utils.StringUtils;
+import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -61,24 +62,28 @@ public class Role extends Entity implements Creatable<Role>, Deleteable<Role>, U
     }
 
     @Override
+    @Step("Создана роль в БД")
     public Role create() {
         new RoleRequest().create(this);
         return this;
     }
 
     @Override
+    @Step("Роль удалена из БД")
     public Role delete() {
         new RoleRequest().delete(this.id);
         return this;
     }
 
     @Override
+    @Step("Роль изменена в БД")
     public Role update() {
         new RoleRequest().update(this.id, this);
         return this;
     }
 
     @Override
+    @Step("Роль прочитана из БД")
     public Role read() {
         return new RoleRequest().read(this.id);
     }

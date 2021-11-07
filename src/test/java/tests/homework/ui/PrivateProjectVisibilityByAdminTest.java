@@ -1,11 +1,11 @@
 package tests.homework.ui;
 
+import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.model.project.Project;
 import automatization.redmine.model.user.User;
 import automatization.redmine.ui.browser.BrowserUtils;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class PrivateProjectVisibilityByAdminTest extends BaseUITest {
     private User admin;
     private Project project;
 
-    @BeforeClass
+    @BeforeMethod(description = "В системе заведен пользователь с правами администратора. Существует приватный проект, не привязанный к пользователю")
     public void prepareConditions() {
         admin = new User() {{
             setIsAdmin(true);
@@ -31,16 +31,16 @@ public class PrivateProjectVisibilityByAdminTest extends BaseUITest {
     @Test(description = "4. Видимость проекта. Приватный проект. Администратор")
     public void privateProjectVisibilityByAdminTest() {
         loginPage.login(admin);
-        Assert.assertEquals(homePage.pageName.getText(), "Домашняя страница");
+        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страница\"");
 
-        topMenuPage.projects.click();
-        Assert.assertEquals(projectsPage.actualTabName.getText(), "Проекты");
+        BrowserUtils.click(topMenuPage.projects, "\"Проекты\"");
+        AllureAssert.assertEquals(projectsPage.pageName.getText(), "Проекты", "Наименование страницы \"Проекты\"");
 
         List<String> projectsNames = BrowserUtils.getElementsText(projectsPage.projects);
-        Assert.assertTrue(projectsNames.contains(project.getName()));
+        AllureAssert.assertTrue(projectsNames.contains(project.getName()), "На странице отображается проект из предусловия");
     }
 
-    @AfterClass
+    @AfterMethod(description = "Удаление тестовых данных")
     public void postConditions() {
         admin.delete();
         project.delete();

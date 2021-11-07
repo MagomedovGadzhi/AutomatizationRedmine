@@ -1,6 +1,8 @@
 package automatization.redmine.db.connection;
 
 import automatization.redmine.property.Property;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import lombok.SneakyThrows;
 import org.postgresql.util.PSQLException;
 
@@ -25,6 +27,7 @@ public class PostgresConnection implements DatabaseConnection {
     }
 
     @SneakyThrows
+    @Step("Подключение к БД")
     private void connect() {
         Class.forName("org.postgresql.Driver");
 
@@ -37,12 +40,14 @@ public class PostgresConnection implements DatabaseConnection {
 
     @Override
     @SneakyThrows
+    @Step("Выполнение запроса к БД")
     public List<Map<String, Object>> executeQuery(String query, Object... parameters) {
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             for (int i = 0; i < parameters.length; i++) {
                 statement.setObject(i + 1, parameters[i]);
             }
+            Allure.addAttachment("SQL-запрос", statement.toString());
             ResultSet rs = statement.executeQuery();
 
             List<Map<String, Object>> result = new ArrayList<>();
@@ -57,6 +62,7 @@ public class PostgresConnection implements DatabaseConnection {
                 }
                 result.add(oneLineResult);
             }
+            Allure.addAttachment("SQL-ответ", result.toString());
             return result;
         } catch (PSQLException exception) {
             if (exception.getMessage().equals("Запрос не вернул результатов.")) {

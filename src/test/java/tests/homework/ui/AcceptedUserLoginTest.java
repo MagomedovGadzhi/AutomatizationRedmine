@@ -27,11 +27,11 @@ public class AcceptedUserLoginTest extends BaseUITest {
     @Test(description = "2. Авторизация подтвержденным пользователем")
     public void positiveUserLoginTest() {
         loginPage.login(acceptedUser);
-        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страницы\"");
+        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страница\"");
 
         AllureAssert.assertEquals(topMenuPage.loggedAs.getText(), "Вошли как " + acceptedUser.getLogin(), "Текст элемента \"Вошли как " + acceptedUser.getLogin() + "\"");
 
-        AllureAssert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница", "Текст элемента \"Домашняя страницы\"");
+        AllureAssert.assertEquals(topMenuPage.homePage.getText(), "Домашняя страница", "Текст элемента \"Домашняя страница\"");
         AllureAssert.assertEquals(topMenuPage.myPage.getText(), "Моя страница", "Текст элемента \"Моя страница\"");
         AllureAssert.assertEquals(topMenuPage.projects.getText(), "Проекты", "Текст элемента \"Проекты\"");
         AllureAssert.assertEquals(topMenuPage.help.getText(), "Помощь", "Текст элемента \"Помощь\"");
@@ -46,7 +46,7 @@ public class AcceptedUserLoginTest extends BaseUITest {
         AllureAssert.assertTrue(headerPage.quickSearchInputField.isDisplayed(), "Отображается поле для ввода поискового запроса");
     }
 
-    @AfterMethod(description = "Удаление тестового пользователя")
+    @AfterMethod(description = "Удаление тестовых данных")
     public void postConditions() {
         acceptedUser.delete();
     }

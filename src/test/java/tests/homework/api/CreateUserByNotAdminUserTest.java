@@ -1,5 +1,6 @@
 package tests.homework.api;
 
+import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.api.client.RestApiClient;
 import automatization.redmine.api.client.RestMethod;
 import automatization.redmine.api.client.RestRequest;
@@ -15,7 +16,6 @@ import io.qameta.allure.Owner;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Step;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -37,13 +37,13 @@ public class CreateUserByNotAdminUserTest {
     }
 
 
-    @Test(description = "Создание пользователя, пользователем без прав администратора.")
+    @Test(description = "2. Создание пользователя, пользователем без прав администратора.")
     @Owner("Магомедов Гаджи Магомедович")
     @Severity(SeverityLevel.CRITICAL)
     public void createUserByNotAdminUserTest() {
         RestResponse response = sendPostRequestToCreateUser();
 
-        Assert.assertEquals(response.getStatusCode(), 403);
+        AllureAssert.assertEquals(response.getStatusCode(), 403, "Статус кода ответа");
     }
 
     @Step("1. Отправлен запрос POST на создание пользователя (данные пользователя должны быть сгенерированы корректно)")

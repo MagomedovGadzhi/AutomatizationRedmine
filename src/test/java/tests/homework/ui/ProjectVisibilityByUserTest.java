@@ -1,14 +1,14 @@
 package tests.homework.ui;
 
+import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.model.project.Project;
 import automatization.redmine.model.role.Permission;
 import automatization.redmine.model.role.Role;
 import automatization.redmine.model.user.Status;
 import automatization.redmine.model.user.User;
 import automatization.redmine.ui.browser.BrowserUtils;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -22,7 +22,14 @@ public class ProjectVisibilityByUserTest extends BaseUITest {
     private Project privateProject3;
 
 
-    @BeforeClass
+    @BeforeMethod(description = "1. Заведен пользователь в системе.\n" +
+            "2. Пользователь подтвержден администратором и не заблокирован\n" +
+            "3. В системе заведена Роль пользователя с правами на просмотр задач\n" +
+            "4. В системе заведен публичный проект (№ 1)\n" +
+            "5. В системе заведен приватный проект (№ 2)\n" +
+            "6. В системе заведен приватный проект (№ 3)\n" +
+            "7. У пользователя нет доступа к проектам №1, №2\n" +
+            "8. У пользователя есть доступ к проекту №3 c ролью из п.3 предусловия")
     public void prepareConditions() {
         user = new User() {{
             setStatus(Status.ACTIVE);
@@ -53,18 +60,18 @@ public class ProjectVisibilityByUserTest extends BaseUITest {
     @Test(description = "5. Видимость проектов. Пользователь")
     public void projectVisibilityByUserTest() {
         loginPage.login(user);
-        Assert.assertEquals(homePage.pageName.getText(), "Домашняя страница");
+        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Текст элемента \"Домашняя страница\"");
 
-        topMenuPage.projects.click();
-        Assert.assertEquals(projectsPage.actualTabName.getText(), "Проекты");
+        BrowserUtils.click(topMenuPage.projects, "\"Проекты\"");
+        AllureAssert.assertEquals(projectsPage.pageName.getText(), "Проекты", "Текст элемента \"Проекты\"");
 
         List<String> projectsNames = BrowserUtils.getElementsText(projectsPage.projects);
-        Assert.assertTrue(projectsNames.contains(publicProject1.getName()));
-        Assert.assertFalse(projectsNames.contains(privateProject2.getName()));
-        Assert.assertTrue(projectsNames.contains(privateProject3.getName()));
+        AllureAssert.assertTrue(projectsNames.contains(publicProject1.getName()), "Отображается проект из п.4 предусловия");
+        AllureAssert.assertTrue(!projectsNames.contains(privateProject2.getName()), "Не отображается проект из п.5 предусловия");
+        AllureAssert.assertTrue(projectsNames.contains(privateProject3.getName()), "Отображается проект из п.6 предусловия");
     }
 
-    @AfterClass
+    @AfterMethod(description = "Удаление тестовых данных")
     public void postConditions() {
         user.delete();
         role.delete();

@@ -1,5 +1,6 @@
 package tests.homework.api;
 
+import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.api.client.RestApiClient;
 import automatization.redmine.api.client.RestMethod;
 import automatization.redmine.api.client.RestRequest;
@@ -14,7 +15,6 @@ import io.qameta.allure.Owner;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Step;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -40,7 +40,7 @@ public class GetUsersListByNotAdminTest {
         notAdminUserWithoutApi = new User().create();
     }
 
-    @Test(description = "Получение информации о пользователе, пользователем без прав администратора")
+    @Test(description = "3. Получение информации о пользователе, пользователем без прав администратора")
     @Owner("Магомедов Гаджи Магомедович")
     @Severity(SeverityLevel.CRITICAL)
     public void getUsersByAdminTest() {
@@ -56,20 +56,20 @@ public class GetUsersListByNotAdminTest {
         request = new RestAssuredRequest(RestMethod.GET, uri, null, null, null);
         RestResponse response = apiClient.execute(request);
 
-        Assert.assertEquals(response.getStatusCode(), 200);
+        AllureAssert.assertEquals(response.getStatusCode(), 200, "Статус кода ответа");
 
         UserInfoDto responseData = response.getPayload(UserInfoDto.class);
         UserDto responseUser = responseData.getUser();
 
-        Assert.assertEquals(responseUser.getId(), targetUser.getId());
-        Assert.assertEquals(responseUser.getLogin(), targetUser.getLogin());
-        Assert.assertEquals(responseUser.getIsAdmin(), targetUser.getIsAdmin());
-        Assert.assertEquals(responseUser.getFirstName(), targetUser.getFirstName());
-        Assert.assertEquals(responseUser.getLastName(), targetUser.getLastName());
+        AllureAssert.assertEquals(responseUser.getId(), targetUser.getId(), "ID");
+        AllureAssert.assertEquals(responseUser.getLogin(), targetUser.getLogin(), "Логин");
+        AllureAssert.assertEquals(responseUser.getIsAdmin(), targetUser.getIsAdmin(), "Признак наличия прав администратора");
+        AllureAssert.assertEquals(responseUser.getFirstName(), targetUser.getFirstName(), "Имя");
+        AllureAssert.assertEquals(responseUser.getLastName(), targetUser.getLastName(), "Фамилия");
         //Пришлось добавить в ожидаемом результат withNano(0), т.к. в ответе API не передаются милисекунды
-        Assert.assertEquals(responseUser.getCreatedOn(), targetUser.getCreatedOn().withNano(0));
-        Assert.assertEquals(responseUser.getLastLoginOn(), targetUser.getLastLoginOn());
-        Assert.assertEquals(responseUser.getApiKey(), targetUser.getTokens().get(0).getValue());
+        AllureAssert.assertEquals(responseUser.getCreatedOn(), targetUser.getCreatedOn().withNano(0), "Дата и время создания");
+        AllureAssert.assertEquals(responseUser.getLastLoginOn(), targetUser.getLastLoginOn(), "Дата и время последней авторизации");
+        AllureAssert.assertEquals(responseUser.getApiKey(), targetUser.getTokens().get(0).getValue(), "Токен");
     }
 
     @Step("2. Отправлен запрос GET на получения пользователя из п.3, используя ключ API из п.2 (получение информации о другом пользователе)")
@@ -79,20 +79,20 @@ public class GetUsersListByNotAdminTest {
         request = new RestAssuredRequest(RestMethod.GET, uri, null, null, null);
         RestResponse response = apiClient.execute(request);
 
-        Assert.assertEquals(response.getStatusCode(), 200);
+        AllureAssert.assertEquals(response.getStatusCode(), 200, "Статус кода ответа");
 
         UserInfoDto responseData = response.getPayload(UserInfoDto.class);
         UserDto responseUser = responseData.getUser();
 
-        Assert.assertEquals(responseUser.getId(), targetUser.getId());
-        Assert.assertEquals(responseUser.getLogin(), targetUser.getLogin());
-        Assert.assertEquals(responseUser.getFirstName(), targetUser.getFirstName());
-        Assert.assertEquals(responseUser.getLastName(), targetUser.getLastName());
+        AllureAssert.assertEquals(responseUser.getId(), targetUser.getId(), "ID");
+        AllureAssert.assertEquals(responseUser.getLogin(), targetUser.getLogin(), "Логин");
+        AllureAssert.assertEquals(responseUser.getFirstName(), targetUser.getFirstName(), "Имя");
+        AllureAssert.assertEquals(responseUser.getLastName(), targetUser.getLastName(), "Фамилия");
         //Пришлось добавить в ожидаемом результат withNano(0), т.к. в ответе API не передаются милисекунды
-        Assert.assertEquals(responseUser.getCreatedOn(), targetUser.getCreatedOn().withNano(0));
-        Assert.assertEquals(responseUser.getLastLoginOn(), targetUser.getLastLoginOn());
-        Assert.assertNull(responseUser.getIsAdmin());
-        Assert.assertNull(responseUser.getApiKey());
+        AllureAssert.assertEquals(responseUser.getCreatedOn(), targetUser.getCreatedOn().withNano(0), "Дата и время создания");
+        AllureAssert.assertEquals(responseUser.getLastLoginOn(), targetUser.getLastLoginOn(), "Дата и время последней авторизации");
+        AllureAssert.assertNull(responseUser.getIsAdmin());
+        AllureAssert.assertNull(responseUser.getApiKey());
     }
 
     @AfterClass(description = "Пользователи удалены из системы")

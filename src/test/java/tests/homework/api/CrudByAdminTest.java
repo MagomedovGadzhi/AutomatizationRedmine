@@ -1,5 +1,6 @@
 package tests.homework.api;
 
+import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.api.client.RestApiClient;
 import automatization.redmine.api.client.RestMethod;
 import automatization.redmine.api.client.RestRequest;
@@ -18,7 +19,6 @@ import io.qameta.allure.Owner;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Step;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -46,7 +46,7 @@ public class CrudByAdminTest {
         apiClient = new RestAssuredClient(admin);
     }
 
-    @Test(description = "Создание, изменение, получение, удаление пользователя администратором системы")
+    @Test(description = "1. Создание, изменение, получение, удаление пользователя администратором системы")
     @Owner("Магомедов Гаджи Магомедович")
     @Severity(SeverityLevel.CRITICAL)
     public void userCrudByAdminTest() {
@@ -69,7 +69,7 @@ public class CrudByAdminTest {
     @Step("1. Отправлен запрос POST на создание пользователя (данные пользователя должны быть сгенерированы корректно, пользователь должен иметь status = 2)")
     private void createAndValidateUser() {
         RestResponse positiveResponse = sendRequest(testUser, RestMethod.POST, "/users.json");
-        Assert.assertEquals(positiveResponse.getStatusCode(), 201);
+        AllureAssert.assertEquals(positiveResponse.getStatusCode(), 201, "Статус кода ответа");
         UserDto dto = getUserDtoFromResponse(positiveResponse);
         checkUserFromJsonResponse(dto, testUser);
         testUser.setId(dto.getId());
@@ -79,11 +79,11 @@ public class CrudByAdminTest {
     @Step("2. Отправлен запрос POST на создание пользователя повторно с тем же телом запроса")
     private void createAndValidateDuplicateUser() {
         RestResponse negativeResponse = sendRequest(testUser, RestMethod.POST, "/users.json");
-        Assert.assertEquals(negativeResponse.getStatusCode(), 422);
+        AllureAssert.assertEquals(negativeResponse.getStatusCode(), 422, "Статус кода ответа");
         ErrorsInfoDto errorsFromResponse = negativeResponse.getPayload(ErrorsInfoDto.class);
 
-        Assert.assertEquals(errorsFromResponse.getErrors().get(0), "Email уже существует");
-        Assert.assertEquals(errorsFromResponse.getErrors().get(1), "Пользователь уже существует");
+        AllureAssert.assertEquals(errorsFromResponse.getErrors().get(0), "Email уже существует", "Текст ошибки \"Email уже существует\"");
+        AllureAssert.assertEquals(errorsFromResponse.getErrors().get(1), "Пользователь уже существует", "Текст ошибки \"Пользователь уже существует\"");
     }
 
     @Step("3. Отправлен запрос POST на создание пользователя повторно с тем же телом запроса, при этом изменив \"email\" на невалидный, а \"password\" - на строку из 4 символов")
@@ -93,12 +93,12 @@ public class CrudByAdminTest {
         invalidUser.setPassword("1234");
         RestResponse negativeResponse = sendRequest(invalidUser, RestMethod.POST, "/users.json");
 
-        Assert.assertEquals(negativeResponse.getStatusCode(), 422);
+        AllureAssert.assertEquals(negativeResponse.getStatusCode(), 422, "Статус кода ответа");
 
         ErrorsInfoDto errorsFromResponse = negativeResponse.getPayload(ErrorsInfoDto.class);
-        Assert.assertEquals(errorsFromResponse.getErrors().get(0), "Email имеет неверное значение");
-        Assert.assertEquals(errorsFromResponse.getErrors().get(1), "Пользователь уже существует");
-        Assert.assertEquals(errorsFromResponse.getErrors().get(2), "Пароль недостаточной длины (не может быть меньше 8 символа)");
+        AllureAssert.assertEquals(errorsFromResponse.getErrors().get(0), "Email имеет неверное значение", "Текст ошибки \"Email имеет неверное значение\"");
+        AllureAssert.assertEquals(errorsFromResponse.getErrors().get(1), "Пользователь уже существует", "Текст ошибки \"Пользователь уже существует\"");
+        AllureAssert.assertEquals(errorsFromResponse.getErrors().get(2), "Пароль недостаточной длины (не может быть меньше 8 символа)", "Текст ошибки \"Пароль недостаточной длины (не может быть меньше 8 символа)\"");
     }
 
     @Step("4. Отправлен запрос PUT на изменение пользователя. Использовать данные из ответа запроса, выполненного в шаге №1, но при этом изменить поле status = 1")
@@ -107,14 +107,14 @@ public class CrudByAdminTest {
         testUser.setStatus(Status.ACTIVE);
         uriWithUserId = String.format("/users/%d.json", testUser.getId());
         RestResponse responseFromPutRequest = sendRequest(testUser, RestMethod.PUT, uriWithUserId);
-        Assert.assertEquals(responseFromPutRequest.getStatusCode(), 204);
+        AllureAssert.assertEquals(responseFromPutRequest.getStatusCode(), 204, "Статус кода ответа");
         readAndCheckUserFromDataBase(testUser);
     }
 
     @Step("5. Отправлен запрос GET на получение пользователя")
     private void getAndValidateUserWithNewStatus() {
         RestResponse response = sendRequest(null, RestMethod.GET, uriWithUserId);
-        Assert.assertEquals(response.getStatusCode(), 200);
+        AllureAssert.assertEquals(response.getStatusCode(), 200, "Статус кода ответа");
         testUser.setStatus(Status.ACTIVE);
         UserDto dto = getUserDtoFromResponse(response);
         checkUserFromJsonResponse(dto, testUser);
@@ -123,14 +123,14 @@ public class CrudByAdminTest {
     @Step("6. Отправлен запрос DELETE на удаление пользователя")
     private void deleteUser() {
         RestResponse responseFromDeleteRequest1 = sendRequest(null, RestMethod.DELETE, uriWithUserId);
-        Assert.assertEquals(responseFromDeleteRequest1.getStatusCode(), 204);
-        Assert.assertNull(testUser.read());
+        AllureAssert.assertEquals(responseFromDeleteRequest1.getStatusCode(), 204, "Статус кода ответа");
+        AllureAssert.assertNull(testUser.read());
     }
 
     @Step("7. Отправлен запрос DELETE на удаление пользователя повторно")
     private void deleteUserAgain() {
         RestResponse responseFromDeleteRequest2 = sendRequest(null, RestMethod.DELETE, uriWithUserId);
-        Assert.assertEquals(responseFromDeleteRequest2.getStatusCode(), 404);
+        AllureAssert.assertEquals(responseFromDeleteRequest2.getStatusCode(), 404, "Статус кода ответа");
     }
 
     //------------------Вспомогательные методы------------------
@@ -156,16 +156,16 @@ public class CrudByAdminTest {
     }
 
     private void checkUserFromJsonResponse(UserDto actualUserDto, User expectedUser) {
-        Assert.assertNotNull(actualUserDto.getId());
-        Assert.assertEquals(actualUserDto.getLogin(), expectedUser.getLogin());
-        Assert.assertEquals(actualUserDto.getIsAdmin(), expectedUser.getIsAdmin());
-        Assert.assertEquals(actualUserDto.getFirstName(), expectedUser.getFirstName());
-        Assert.assertEquals(actualUserDto.getLastName(), expectedUser.getLastName());
-        Assert.assertEquals(actualUserDto.getMail(), expectedUser.getEmails().get(0).getAddress());
-        Assert.assertEquals(actualUserDto.getLastLoginOn(), expectedUser.getLastLoginOn());
-        Assert.assertEquals(actualUserDto.getStatus().intValue(), expectedUser.getStatus().statusCode);
+        AllureAssert.assertNotNull(actualUserDto.getId());
+        AllureAssert.assertEquals(actualUserDto.getLogin(), expectedUser.getLogin(), "Логин");
+        AllureAssert.assertEquals(actualUserDto.getIsAdmin(), expectedUser.getIsAdmin(), "Признак наличия прав администратора");
+        AllureAssert.assertEquals(actualUserDto.getFirstName(), expectedUser.getFirstName(), "Имя");
+        AllureAssert.assertEquals(actualUserDto.getLastName(), expectedUser.getLastName(), "Фамилия");
+        AllureAssert.assertEquals(actualUserDto.getMail(), expectedUser.getEmails().get(0).getAddress(), "Email адрес");
+        AllureAssert.assertEquals(actualUserDto.getLastLoginOn(), expectedUser.getLastLoginOn(), "Дата и время последней авторизации");
+        AllureAssert.assertEquals(actualUserDto.getStatus(), expectedUser.getStatus().statusCode, "Статус");
         if (expectedUser.getId() != null) {
-            Assert.assertEquals(actualUserDto.getId(), expectedUser.getId());
+            AllureAssert.assertEquals(actualUserDto.getId(), expectedUser.getId(), "ID");
         }
     }
 
@@ -177,19 +177,19 @@ public class CrudByAdminTest {
     private void readAndCheckUserFromDataBase(User expectedUser) {
         User userFromDataBase = expectedUser.read();
         //Сверяем информацию о пользователе из БД. Password, createdOn, updatedOn, salt, hashedPassword, mailNotification, passwordChangedOn, tokens  не проверяем
-        Assert.assertEquals(userFromDataBase.getId(), expectedUser.getId());
-        Assert.assertEquals(userFromDataBase.getLogin(), expectedUser.getLogin());
-        Assert.assertEquals(userFromDataBase.getFirstName(), expectedUser.getFirstName());
-        Assert.assertEquals(userFromDataBase.getLastName(), expectedUser.getLastName());
-        Assert.assertEquals(userFromDataBase.getIsAdmin(), expectedUser.getIsAdmin());
-        Assert.assertEquals(userFromDataBase.getStatus(), expectedUser.getStatus());
-        Assert.assertEquals(userFromDataBase.getLastLoginOn(), expectedUser.getLastLoginOn());
-        Assert.assertEquals(userFromDataBase.getLanguage(), expectedUser.getLanguage());
-        Assert.assertEquals(userFromDataBase.getAuthSourceId(), expectedUser.getAuthSourceId());
-        Assert.assertEquals(userFromDataBase.getType(), expectedUser.getType());
-        Assert.assertEquals(userFromDataBase.getIdentityUrl(), expectedUser.getIdentityUrl());
-        Assert.assertEquals(userFromDataBase.getMustChangePassword(), expectedUser.getMustChangePassword());
-        Assert.assertEquals(userFromDataBase.getEmails().get(0).getAddress(), expectedUser.getEmails().get(0).getAddress());
+        AllureAssert.assertEquals(userFromDataBase.getId(), expectedUser.getId(), "ID");
+        AllureAssert.assertEquals(userFromDataBase.getLogin(), expectedUser.getLogin(), "Логин");
+        AllureAssert.assertEquals(userFromDataBase.getFirstName(), expectedUser.getFirstName(), "Имя");
+        AllureAssert.assertEquals(userFromDataBase.getLastName(), expectedUser.getLastName(), "Фамилия");
+        AllureAssert.assertEquals(userFromDataBase.getIsAdmin(), expectedUser.getIsAdmin(), "Признак наличия прав администратора");
+        AllureAssert.assertEquals(userFromDataBase.getStatus(), expectedUser.getStatus(), "Статус");
+        AllureAssert.assertEquals(userFromDataBase.getLastLoginOn(), expectedUser.getLastLoginOn(), "Дата и время последней авторизации");
+        AllureAssert.assertEquals(userFromDataBase.getLanguage(), expectedUser.getLanguage(), "Язык");
+        AllureAssert.assertEquals(userFromDataBase.getAuthSourceId(), expectedUser.getAuthSourceId(), "AuthSourceId");
+        AllureAssert.assertEquals(userFromDataBase.getType(), expectedUser.getType(), "Тип пользователя");
+        AllureAssert.assertEquals(userFromDataBase.getIdentityUrl(), expectedUser.getIdentityUrl(), "IdentityUrl");
+        AllureAssert.assertEquals(userFromDataBase.getMustChangePassword(), expectedUser.getMustChangePassword(), "Признак необходимости изменения пароля при следующем входе");
+        AllureAssert.assertEquals(userFromDataBase.getEmails().get(0).getAddress(), expectedUser.getEmails().get(0).getAddress(), "Email адрес");
     }
 
     @AfterClass(description = "Пользователи удалены из системы")

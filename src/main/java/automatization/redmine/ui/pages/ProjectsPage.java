@@ -13,7 +13,7 @@ import java.util.List;
 public class ProjectsPage extends Page {
 
     @FindBy(xpath = "//div[@id='content']/h2")
-    public WebElement actualTabName;
+    public WebElement pageName;
 
     @FindBy(xpath = "//div[@id='main-menu']//a[contains(@class, 'project')]")
     public WebElement projectsTab;
