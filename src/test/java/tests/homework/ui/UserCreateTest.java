@@ -4,6 +4,7 @@ import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.model.user.Email;
 import automatization.redmine.model.user.User;
 import automatization.redmine.ui.browser.BrowserUtils;
+import io.qameta.allure.Step;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,25 +30,48 @@ public class UserCreateTest extends BaseUITest {
 
     @Test(description = "8. Администрирование. Создание пользователя.")
     public void userCreateTest() {
-        loginPage.login(admin);
-        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страница\"");
+        authorization(admin);
 
-        BrowserUtils.click(topMenuPage.administration, "\"Администрирование\"");
-        AllureAssert.assertEquals(administrationPage.pageName.getText(), "Администрирование", "Наименование страницы \"Администрирование\"");
+        goToAdministrationPage();
 
+        goToUsersPage();
+
+        goToNewUserPage();
+
+        fillInTheFields();
+
+        clickPasswordCreationCheckbox();
+
+        clickCreateButton();
+    }
+
+    @Step("Выбрать из списка меню \"Пользователи\"")
+    private void goToUsersPage() {
         BrowserUtils.click(administrationPage.users, "\"Пользователи\"");
         AllureAssert.assertEquals(usersPage.pageName.getText(), "Пользователи", "Наименование страницы \"Пользователи\"");
+    }
 
+    @Step("Нажать \"Новый пользователь\"")
+    private void goToNewUserPage() {
         BrowserUtils.click(usersPage.newUserButton, "\"Новый пользователь\"");
         AllureAssert.assertEquals(newUserPage.pageName.getText(), "Пользователи » Новый пользователь", "Наименование страницы \"Пользователи » Новый пользователь\"");
+    }
 
+    @Step("Заполнить поля \"Пользователь\", \"Имя\", \"Фамилия\", \"Email\" корректными значениями")
+    private void fillInTheFields() {
         BrowserUtils.sendKeys(newUserPage.loginField, "Пользователь", userUi.getLogin());
         BrowserUtils.sendKeys(newUserPage.firstNameField, "Имя", userUi.getFirstName());
         BrowserUtils.sendKeys(newUserPage.lastNameField, "Фамилия", userUi.getLastName());
         BrowserUtils.sendKeys(newUserPage.emailField, "Email", userUi.getEmails().get(0).getAddress());
+    }
 
+    @Step("Установить чекбокс \"Создание пароля\"")
+    private void clickPasswordCreationCheckbox() {
         BrowserUtils.click(newUserPage.passwordCreationCheckbox, "чек-бокс \"Создание пароля\"");
+    }
 
+    @Step("Нажать кнопку \"Создать\"")
+    private void clickCreateButton() {
         BrowserUtils.click(newUserPage.createButton, "\"Создать\"");
 
         String notice = "Пользователь " + userUi.getLogin() + " создан.";

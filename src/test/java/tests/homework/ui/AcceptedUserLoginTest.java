@@ -31,9 +31,8 @@ public class AcceptedUserLoginTest extends BaseUITest {
     }
 
     @Step("Авторизация подтвержденным пользователем")
-    private void activeUserAuthorization (User activeUser) {
-        loginPage.login(activeUser);
-        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страница\"");
+    private void activeUserAuthorization(User activeUser) {
+        authorization(activeUser);
 
         AllureAssert.assertEquals(topMenuPage.loggedAs.getText(), "Вошли как " + acceptedUser.getLogin(), "Текст элемента \"Вошли как " + acceptedUser.getLogin() + "\"");
 

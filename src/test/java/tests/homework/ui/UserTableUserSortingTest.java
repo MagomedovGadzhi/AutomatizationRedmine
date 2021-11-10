@@ -3,6 +3,7 @@ package tests.homework.ui;
 import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.model.user.User;
 import automatization.redmine.ui.browser.BrowserUtils;
+import io.qameta.allure.Step;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -34,19 +35,27 @@ public class UserTableUserSortingTest extends BaseUITest {
 
     @Test(description = "6. Администрирование. Сортировка списка пользователей по пользователю")
     public void testUsersTableLoginSorting() {
-        loginPage.login(admin);
-        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страница\"");
+        authorization(admin);
 
-        BrowserUtils.click(topMenuPage.administration, "\"Администрирование\"");
-        AllureAssert.assertEquals(administrationPage.pageName.getText(), "Администрирование", "Наименование страницы \"Администрирование\"");
+        goToAdministrationPage();
 
+        goToUsersPage();
+
+        clickUserInUsersTable();
+    }
+
+    @Step("Выбрать из списка меню \"Пользователи\"")
+    private void goToUsersPage() {
         BrowserUtils.click(administrationPage.users, "\"Пользователи\"");
         AllureAssert.assertEquals(usersPage.pageName.getText(), "Пользователи", "Наименование страницы \"Пользователи\"");
         List<String> logins = getElementsText(usersPage.login);
         assertListSortedByNameAsc(logins);
+    }
 
+    @Step("В шапке таблицы нажать на \"Пользователь\"")
+    private void clickUserInUsersTable() {
         BrowserUtils.click(usersPage.filterButton("Пользователь"), "\"Пользователь\"");
-        logins = getElementsText(usersPage.login);
+        List<String> logins = getElementsText(usersPage.login);
         assertListSortedByNameDesc(logins);
     }
 

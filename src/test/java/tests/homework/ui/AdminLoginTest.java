@@ -2,6 +2,7 @@ package tests.homework.ui;
 
 import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.model.user.User;
+import io.qameta.allure.Step;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -24,8 +25,12 @@ public class AdminLoginTest extends BaseUITest {
 
     @Test(description = "1. Авторизация администратором")
     public void positiveAdminLoginTest() {
-        loginPage.login(admin);
-        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страница\"");
+        adminAuthorization(admin);
+    }
+
+    @Step("Авторизация администратором")
+    private void adminAuthorization(User admin) {
+        authorization(admin);
 
         AllureAssert.assertEquals(topMenuPage.loggedAs.getText(), "Вошли как " + admin.getLogin(), "Текст элемента \"Вошли как " + admin.getLogin() + "\"");
 

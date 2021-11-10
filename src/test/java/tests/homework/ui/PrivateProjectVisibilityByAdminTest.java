@@ -4,6 +4,7 @@ import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.model.project.Project;
 import automatization.redmine.model.user.User;
 import automatization.redmine.ui.browser.BrowserUtils;
+import io.qameta.allure.Step;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -30,9 +31,13 @@ public class PrivateProjectVisibilityByAdminTest extends BaseUITest {
 
     @Test(description = "4. Видимость проекта. Приватный проект. Администратор")
     public void privateProjectVisibilityByAdminTest() {
-        loginPage.login(admin);
-        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страница\"");
+        authorization(admin);
 
+        goToProjectsPage();
+    }
+
+    @Step("На главной странице нажать \"Проекты\"")
+    private void goToProjectsPage() {
         BrowserUtils.click(topMenuPage.projects, "\"Проекты\"");
         AllureAssert.assertEquals(projectsPage.pageName.getText(), "Проекты", "Наименование страницы \"Проекты\"");
 

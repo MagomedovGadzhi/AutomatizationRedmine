@@ -1,7 +1,10 @@
 package tests.homework.ui;
 
+import automatization.redmine.allure.AllureAssert;
+import automatization.redmine.model.user.User;
 import automatization.redmine.ui.browser.Browser;
 import automatization.redmine.ui.browser.BrowserManager;
+import automatization.redmine.ui.browser.BrowserUtils;
 import automatization.redmine.ui.pages.*;
 import io.qameta.allure.Step;
 import org.testng.annotations.AfterMethod;
@@ -31,6 +34,18 @@ public class BaseUITest {
         initPages();
     }
 
+    @Step("Авторизация")
+    protected void authorization(User user) {
+        loginPage.login(user);
+        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Наименование страницы \"Домашняя страница\"");
+    }
+
+    @Step("На главной странице нажать \"Администрирование\"")
+    protected void goToAdministrationPage() {
+        BrowserUtils.click(topMenuPage.administration, "\"Администрирование\"");
+        AllureAssert.assertEquals(administrationPage.pageName.getText(), "Администрирование", "Наименование страницы \"Администрирование\"");
+    }
+
     private void initPages() {
         topMenuPage = Page.getPage(TopMenuPage.class);
         headerPage = Page.getPage(HeaderPage.class);
@@ -43,7 +58,7 @@ public class BaseUITest {
         newUserPage = Page.getPage(NewUserPage.class);
     }
 
-    @AfterMethod (description = "Закрытие браузера")
+    @AfterMethod(description = "Закрытие браузера")
     public void tearDown() {
         BrowserManager.closeBrowser();
     }

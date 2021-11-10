@@ -3,6 +3,7 @@ package tests.homework.ui;
 import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.model.user.Status;
 import automatization.redmine.model.user.User;
+import io.qameta.allure.Step;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -25,7 +26,12 @@ public class UnacceptedUserLoginTest extends BaseUITest {
 
     @Test(description = "3. Авторизация неподтвержденным пользователем")
     public void negativeUnacceptedUserLoginTest() {
-        loginPage.login(unacceptedUser);
+        unacceptedUserAuthorization(unacceptedUser);
+    }
+
+    @Step("1. Авторизация неподтвержденным пользователем")
+    private void unacceptedUserAuthorization(User user) {
+        loginPage.login(user);
 
         AllureAssert.assertTrue(!isElementDisplayed(homePage.pageName), "Не отображается наименование страницы \"Домашняя страница\"");
 

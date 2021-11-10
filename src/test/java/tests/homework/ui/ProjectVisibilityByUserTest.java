@@ -7,6 +7,7 @@ import automatization.redmine.model.role.Role;
 import automatization.redmine.model.user.Status;
 import automatization.redmine.model.user.User;
 import automatization.redmine.ui.browser.BrowserUtils;
+import io.qameta.allure.Step;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -59,9 +60,13 @@ public class ProjectVisibilityByUserTest extends BaseUITest {
 
     @Test(description = "5. Видимость проектов. Пользователь")
     public void projectVisibilityByUserTest() {
-        loginPage.login(user);
-        AllureAssert.assertEquals(homePage.pageName.getText(), "Домашняя страница", "Текст элемента \"Домашняя страница\"");
+        authorization(user);
 
+        goToProjectsPage();
+    }
+
+    @Step("На главной странице нажать \"Проекты\"")
+    private void goToProjectsPage() {
         BrowserUtils.click(topMenuPage.projects, "\"Проекты\"");
         AllureAssert.assertEquals(projectsPage.pageName.getText(), "Проекты", "Текст элемента \"Проекты\"");
 
