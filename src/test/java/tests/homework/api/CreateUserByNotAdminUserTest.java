@@ -41,13 +41,11 @@ public class CreateUserByNotAdminUserTest {
     @Owner("Магомедов Гаджи Магомедович")
     @Severity(SeverityLevel.CRITICAL)
     public void createUserByNotAdminUserTest() {
-        RestResponse response = sendPostRequestToCreateUser();
-
-        AllureAssert.assertEquals(response.getStatusCode(), 403, "Статус кода ответа");
+        sendPostRequestToCreateUserAndCheckResponse();
     }
 
     @Step("1. Отправлен запрос POST на создание пользователя (данные пользователя должны быть сгенерированы корректно)")
-    private RestResponse sendPostRequestToCreateUser() {
+    private void sendPostRequestToCreateUserAndCheckResponse() {
         RestApiClient apiClient = new RestAssuredClient(notAdminUser);
 
         UserInfoDto dto = new UserInfoDto(
@@ -61,7 +59,8 @@ public class CreateUserByNotAdminUserTest {
         String body = GsonProvider.GSON.toJson(dto);
 
         RestRequest request = new RestAssuredRequest(RestMethod.POST, "/users.json", null, null, body);
-        return apiClient.execute(request);
+        RestResponse response = apiClient.execute(request);
+        AllureAssert.assertEquals(response.getStatusCode(), 403, "Статус кода ответа");
     }
 
     @AfterClass(description = "Пользователь удален из системы")
