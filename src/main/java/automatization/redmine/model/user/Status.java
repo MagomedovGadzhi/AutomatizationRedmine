@@ -20,4 +20,11 @@ public enum Status {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Не найден объект enum Status"));
     }
+
+    public static Status getStatusFromDescription(String description) {
+        return Stream.of(values())
+                .filter(status -> status.description.equals(description))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Не найден объект Status с описанием " + description));
+    }
 }

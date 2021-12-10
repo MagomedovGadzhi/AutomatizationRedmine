@@ -8,6 +8,7 @@ import automatization.redmine.model.Readable;
 import automatization.redmine.model.Updateable;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -16,6 +17,7 @@ import static automatization.redmine.utils.StringUtils.randomEmail;
 @Accessors(chain = true)
 @Setter
 @Getter
+@NoArgsConstructor
 public class Email extends CreatableEntity implements Creatable<Email>, Deleteable<Email>, Updateable<Email>, Readable<Email> {
 
     private Integer userId;

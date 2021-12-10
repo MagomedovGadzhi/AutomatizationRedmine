@@ -1,5 +1,7 @@
 package automatization.redmine.ui.pages;
 
+import automatization.redmine.cucumber.ElementName;
+import automatization.redmine.cucumber.PageName;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -7,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@PageName("Администрирование")
 public class AdministrationPage extends Page {
     @FindBy(xpath = "//div[@id='content']//h2")
     public WebElement pageName;
@@ -14,6 +17,7 @@ public class AdministrationPage extends Page {
     @FindBy(xpath = "//div[@id='admin-menu']//a[contains(@class,'projects')]")
     public WebElement projects;
 
+    @ElementName("Пользователи")
     @FindBy(xpath = "//div[@id='admin-menu']//a[contains(@class,'users')]")
     public WebElement users;
 

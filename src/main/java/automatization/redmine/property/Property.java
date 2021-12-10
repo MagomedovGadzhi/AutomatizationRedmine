@@ -21,6 +21,9 @@ public class Property {
         if (!isInitialized) {
             init();
         }
+        if (System.getProperty(key) != null) {
+            return System.getProperty(key);
+        }
         return properties.getProperty(key);
     }
 

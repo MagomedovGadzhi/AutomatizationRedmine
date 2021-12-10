@@ -11,6 +11,11 @@ public class AllureAssert {
         Assert.assertEquals(actual, expected, message);
     }
 
+    @Step("Проверка равенства: ")
+    public static void assertEquals(Object actual, Object expected) {
+        Assert.assertEquals(actual, expected);
+    }
+
     @Step("Проверка на NULL")
     public static void assertNull(Object object) {
         Assert.assertNull(object);

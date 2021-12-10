@@ -41,7 +41,7 @@ public class PostgresConnection implements DatabaseConnection {
     @Override
     @SneakyThrows
     @Step("Выполнение запроса к БД")
-    public List<Map<String, Object>> executeQuery(String query, Object... parameters) {
+    public synchronized List<Map<String, Object>> executeQuery(String query, Object... parameters) {
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             for (int i = 0; i < parameters.length; i++) {
