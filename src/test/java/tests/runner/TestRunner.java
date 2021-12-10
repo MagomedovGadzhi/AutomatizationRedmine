@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
                 "io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm",
                 "json:target/cucumber.json"
         },
-        glue = {"src/test/java/tests/steps"},
+        glue = {"tests.steps"},
         features = "src/test/resources/features",
         tags = {"@ui and not @smoke"}
 )
