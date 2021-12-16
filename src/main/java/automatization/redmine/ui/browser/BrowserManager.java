@@ -18,8 +18,10 @@ public class BrowserManager {
     }
 
     public static void closeBrowser() {
-        browser.get().takeScreenshot();
-        browser.get().getDriver().quit();
-        browser.set(null);
+        if (browser.get() != null) {
+            browser.get().takeScreenshot();
+            browser.get().getDriver().quit();
+            browser.set(null);
+        }
     }
 }

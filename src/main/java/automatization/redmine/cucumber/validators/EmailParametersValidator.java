@@ -2,12 +2,10 @@ package automatization.redmine.cucumber.validators;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
-public class UserParametersValidator {
-
-    public static void validateUserParameters(Set<String> keys) {
-        List<String> allowedKeys = Arrays.asList("Администратор", "Статус", "Уведомления о новых событиях", "E-Mail", "Token", "Пароль");
+public class EmailParametersValidator {
+    public static void validateEmailParameters(List<String> keys) {
+        List<String> allowedKeys = Arrays.asList("Адрес", "По умолчанию", "Уведомления");
 
         boolean allKeysAreValid = allowedKeys.containsAll(keys);
         if (!allKeysAreValid) {

@@ -1,10 +1,8 @@
 package tests.steps;
 
 import automatization.redmine.context.Context;
-import automatization.redmine.model.user.Email;
-import automatization.redmine.model.user.MailNotification;
-import automatization.redmine.model.user.Status;
-import automatization.redmine.model.user.User;
+import automatization.redmine.cucumber.validators.EmailParametersValidator;
+import automatization.redmine.model.user.*;
 import automatization.redmine.cucumber.validators.UserParametersValidator;
 import cucumber.api.java.ru.Дано;
 import cucumber.api.java.ru.И;
@@ -18,7 +16,7 @@ public class PrepareFixtureSteps {
 
     @И("Имеется список E-Mail адресов \"(.+)\":")
     public void createEmails(String emailsStashId, DataTable dataTable) {
-        // TODO: EmailValidator
+        EmailParametersValidator.validateEmailParameters(dataTable.row(0));
 
         List<Map<String, String>> maps = dataTable.asMaps();
         List<Email> emails = new ArrayList<>();
@@ -35,6 +33,15 @@ public class PrepareFixtureSteps {
         });
 
         Context.getStash().put(emailsStashId, emails);
+    }
+
+    @И("Есть список с \"(.+)\" API токеном\\(ами\\) \"(.+)\"")
+    public void createTokens(Integer tokenCount, String tokenStashId) {
+        List<Token> tokens = new ArrayList<>();
+        for (int i = 0; i < tokenCount; i++) {
+            tokens.add(new Token());
+        }
+        Context.getStash().put(tokenStashId, tokens);
     }
 
     @Дано("В системе есть пользователь \"(.+)\" с параметрами:")
@@ -59,6 +66,11 @@ public class PrepareFixtureSteps {
             String emailsStashId = parameters.get("E-Mail");
             List<Email> emails = Context.getStash().get(emailsStashId, List.class);
             user.setEmails(emails);
+        }
+        if (parameters.containsKey("Token")) {
+            String tokenStashId = parameters.get("Token");
+            List<Token> tokens = Context.getStash().get(tokenStashId, List.class);
+            user.setTokens(tokens);
         }
         user.create();
         Context.getStash().put(userStashId, user);
