@@ -1,4 +1,4 @@
-package tests;
+package tests.testNg;
 
 import automatization.redmine.db.connection.PostgresConnection;
 import automatization.redmine.db.requests.EmailRequests;

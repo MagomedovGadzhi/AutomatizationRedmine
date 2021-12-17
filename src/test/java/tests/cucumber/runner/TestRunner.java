@@ -1,4 +1,4 @@
-package tests.runner;
+package tests.cucumber.runner;
 
 import automatization.redmine.context.Context;
 import automatization.redmine.ui.browser.BrowserManager;
@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
                 "io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm",
                 "json:target/cucumber.json"
         },
-        glue = {"tests.steps"},
+        glue = {"tests.cucumber.steps"},
         features = "src/test/resources/features",
         tags = {"@api"}
 )

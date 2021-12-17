@@ -1,4 +1,4 @@
-package tests.homework.ui;
+package tests.testNg.homework.ui;
 
 import java.util.List;
 

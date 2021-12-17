@@ -1,5 +1,7 @@
-package tests.steps;
+package tests.cucumber.steps;
 
+import automatization.redmine.api.client.RestApiClient;
+import automatization.redmine.api.rest_assured.RestAssuredClient;
 import automatization.redmine.context.Context;
 import automatization.redmine.cucumber.validators.EmailParametersValidator;
 import automatization.redmine.model.user.*;
@@ -74,5 +76,12 @@ public class PrepareFixtureSteps {
         }
         user.create();
         Context.getStash().put(userStashId, user);
+    }
+
+    @И("Создан API-клиент \"(.+)\" для пользователя \"(.+)\"")
+    public void createApiClientWithUser(String apiClientStashId, String userStashId) {
+        User user = Context.getStash().get(userStashId, User.class);
+        RestApiClient apiClient = new RestAssuredClient(user);
+        Context.getStash().put(apiClientStashId, apiClient);
     }
 }

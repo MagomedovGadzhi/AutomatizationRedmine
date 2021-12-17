@@ -1,4 +1,4 @@
-package tests.homework.api;
+package tests.testNg.homework.api;
 
 import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.api.client.RestApiClient;

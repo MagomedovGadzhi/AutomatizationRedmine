@@ -1,4 +1,4 @@
-package tests;
+package tests.testNg;
 
 import automatization.redmine.api.client.RestApiClient;
 import automatization.redmine.api.client.RestMethod;

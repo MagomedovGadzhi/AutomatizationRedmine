@@ -1,4 +1,4 @@
-package tests.steps;
+package tests.cucumber.steps;
 
 import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.context.Context;

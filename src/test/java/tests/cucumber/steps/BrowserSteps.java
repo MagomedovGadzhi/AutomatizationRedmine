@@ -1,4 +1,4 @@
-package tests.steps;
+package tests.cucumber.steps;
 
 import automatization.redmine.ui.browser.BrowserManager;
 import cucumber.api.java.ru.Дано;

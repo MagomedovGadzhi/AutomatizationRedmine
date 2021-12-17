@@ -1,4 +1,4 @@
-package tests;
+package tests.testNg;
 
 import automatization.redmine.model.user.Email;
 import automatization.redmine.model.user.Status;

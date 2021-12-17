@@ -1,4 +1,4 @@
-package tests.steps;
+package tests.cucumber.steps;
 
 import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.api.client.RestApiClient;
@@ -24,11 +24,8 @@ import lombok.NonNull;
 import java.util.*;
 
 public class ApiSteps {
-    RestApiClient apiClient;
-    User admin;
-
-    @Дано("Отправить POST запрос для создания пользователя \"(.+)\" и записать ответ \"(.+)\"")
-    public void sendPostRequestToCreateUserAndSaveResponse(String userStashId, String responseStashId) {
+    @Дано("Отправить POST запрос на создания пользователя \"(.+)\" через API-клиент \"(.+)\" и записать ответ \"(.+)\"")
+    public void sendPostRequestToCreateUserAndSaveResponse(String userStashId, String apiClientStashId, String responseStashId) {
         User user;
         if (Context.getStash().get(userStashId) == null) {
             user = new User() {{
@@ -39,7 +36,7 @@ public class ApiSteps {
         } else {
             user = Context.getStash().get(userStashId, User.class);
         }
-        RestResponse response = sendRequest(user, RestMethod.POST, "/users.json");
+        RestResponse response = sendRequest(user, RestMethod.POST, "/users.json", apiClientStashId);
         Context.getStash().put(responseStashId, response);
     }
 
@@ -102,8 +99,8 @@ public class ApiSteps {
         AllureAssert.assertEquals(errorsFromResponse.getErrors().get(1), errorsText.get(1));
     }
 
-    @Если("Отправить POST запрос для создания пользователя \"(.+)\" с параметрами и записать ответ \"(.+)\"")
-    public void sendPostRequestToCreateUserWithParametersAndSaveResponse(String userStashId, String responseStashId, Map<String, String> parameters) {
+    @Если("Отправить POST запрос на создания пользователя \"(.+)\" с параметрами через API-клиент \"(.+)\" и записать ответ \"(.+)\"")
+    public void sendPostRequestToCreateUserWithParametersAndSaveResponse(String userStashId, String apiClientStashId, String responseStashId, Map<String, String> parameters) {
         UserParametersValidator.validateUserParameters(parameters.keySet());
         User user = Context.getStash().get(userStashId, User.class);
         User userWithParameters = user.read();
@@ -119,11 +116,11 @@ public class ApiSteps {
             userWithParameters.setEmails(emails);
         }
 
-        RestResponse response = sendRequest(userWithParameters, RestMethod.POST, "/users.json");
+        RestResponse response = sendRequest(userWithParameters, RestMethod.POST, "/users.json", apiClientStashId);
         Context.getStash().put(responseStashId, response);
     }
 
-    private RestResponse sendRequest(@NonNull User user, RestMethod method, String uri) {
+    private RestResponse sendRequest(@NonNull User user, RestMethod method, String uri, String apiClientStashId) {
         UserInfoDto userInfoDto = new UserInfoDto(
                 new UserDto()
                         .setLogin(user.getLogin())
@@ -135,20 +132,18 @@ public class ApiSteps {
         );
         String body = new Gson().toJson(userInfoDto);
         RestRequest postRequest = new RestAssuredRequest(method, uri, null, null, body);
-        admin = Context.getStash().get("АДМИН", User.class);
-        apiClient = new RestAssuredClient(admin);
+        RestApiClient apiClient = Context.getStash().get(apiClientStashId, RestAssuredClient.class);
         return apiClient.execute(postRequest);
     }
 
-    private RestResponse sendRequest(RestMethod method, String uri) {
+    private RestResponse sendRequest(RestMethod method, String uri, String apiClientStashId) {
         RestRequest postRequest = new RestAssuredRequest(method, uri, null, null, null);
-        admin = Context.getStash().get("АДМИН", User.class);
-        apiClient = new RestAssuredClient(admin);
+        RestApiClient apiClient = Context.getStash().get(apiClientStashId, RestAssuredClient.class);
         return apiClient.execute(postRequest);
     }
 
-    @Если("Отправить PUT запрос на изменение пользователя \"(.+)\" с параметрами и записать ответ \"(.+)\"")
-    public void sendPutRequestToChangeUserWithParametersAndSaveResponse(String userStashId, String responseStashId, Map<String, String> parameters) {
+    @Если("Отправить PUT запрос на изменение пользователя \"(.+)\" с параметрами через API-клиент \"(.+)\" и записать ответ \"(.+)\"")
+    public void sendPutRequestToChangeUserWithParametersAndSaveResponse(String userStashId, String apiClientStashId, String responseStashId, Map<String, String> parameters) {
         UserParametersValidator.validateUserParameters(parameters.keySet());
         User user = Context.getStash().get(userStashId, User.class);
         if (parameters.containsKey("Статус")) {
@@ -156,8 +151,8 @@ public class ApiSteps {
             user.setStatus(status);
         }
         String uriWithUserId = String.format("/users/%s.json", user.getId());
-        RestResponse response =  sendRequest(user, RestMethod.PUT, uriWithUserId);
-        Context.getStash().put(responseStashId,response);
+        RestResponse response = sendRequest(user, RestMethod.PUT, uriWithUserId, apiClientStashId);
+        Context.getStash().put(responseStashId, response);
     }
 
     @То("В базе данных есть информация о пользователе \"(.+)\"")
@@ -180,12 +175,12 @@ public class ApiSteps {
         AllureAssert.assertEquals(userFromDataBase.getEmails().get(0).getAddress(), expectedUser.getEmails().get(0).getAddress(), "Email адрес");
     }
 
-    @Если("Отправить GET запрос на получение пользователя \"(.+)\" и записать ответ \"(.+)\"")
-    public void sendGetRequestToGetUserAndSaveResponse(String userStashId, String responseStashId) {
+    @Если("Отправить GET запрос на получение пользователя \"(.+)\" через API-клиент \"(.+)\" и записать ответ \"(.+)\"")
+    public void sendGetRequestToGetUserAndSaveResponse(String userStashId, String apiClientStashId, String responseStashId) {
         User user = Context.getStash().get(userStashId, User.class);
         String uriWithUserId = String.format("/users/%s.json", user.getId());
-        RestResponse response = sendRequest(RestMethod.GET, uriWithUserId);
-        Context.getStash().put(responseStashId,response);
+        RestResponse response = sendRequest(RestMethod.GET, uriWithUserId, apiClientStashId);
+        Context.getStash().put(responseStashId, response);
     }
 
     @То("Статус пользователя \"(.+)\" равен \"(.+)\"")
@@ -194,12 +189,12 @@ public class ApiSteps {
         AllureAssert.assertEquals(user.getStatus(), Status.getStatusFromDescription(status));
     }
 
-    @Если("Отправить DELETE запрос на удаление пользователя \"(.+)\" и записать ответ \"(.+)\"")
-    public void sendDeleteRequestToDeleteUserAndSaveResponse(String userStashId, String responseStashId) {
+    @Если("Отправить DELETE запрос на удаление пользователя \"(.+)\" через API-клиент \"(.+)\" и записать ответ \"(.+)\"")
+    public void sendDeleteRequestToDeleteUserAndSaveResponse(String userStashId, String apiClientStashId, String responseStashId) {
         User user = Context.getStash().get(userStashId, User.class);
         String uriWithUserId = String.format("/users/%s.json", user.getId());
-        RestResponse response = sendRequest(RestMethod.DELETE, uriWithUserId);
-        Context.getStash().put(responseStashId,response);
+        RestResponse response = sendRequest(RestMethod.DELETE, uriWithUserId, apiClientStashId);
+        Context.getStash().put(responseStashId, response);
     }
 
     @То("В базе данных отсутствует информация о пользователе \"(.+)\"")

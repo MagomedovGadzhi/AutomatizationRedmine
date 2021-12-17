@@ -1,4 +1,4 @@
-package tests.steps;
+package tests.cucumber.steps;
 
 import cucumber.api.java.ru.Дано;
 import cucumber.api.java.ru.Пусть;
