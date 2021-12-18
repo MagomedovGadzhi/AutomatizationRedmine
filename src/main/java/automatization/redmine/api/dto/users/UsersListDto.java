@@ -19,5 +19,4 @@ public class UsersListDto {
 
     private Integer offset;
     private Integer limit;
-
 }

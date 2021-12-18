@@ -11,6 +11,7 @@ import cucumber.api.java.ru.И;
 import io.cucumber.datatable.DataTable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -37,12 +38,10 @@ public class PrepareFixtureSteps {
         Context.getStash().put(emailsStashId, emails);
     }
 
-    @И("Есть список с \"(.+)\" API токеном\\(ами\\) \"(.+)\"")
-    public void createTokens(Integer tokenCount, String tokenStashId) {
+    @И("Есть список с API токеном \"(.+)\"")
+    public void createTokens(String tokenStashId) {
         List<Token> tokens = new ArrayList<>();
-        for (int i = 0; i < tokenCount; i++) {
-            tokens.add(new Token());
-        }
+        tokens.add(new Token());
         Context.getStash().put(tokenStashId, tokens);
     }
 
@@ -64,17 +63,21 @@ public class PrepareFixtureSteps {
             MailNotification mn = MailNotification.getMailNotificationFromDescription(mailNotificationDescription);
             user.setMailNotification(mn);
         }
-        if (parameters.containsKey("E-Mail")) {
-            String emailsStashId = parameters.get("E-Mail");
+        if (parameters.containsKey("E-Mail список")) {
+            String emailsStashId = parameters.get("E-Mail список");
             List<Email> emails = Context.getStash().get(emailsStashId, List.class);
             user.setEmails(emails);
+        }
+        if (parameters.containsKey("E-Mail")) {
+            String emailValue = parameters.get("E-Mail");
+            user.getEmails().add(new Email().setAddress(emailValue));
         }
         if (parameters.containsKey("Token")) {
             String tokenStashId = parameters.get("Token");
             List<Token> tokens = Context.getStash().get(tokenStashId, List.class);
             user.setTokens(tokens);
         }
-        user.create();
+        user = user.create().read();
         Context.getStash().put(userStashId, user);
     }
 
@@ -83,5 +86,14 @@ public class PrepareFixtureSteps {
         User user = Context.getStash().get(userStashId, User.class);
         RestApiClient apiClient = new RestAssuredClient(user);
         Context.getStash().put(apiClientStashId, apiClient);
+    }
+
+    @И("Создан пользователь \"(.+)\" для отправки POST запроса")
+    public void createUserForPostRequest(String userStashId) {
+        User user = new User() {{
+            setStatus(Status.UNACCEPTED);
+            setEmails(Collections.singletonList(new Email(this)));
+        }};
+        Context.getStash().put(userStashId, user);
     }
 }

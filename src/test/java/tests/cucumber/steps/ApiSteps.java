@@ -26,16 +26,7 @@ import java.util.*;
 public class ApiSteps {
     @Дано("Отправить POST запрос на создания пользователя \"(.+)\" через API-клиент \"(.+)\" и записать ответ \"(.+)\"")
     public void sendPostRequestToCreateUserAndSaveResponse(String userStashId, String apiClientStashId, String responseStashId) {
-        User user;
-        if (Context.getStash().get(userStashId) == null) {
-            user = new User() {{
-                setStatus(Status.UNACCEPTED);
-                setEmails(Collections.singletonList(new Email(this)));
-            }};
-            Context.getStash().put(userStashId, user);
-        } else {
-            user = Context.getStash().get(userStashId, User.class);
-        }
+        User user = Context.getStash().get(userStashId, User.class);
         RestResponse response = sendRequest(user, RestMethod.POST, "/users.json", apiClientStashId);
         Context.getStash().put(responseStashId, response);
     }
@@ -50,22 +41,62 @@ public class ApiSteps {
     public void checkIsResponseContainsUserInfoAndSetUserID(String responseStashId, String expectedUserStashId) {
         RestResponse response = Context.getStash().get(responseStashId, RestResponse.class);
         UserInfoDto userInfoDto = response.getPayload(UserInfoDto.class);
-        UserDto actualUserDto = userInfoDto.getUser();
+        UserDto userFromResponse = userInfoDto.getUser();
+
         User expectedUser = Context.getStash().get(expectedUserStashId, User.class);
 
-        AllureAssert.assertNotNull(actualUserDto.getId());
-        AllureAssert.assertEquals(actualUserDto.getLogin(), expectedUser.getLogin(), "Логин");
-        AllureAssert.assertEquals(actualUserDto.getIsAdmin(), expectedUser.getIsAdmin(), "Признак наличия прав администратора");
-        AllureAssert.assertEquals(actualUserDto.getFirstName(), expectedUser.getFirstName(), "Имя");
-        AllureAssert.assertEquals(actualUserDto.getLastName(), expectedUser.getLastName(), "Фамилия");
-        AllureAssert.assertEquals(actualUserDto.getMail(), expectedUser.getEmails().get(0).getAddress(), "Email адрес");
-        AllureAssert.assertEquals(actualUserDto.getLastLoginOn(), expectedUser.getLastLoginOn(), "Дата и время последней авторизации");
-        AllureAssert.assertEquals(actualUserDto.getStatus(), expectedUser.getStatus().statusCode, "Статус");
+        AllureAssert.assertNotNull(userFromResponse.getId());
         if (expectedUser.getId() != null) {
-            AllureAssert.assertEquals(actualUserDto.getId(), expectedUser.getId(), "ID");
+            AllureAssert.assertEquals(userFromResponse.getId(), expectedUser.getId(), "ID");
         }
+        AllureAssert.assertEquals(userFromResponse.getLogin(), expectedUser.getLogin(), "Логин");
+        AllureAssert.assertEquals(userFromResponse.getIsAdmin(), expectedUser.getIsAdmin(), "Признак наличия прав администратора");
+        AllureAssert.assertEquals(userFromResponse.getFirstName(), expectedUser.getFirstName(), "Имя");
+        AllureAssert.assertEquals(userFromResponse.getLastName(), expectedUser.getLastName(), "Фамилия");
+        AllureAssert.assertEquals(userFromResponse.getMail(), expectedUser.getEmails().get(0).getAddress(), "Email адрес");
+        AllureAssert.assertEquals(userFromResponse.getLastLoginOn(), expectedUser.getLastLoginOn(), "Дата и время последней авторизации");
+        AllureAssert.assertEquals(userFromResponse.getStatus(), expectedUser.getStatus().statusCode, "Статус");
 
-        expectedUser.setId(actualUserDto.getId());
+        expectedUser.setId(userFromResponse.getId());
+    }
+
+    @То("Ответ на GET запрос \"(.+)\" содержит данные пользователя \"(.+)\"")
+    public void checkIsGetResponseContainsUserInfo(String responseStashId, String expectedUserStashId) {
+        RestResponse response = Context.getStash().get(responseStashId, RestResponse.class);
+        UserInfoDto responseData = response.getPayload(UserInfoDto.class);
+        UserDto userFromResponse = responseData.getUser();
+
+        User expectedUser = Context.getStash().get(expectedUserStashId, User.class);
+
+        AllureAssert.assertEquals(userFromResponse.getId(), expectedUser.getId(), "ID");
+        AllureAssert.assertEquals(userFromResponse.getLogin(), expectedUser.getLogin(), "Логин");
+        AllureAssert.assertEquals(userFromResponse.getIsAdmin(), expectedUser.getIsAdmin(), "Признак наличия прав администратора");
+        AllureAssert.assertEquals(userFromResponse.getFirstName(), expectedUser.getFirstName(), "Имя");
+        AllureAssert.assertEquals(userFromResponse.getLastName(), expectedUser.getLastName(), "Фамилия");
+        AllureAssert.assertEquals(userFromResponse.getApiKey(), expectedUser.getTokens().get(0).getValue(), "Токен");
+        //Пришлось добавить в ожидаемом результат withNano(0), т.к. в ответе API не передаются милисекунды
+        AllureAssert.assertEquals(userFromResponse.getCreatedOn(), expectedUser.getCreatedOn().withNano(0), "Дата и время создания");
+        AllureAssert.assertEquals(userFromResponse.getLastLoginOn(), expectedUser.getLastLoginOn(), "Дата и время последней авторизации");
+    }
+
+    @То("Ответ на GET запрос \"(.+)\" содержит данные пользователя \"(.+)\", при этом поля \"admin\" и \"api_key\" в ответе не содержатся")
+    public void checkIsGetResponseContainsUserInfoWithoutAdminAndApiKey(String responseStashId, String expectedUserStashId) {
+        RestResponse response = Context.getStash().get(responseStashId, RestResponse.class);
+        UserInfoDto responseData = response.getPayload(UserInfoDto.class);
+        UserDto userFromResponse = responseData.getUser();
+
+        User expectedUser = Context.getStash().get(expectedUserStashId, User.class);
+
+        AllureAssert.assertNull(userFromResponse.getIsAdmin());
+        AllureAssert.assertNull(userFromResponse.getApiKey());
+
+        AllureAssert.assertEquals(userFromResponse.getId(), expectedUser.getId(), "ID");
+        AllureAssert.assertEquals(userFromResponse.getLogin(), expectedUser.getLogin(), "Логин");
+        AllureAssert.assertEquals(userFromResponse.getFirstName(), expectedUser.getFirstName(), "Имя");
+        AllureAssert.assertEquals(userFromResponse.getLastName(), expectedUser.getLastName(), "Фамилия");
+        //Пришлось добавить в ожидаемом результат withNano(0), т.к. в ответе API не передаются милисекунды
+        AllureAssert.assertEquals(userFromResponse.getCreatedOn(), expectedUser.getCreatedOn().withNano(0), "Дата и время создания");
+        AllureAssert.assertEquals(userFromResponse.getLastLoginOn(), expectedUser.getLastLoginOn(), "Дата и время последней авторизации");
     }
 
     @То("В базе данных есть информация о созданном пользователе \"(.+)\" со статусом \"(.+)\"")
