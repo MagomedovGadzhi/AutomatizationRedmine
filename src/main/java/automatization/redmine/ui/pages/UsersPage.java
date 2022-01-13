@@ -16,18 +16,23 @@ import lombok.NoArgsConstructor;
 @PageName("Пользователи")
 public class UsersPage extends Page {
 
+    @ElementName("Имя страницы")
     @FindBy(xpath = "//div[@id='content']//h2")
     public WebElement pageName;
 
+    @ElementName("Новый пользователь")
     @FindBy(xpath = "//div[@id='content']//a[contains(@class, 'add')]")
     public WebElement newUserButton;
 
+    @ElementName("Логины")
     @FindBy(xpath = "//table[@class='list users']/tbody//td[@class='username']")
     public List<WebElement> login;
 
+    @ElementName("Имена")
     @FindBy(xpath = "//table[@class='list users']/tbody//td[@class='firstname']")
     public List<WebElement> firstName;
 
+    @ElementName("Фамилии")
     @FindBy(xpath = "//table[@class='list users']/tbody//td[@class='lastname']")
     public List<WebElement> lastName;
 

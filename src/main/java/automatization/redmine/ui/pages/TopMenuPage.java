@@ -8,28 +8,27 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@PageName("Заголовок страницы")
+@PageName("Меню страницы")
 public class TopMenuPage extends Page {
     //-----------Кнопки доступные всегда-----------
-    //Домашняя страница
+    @ElementName("Домашняя страница")
     @FindBy(xpath = "//div[@id='top-menu']//a[@class='home']")
     public WebElement homePage;
 
-    //Проекты
+    @ElementName("Проекты")
     @FindBy(xpath = "//div[@id='top-menu']//a[@class='projects']")
     public WebElement projects;
 
-    //Помощь
+    @ElementName("Помощь")
     @FindBy(xpath = "//div[@id='top-menu']//a[@class='help']")
     public WebElement help;
-
 
     //-----------Кнопки достпуные до авторизации-----------
     @ElementName("Войти")
     @FindBy(xpath = "//div[@id='account']//a[@class='login']")
     public WebElement loginButton;
 
-    //Регистрация
+    @ElementName("Регистрация")
     @FindBy(xpath = "//div[@id='account']//a[@class='register']")
     public WebElement registration;
 
@@ -42,19 +41,19 @@ public class TopMenuPage extends Page {
     @FindBy(xpath = "//div[@id='top-menu']//a[@class='administration']")
     public WebElement administration;
 
-    //Вошли как
+    @ElementName("Вошли как")
     @FindBy(xpath = "//div[@id='loggedas']")
     public WebElement loggedAs;
 
-    //Логин авторизованного пользователя
+    @ElementName("Логин пользователя")
     @FindBy(xpath = "//div[@id='loggedas']//a[@class='user active']")
     public WebElement activeUserLogin;
 
-    //Моя учетная запись
+    @ElementName("Моя учетная запись")
     @FindBy(xpath = "//div[@id='account']//a[@class='my-account']")
     public WebElement myAccount;
 
-    //Выйти
+    @ElementName("Выйти")
     @FindBy(xpath = "//div[@id='account']//a[@class='logout']")
     public WebElement logoutButton;
 }
