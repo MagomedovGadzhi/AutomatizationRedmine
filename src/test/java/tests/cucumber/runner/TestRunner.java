@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
         },
         glue = {"tests.cucumber.steps"},
         features = "src/test/resources/features",
-        tags = {"@api"}
+        tags = {"@smoke"}
 )
 public class TestRunner extends AbstractTestNGCucumberTests implements ITest {
 

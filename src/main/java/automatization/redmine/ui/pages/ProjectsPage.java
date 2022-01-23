@@ -31,8 +31,8 @@ public class ProjectsPage extends Page {
     @FindBy(xpath = "//div[@id='main-menu']//a[contains(@class, 'issues')]")
     public WebElement issuesTab;
 
-    @ElementName("Проекты")
-    @FindBy(xpath = "Список проектов")
+    @ElementName("Список проектов")
+    @FindBy(xpath = "//div[@id='projects-index']//li[@class='root']//a")
     public List<WebElement> projects;
 
     public WebElement projectButton(String projectName) {

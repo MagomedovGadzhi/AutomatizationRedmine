@@ -33,7 +33,7 @@ public class TopMenuPage extends Page {
     public WebElement registration;
 
     //-----------Кнопки достпуные после авторизации-----------
-    @ElementName("Моя учётная запись")
+    @ElementName("Моя страница")
     @FindBy(xpath = "//div[@id='top-menu']//a[@class='my-page']")
     public WebElement myPage;
 
@@ -41,7 +41,7 @@ public class TopMenuPage extends Page {
     @FindBy(xpath = "//div[@id='top-menu']//a[@class='administration']")
     public WebElement administration;
 
-    @ElementName("Вошли как")
+    @ElementName("Вошли как *логин пользователя*")
     @FindBy(xpath = "//div[@id='loggedas']")
     public WebElement loggedAs;
 
@@ -49,7 +49,7 @@ public class TopMenuPage extends Page {
     @FindBy(xpath = "//div[@id='loggedas']//a[@class='user active']")
     public WebElement activeUserLogin;
 
-    @ElementName("Моя учетная запись")
+    @ElementName("Моя учётная запись")
     @FindBy(xpath = "//div[@id='account']//a[@class='my-account']")
     public WebElement myAccount;
 

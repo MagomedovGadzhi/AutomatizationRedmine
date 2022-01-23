@@ -32,14 +32,14 @@ public class PageObjectHelper {
         return getElements(getPage(pageName), elementsName);
     }
 
-    private static <T extends Page> T getPage(String pageName) {
+    private static Page getPage(String pageName) {
         Set<Class<? extends Page>> allPages = new Reflections("automatization.redmine.ui.pages").getSubTypesOf(Page.class);
         Class<? extends Page> pageObjectClass = allPages.stream()
                 .filter(page -> page.isAnnotationPresent(PageName.class))
                 .filter(page -> page.getAnnotation(PageName.class).value().equals(pageName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Не найдено страницы с аннотацией @PageName(\"" + pageName + "\")"));
-        return (T) Page.getPage(pageObjectClass);
+        return Page.getPage(pageObjectClass);
     }
 
     private static WebElement getElement(Page page, String elementName) {

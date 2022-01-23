@@ -3,12 +3,13 @@ package tests.cucumber.steps;
 import automatization.redmine.allure.AllureAssert;
 import automatization.redmine.context.Context;
 import automatization.redmine.cucumber.PageObjectHelper;
+import automatization.redmine.model.project.Project;
 import automatization.redmine.model.user.User;
 import automatization.redmine.ui.browser.BrowserUtils;
 import automatization.redmine.ui.pages.LoginPage;
+import automatization.redmine.ui.pages.Page;
 import automatization.redmine.ui.pages.TopMenuPage;
 import automatization.redmine.utils.CompareUtils;
-import cucumber.api.java.ru.Если;
 import cucumber.api.java.ru.И;
 import org.openqa.selenium.WebElement;
 
@@ -29,12 +30,26 @@ public class UiSteps {
         getPage(LoginPage.class).login(login, password);
     }
 
-    @И("Текст элемента Моя учётная запись - \"(.*)\"")
-    public void assertMyAccountText(String expectedText) {
-        AllureAssert.assertEquals(getPage(TopMenuPage.class).myAccount.getText(), expectedText);
+    @И("На странице {string} отображается элемент {string}")
+    public void isElementDisplayed(String pageName, String elementName) {
+        WebElement webElement = PageObjectHelper.findElement(pageName, elementName);
+        AllureAssert.assertTrue(BrowserUtils.isElementDisplayed(webElement), "Элемент отображается");
     }
 
-    @Если("На странице {string} нажать на элемент {string}")
+    @И("На странице {string} отображается элемент {string} с текстом {string}")
+    public void isElementWithTextDisplayed(String pageName, String elementName, String text) {
+        WebElement webElement = PageObjectHelper.findElement(pageName, elementName);
+        AllureAssert.assertTrue(BrowserUtils.isElementDisplayed(webElement), "Элемент отображается");
+        AllureAssert.assertEquals(webElement.getText(), text);
+    }
+
+    @И("На странице {string} не отображается элемент {string}")
+    public void isElementNotDisplayed(String pageName, String elementName) {
+        WebElement webElement = PageObjectHelper.findElement(pageName, elementName);
+        AllureAssert.assertFalse(BrowserUtils.isElementDisplayed(webElement), "Элемент не отображается");
+    }
+
+    @И("На странице {string} нажать на элемент {string}")
     public void clickOnElementOnPage(String pageName, String elementName) {
         PageObjectHelper.findElement(pageName, elementName).click();
     }
@@ -49,5 +64,19 @@ public class UiSteps {
         List<WebElement> elements = PageObjectHelper.findElements(pageName, elementsName);
         List<String> elementsTexts = BrowserUtils.getElementsText(elements);
         CompareUtils.assertListSortedByDateDesc(elementsTexts);
+    }
+
+    @И("На странице {string} текст элемента {string} равен {string}")
+    public void assertElementText(String pageName, String elementName, String text) {
+        WebElement webElement = PageObjectHelper.findElement(pageName, elementName);
+        AllureAssert.assertEquals(getPage(TopMenuPage.class).myAccount.getText(), text);
+    }
+
+    @И("В спике проектов отображается проект {string}")
+    public void doesProjectListContainProject(String projectStashId) {
+        List<WebElement> projects = PageObjectHelper.findElements("Проекты", "Список проектов");
+        List<String> projectsNames = BrowserUtils.getElementsText(projects);
+        Project project = Context.getStash().get(projectStashId, Project.class);
+        AllureAssert.assertTrue(projectsNames.contains(project.getName()), "Проект отображается");
     }
 }

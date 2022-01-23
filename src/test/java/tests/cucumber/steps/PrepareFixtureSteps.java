@@ -4,6 +4,8 @@ import automatization.redmine.api.client.RestApiClient;
 import automatization.redmine.api.rest_assured.RestAssuredClient;
 import automatization.redmine.context.Context;
 import automatization.redmine.cucumber.validators.EmailParametersValidator;
+import automatization.redmine.cucumber.validators.ProjectParametersValidator;
+import automatization.redmine.model.project.Project;
 import automatization.redmine.model.user.*;
 import automatization.redmine.cucumber.validators.UserParametersValidator;
 import cucumber.api.java.ru.Дано;
@@ -46,7 +48,7 @@ public class PrepareFixtureSteps {
     }
 
     @Дано("В системе есть пользователь \"(.+)\" с параметрами:")
-    public void createAdminUser(String userStashId, Map<String, String> parameters) {
+    public void createUser(String userStashId, Map<String, String> parameters) {
         UserParametersValidator.validateUserParameters(parameters.keySet());
         User user = new User();
         if (parameters.containsKey("Администратор")) {
@@ -79,6 +81,18 @@ public class PrepareFixtureSteps {
         }
         user = user.create().read();
         Context.getStash().put(userStashId, user);
+    }
+
+    @Дано("В системе есть проект \"(.+)\" с параметрами:")
+    public void createProject(String projectStashId, Map<String, String> parameters) {
+        ProjectParametersValidator.validateProjectParameters(parameters.keySet());
+        Project project = new Project();
+        if (parameters.containsKey("Общедоступный")) {
+            Boolean isPublic = Boolean.parseBoolean(parameters.get("Общедоступный"));
+            project.setIsPublic(isPublic);
+        }
+        project = project.create().read();
+        Context.getStash().put(projectStashId, project);
     }
 
     @И("Создан API-клиент \"(.+)\" для пользователя \"(.+)\"")

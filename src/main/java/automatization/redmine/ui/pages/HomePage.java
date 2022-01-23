@@ -10,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @PageName("Домашняя страница")
 public class HomePage extends Page {
+
     @ElementName("Имя страницы")
     @FindBy(xpath = "//div[@id='content']//h2[text()='Домашняя страница']")
     public WebElement pageName;
