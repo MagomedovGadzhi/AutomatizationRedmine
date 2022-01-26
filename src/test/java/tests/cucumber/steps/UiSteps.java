@@ -59,7 +59,7 @@ public class UiSteps {
     @Если("На странице {string} в шапке таблицы нажать на элемент {string}")
     public void clickOnUsersTableElementOnPage(String pageName, String elementName) {
         UsersPage users = (UsersPage) PageObjectHelper.getPage(pageName);
-        users.filterButton(elementName);
+        users.filterButton(elementName).click();
     }
 
     @И("На странице {string} в поле {string} ввести текст {string}")
