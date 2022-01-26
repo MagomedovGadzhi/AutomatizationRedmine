@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TokenParametersValidator {
+
     public static void validateTokenParameters(List<String> keys) {
         List<String> allowedKeys = Arrays.asList("Тип", "Значение");
 

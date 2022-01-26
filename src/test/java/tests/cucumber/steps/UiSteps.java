@@ -79,4 +79,12 @@ public class UiSteps {
         Project project = Context.getStash().get(projectStashId, Project.class);
         AllureAssert.assertTrue(projectsNames.contains(project.getName()), "Проект отображается");
     }
+
+    @И("В спике проектов не отображается проект {string}")
+    public void doesProjectListNotContainProject(String projectStashId) {
+        List<WebElement> projects = PageObjectHelper.findElements("Проекты", "Список проектов");
+        List<String> projectsNames = BrowserUtils.getElementsText(projects);
+        Project project = Context.getStash().get(projectStashId, Project.class);
+        AllureAssert.assertFalse(projectsNames.contains(project.getName()), "Проект не отображается");
+    }
 }

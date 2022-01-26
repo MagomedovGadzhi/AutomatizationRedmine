@@ -77,7 +77,7 @@ public enum Permission {
 
     private final String description;
 
-    public static Permission getPermissionByCode(String description) {
+    public static Permission getPermissionByDescription(String description) {
         return Stream.of(values())
                 .filter(permission -> permission.description.equals(description))
                 .findFirst()

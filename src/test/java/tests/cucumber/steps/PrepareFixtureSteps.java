@@ -5,11 +5,15 @@ import automatization.redmine.api.rest_assured.RestAssuredClient;
 import automatization.redmine.context.Context;
 import automatization.redmine.cucumber.validators.EmailParametersValidator;
 import automatization.redmine.cucumber.validators.ProjectParametersValidator;
+import automatization.redmine.cucumber.validators.RoleParametersValidator;
 import automatization.redmine.model.project.Project;
+import automatization.redmine.model.role.Permission;
+import automatization.redmine.model.role.Role;
 import automatization.redmine.model.user.*;
 import automatization.redmine.cucumber.validators.UserParametersValidator;
 import cucumber.api.java.ru.Дано;
 import cucumber.api.java.ru.И;
+import cucumber.api.java.ru.Пусть;
 import io.cucumber.datatable.DataTable;
 
 import java.util.ArrayList;
@@ -109,5 +113,25 @@ public class PrepareFixtureSteps {
             setEmails(Collections.singletonList(new Email(this)));
         }};
         Context.getStash().put(userStashId, user);
+    }
+
+    @Пусть("В системе есть роль \"(.+)\" с правами:")
+    public void createRoleWithPermissions(String roleStashId, List<String> permissionDescriptions) {
+        RoleParametersValidator.validateRolePermissions(permissionDescriptions);
+        Role role = new Role();
+        for (String permissionDescription : permissionDescriptions) {
+            Permission permission = Permission.getPermissionByDescription(permissionDescription);
+            role.getPermissions().add(permission);
+        }
+        role = role.create().read();
+        Context.getStash().put(roleStashId, role);
+    }
+
+    @Пусть("Пользователь \"(.+)\" имеет доступ к проекту \"(.+)\" с ролью \"(.+)\"")
+    public void addUserToProjectWithRole(String userStashId, String projectStashId, String roleStashId) {
+        User user = Context.getStash().get(userStashId, User.class);
+        Project project = Context.getStash().get(projectStashId, Project.class);
+        Role role = Context.getStash().get(roleStashId, Role.class);
+        user.addProject(project.getId(), role);
     }
 }
