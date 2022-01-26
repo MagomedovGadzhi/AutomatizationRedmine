@@ -20,6 +20,10 @@ public class UsersPage extends Page {
     @FindBy(xpath = "//div[@id='content']//h2")
     public WebElement pageName;
 
+    @ElementName("Таблица с пользователями")
+    @FindBy(xpath = "//table[@class='list users']")
+    public WebElement usersTable;
+
     @ElementName("Новый пользователь")
     @FindBy(xpath = "//div[@id='content']//a[contains(@class, 'add')]")
     public WebElement newUserButton;

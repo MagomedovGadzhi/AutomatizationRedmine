@@ -32,7 +32,7 @@ public class PageObjectHelper {
         return getElements(getPage(pageName), elementsName);
     }
 
-    private static Page getPage(String pageName) {
+    public static Page getPage(String pageName) {
         Set<Class<? extends Page>> allPages = new Reflections("automatization.redmine.ui.pages").getSubTypesOf(Page.class);
         Class<? extends Page> pageObjectClass = allPages.stream()
                 .filter(page -> page.isAnnotationPresent(PageName.class))

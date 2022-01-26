@@ -9,7 +9,9 @@ import automatization.redmine.ui.browser.BrowserUtils;
 import automatization.redmine.ui.pages.LoginPage;
 import automatization.redmine.ui.pages.Page;
 import automatization.redmine.ui.pages.TopMenuPage;
+import automatization.redmine.ui.pages.UsersPage;
 import automatization.redmine.utils.CompareUtils;
+import cucumber.api.java.ru.Если;
 import cucumber.api.java.ru.И;
 import org.openqa.selenium.WebElement;
 
@@ -54,6 +56,12 @@ public class UiSteps {
         PageObjectHelper.findElement(pageName, elementName).click();
     }
 
+    @Если("На странице {string} в шапке таблицы нажать на элемент {string}")
+    public void clickOnUsersTableElementOnPage(String pageName, String elementName) {
+        UsersPage users = (UsersPage) PageObjectHelper.getPage(pageName);
+        users.filterButton(elementName);
+    }
+
     @И("На странице {string} в поле {string} ввести текст {string}")
     public void sendKeysToElementOnPage(String pageName, String elementName, String charSequence) {
         PageObjectHelper.findElement(pageName, elementName).sendKeys(charSequence);
@@ -64,6 +72,20 @@ public class UiSteps {
         List<WebElement> elements = PageObjectHelper.findElements(pageName, elementsName);
         List<String> elementsTexts = BrowserUtils.getElementsText(elements);
         CompareUtils.assertListSortedByDateDesc(elementsTexts);
+    }
+
+    @И("На странице {string} тексты элементов {string} отсортированы по убыванию")
+    public void assertElementsTextsIsSortedByNameDesc(String pageName, String elementsName) {
+        List<WebElement> elements = PageObjectHelper.findElements(pageName, elementsName);
+        List<String> elementsTexts = BrowserUtils.getElementsText(elements);
+        CompareUtils.assertListSortedByNameDesc(elementsTexts);
+    }
+
+    @И("На странице {string} тексты элементов {string} отсортированы по возрастанию")
+    public void assertElementsTextsIsSortedByNameAsc(String pageName, String elementsName) {
+        List<WebElement> elements = PageObjectHelper.findElements(pageName, elementsName);
+        List<String> elementsTexts = BrowserUtils.getElementsText(elements);
+        CompareUtils.assertListSortedByNameAsc(elementsTexts);
     }
 
     @И("На странице {string} текст элемента {string} равен {string}")
