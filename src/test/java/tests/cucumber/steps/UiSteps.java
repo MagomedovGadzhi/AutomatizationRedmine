@@ -7,12 +7,12 @@ import automatization.redmine.model.project.Project;
 import automatization.redmine.model.user.User;
 import automatization.redmine.ui.browser.BrowserUtils;
 import automatization.redmine.ui.pages.LoginPage;
-import automatization.redmine.ui.pages.Page;
-import automatization.redmine.ui.pages.TopMenuPage;
 import automatization.redmine.ui.pages.UsersPage;
 import automatization.redmine.utils.CompareUtils;
 import cucumber.api.java.ru.Если;
 import cucumber.api.java.ru.И;
+import cucumber.api.java.ru.Тогда;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -88,14 +88,21 @@ public class UiSteps {
         CompareUtils.assertListSortedByNameAsc(elementsTexts);
     }
 
+    @И("На странице {string} тексты элементов {string} не отсортированы")
+    public void assertElementsTextsIsNotSorted(String pageName, String elementsName) {
+        List<WebElement> elements = PageObjectHelper.findElements(pageName, elementsName);
+        List<String> elementsTexts = BrowserUtils.getElementsText(elements);
+        CompareUtils.assertIsNotSorted(elementsTexts);
+    }
+
     @И("На странице {string} текст элемента {string} равен {string}")
     public void assertElementText(String pageName, String elementName, String text) {
         WebElement webElement = PageObjectHelper.findElement(pageName, elementName);
-        AllureAssert.assertEquals(getPage(TopMenuPage.class).myAccount.getText(), text);
+        AllureAssert.assertEquals(webElement.getText(), text);
     }
 
     @И("В спике проектов отображается проект {string}")
-    public void doesProjectListContainProject(String projectStashId) {
+    public void assertProjectListContainProject(String projectStashId) {
         List<WebElement> projects = PageObjectHelper.findElements("Проекты", "Список проектов");
         List<String> projectsNames = BrowserUtils.getElementsText(projects);
         Project project = Context.getStash().get(projectStashId, Project.class);
@@ -103,10 +110,45 @@ public class UiSteps {
     }
 
     @И("В спике проектов не отображается проект {string}")
-    public void doesProjectListNotContainProject(String projectStashId) {
+    public void assertProjectListNotContainProject(String projectStashId) {
         List<WebElement> projects = PageObjectHelper.findElements("Проекты", "Список проектов");
         List<String> projectsNames = BrowserUtils.getElementsText(projects);
         Project project = Context.getStash().get(projectStashId, Project.class);
         AllureAssert.assertFalse(projectsNames.contains(project.getName()), "Проект не отображается");
+    }
+
+
+    @И("На странице {string} в поле {string} ввести данные пользователя {string}")
+    public void sendUsersInformationToElementOnPage(String pageName, String elementName, String userStashId) {
+        User user = Context.getStash().get(userStashId, User.class);
+        WebElement webElement = PageObjectHelper.findElement(pageName, elementName);
+        if (elementName.equals("Пользователь")) {
+            webElement.sendKeys(user.getLogin());
+        } else if (elementName.equals("Имя")) {
+            webElement.sendKeys(user.getFirstName());
+        } else if (elementName.equals("Фамилия")) {
+            webElement.sendKeys(user.getLastName());
+        } else if (elementName.equals("Email")) {
+            webElement.sendKeys(user.getEmails().get(0).getAddress());
+        } else {
+            throw new NotFoundException("Не найдены реквизиты пользователя");
+        }
+    }
+
+    @Тогда("Сообщение о создании пользователя содержит логин пользователя {string}")
+    public void assertMessageContainUserLogin(String userStashId) {
+        User user = Context.getStash().get(userStashId, User.class);
+        WebElement webElement = PageObjectHelper.findElement("Новый пользователь", "Сообщение о создании пользователя");
+        String notice = "Пользователь " + user.getLogin() + " создан.";
+        AllureAssert.assertEquals(webElement.getText(), notice);
+    }
+
+    @И("В БД в таблице пользователи есть запись о {string}")
+    public void assertUserInfoInDataBase(String userStashId) {
+        User expectedUser = Context.getStash().get(userStashId, User.class);
+        User actualUser = expectedUser.readByLogin();
+        AllureAssert.assertEquals(actualUser.getLogin(), expectedUser.getLogin());
+        AllureAssert.assertEquals(actualUser.getFirstName(), expectedUser.getFirstName());
+        AllureAssert.assertEquals(actualUser.getLastName(), expectedUser.getLastName());
     }
 }

@@ -134,4 +134,12 @@ public class PrepareFixtureSteps {
         Role role = Context.getStash().get(roleStashId, Role.class);
         user.addProject(project.getId(), role);
     }
+
+    @Пусть("Есть абстрактный пользователь {string}")
+    public void createUserObject(String userStashId) {
+        User user = new User();
+        user.getEmails().add(new Email());
+        user.getTokens().add(new Token());
+        Context.getStash().put(userStashId, user);
+    }
 }
