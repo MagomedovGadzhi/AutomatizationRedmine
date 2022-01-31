@@ -142,7 +142,7 @@ public class UserRequests extends BaseRequests implements Create<User>, Update<U
     public void addMemberRoles(Integer memberId, Role role) {
         String query = "INSERT INTO public.member_roles\n" +
                 "(id, member_id, role_id, inherited_from)\n" +
-                "VALUES(DEFAULT, ?, ?, ?);\n";
+                "VALUES(DEFAULT, ?, ?, ?) RETURNING id;\n";
         PostgresConnection.INSTANCE.executeQuery(
                 query,
                 memberId,
