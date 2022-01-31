@@ -7,7 +7,7 @@ import java.util.Set;
 public class UserParametersValidator {
 
     public static void validateUserParameters(Set<String> keys) {
-        List<String> allowedKeys = Arrays.asList("Администратор", "Статус", "Уведомления о новых событиях", "E-Mail", "Token", "Пароль");
+        List<String> allowedKeys = Arrays.asList("Администратор", "Статус", "Уведомления о новых событиях", "E-Mail", "E-Mail список", "Token", "Пароль");
 
         boolean allKeysAreValid = allowedKeys.containsAll(keys);
         if (!allKeysAreValid) {
