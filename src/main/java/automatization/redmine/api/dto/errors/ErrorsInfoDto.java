@@ -10,5 +10,5 @@ import java.util.List;
 @Accessors(chain = true)
 @AllArgsConstructor
 public class ErrorsInfoDto {
-    List<String> errors;
+    private List<String> errors;
 }

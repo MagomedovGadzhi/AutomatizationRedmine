@@ -66,11 +66,6 @@ public class Project extends CreatableEntity implements Creatable<Project>, Dele
         return new ProjectRequest().read(this.id);
     }
 
-    public void addUserWithRoles(User user, List<Role> roles) {
-        usersAndRoles.put(user, roles);
-        user.addProject(this.id, roles);
-    }
-
     @Override
     public String toString() {
         return "Project { " + "\n"

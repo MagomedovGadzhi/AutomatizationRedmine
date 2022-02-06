@@ -81,6 +81,6 @@ public enum Permission {
         return Stream.of(values())
                 .filter(permission -> permission.description.equals(description))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Не найден объект enum Permission"));
+                .orElseThrow(() -> new IllegalArgumentException("По переданному описанию не найден объект enum Permission"));
     }
 }

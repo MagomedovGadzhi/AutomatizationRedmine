@@ -122,16 +122,21 @@ public class UiSteps {
     public void sendUsersInformationToElementOnPage(String pageName, String elementName, String userStashId) {
         User user = Context.getStash().get(userStashId, User.class);
         WebElement webElement = PageObjectHelper.findElement(pageName, elementName);
-        if (elementName.equals("Пользователь")) {
-            webElement.sendKeys(user.getLogin());
-        } else if (elementName.equals("Имя")) {
-            webElement.sendKeys(user.getFirstName());
-        } else if (elementName.equals("Фамилия")) {
-            webElement.sendKeys(user.getLastName());
-        } else if (elementName.equals("Email")) {
-            webElement.sendKeys(user.getEmails().get(0).getAddress());
-        } else {
-            throw new NotFoundException("Не найдены реквизиты пользователя");
+        switch (elementName) {
+            case "Пользователь":
+                webElement.sendKeys(user.getLogin());
+                break;
+            case "Имя":
+                webElement.sendKeys(user.getFirstName());
+                break;
+            case "Фамилия":
+                webElement.sendKeys(user.getLastName());
+                break;
+            case "Email":
+                webElement.sendKeys(user.getEmails().get(0).getAddress());
+                break;
+            default:
+                throw new NotFoundException("Не найдены реквизиты пользователя");
         }
     }
 

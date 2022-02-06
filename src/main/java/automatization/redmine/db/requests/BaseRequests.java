@@ -2,7 +2,6 @@ package automatization.redmine.db.requests;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public abstract class BaseRequests {
 
@@ -14,18 +13,11 @@ public abstract class BaseRequests {
         return ts.toLocalDateTime();
     }
 
-    /**
-     * Отдельный методы проверяющие, что объект не равен NULL.
-     * Созданы т.к. при попытке установить значение переменной объекта,
-     * которая в БД равна NULL, возникало исключение.
-     */
     protected String getStringFromObject(Object object) {
-        if (object == null) return null;
-        else return object.toString();
+        return object != null ? object.toString() : null;
     }
 
     protected Integer getIntegerFromObject(Object object) {
-        if (object == null) return null;
-        else return (Integer) object;
+        return object != null ? (Integer) object : null;
     }
 }
